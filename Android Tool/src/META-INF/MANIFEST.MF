@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: AndroidToolKt
+Class-Path: flatlaf-0.38.jar kotlin-stdlib.jar kotlin-reflect.jar kotlin
+ -test.jar kotlin-stdlib-jdk7.jar kotlin-stdlib-jdk8.jar
+
