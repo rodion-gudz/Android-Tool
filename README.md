@@ -9,12 +9,12 @@
   Main Features
   ------------------
 
-  * Adb (Installation one apk or mass installation, disable, enable or uninstall(for main user) system apps, you can get list of apps packages (system, third, enabled, disabled or all), reboot to system, recovery, bootloader. You can also run another ADB command, to do this, enter it in the input field and press "Run")
-  ![screenshot of sample](https://i.imgur.com/OVKrfZU.png)
-  * Fastboot (Install or boot (without installation) recovery .img, reboot to system, recovery, bootloader. You can also run another Fastboot command, to do this, enter it in the input field and press "Run")
-  ![screenshot of sample](https://i.imgur.com/yNMAN1P.png)
+  * Adb (Support usb and wifi connection. Installation one apk or mass installation, disable, enable or uninstall(for main user) system apps, you can get list of apps packages (system, third, enabled, disabled or all), reboot to system, recovery, bootloader. You can also run another ADB command, to do this, enter it in the input field and press "Run")
+  ![screenshot of sample](https://i.imgur.com/Xp7NQ74.png)
+  * Fastboot (Install or boot (without installation) recovery .img, reboot to system, recovery, bootloader, or erase selected partitions. You can also run another Fastboot command, to do this, enter it in the input field and press "Run")
+  ![screenshot of sample](https://i.imgur.com/XBINgTJ.png)
   * Links (For your convenience, I made a tab with links to official sites and pages for downloading ROMs, Recovery, Google Apps and other)
-  ![screenshot of sample](https://i.imgur.com/XU34BwI.png)
+  ![screenshot of sample](https://i.imgur.com/NLHafWU.png)
 
   The Latest Version And Updates
   ------------------
@@ -30,5 +30,5 @@
   ------------
 
   * OS (Windows 10), Linux and Mac os support maybe will be later
-  * JDK (Java SE Development Kit)
+  * JRE (Java Runtime Environment)
   
