@@ -13,6 +13,7 @@ import java.io.InputStreamReader
 import java.net.URI
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
+import javax.swing.text.MaskFormatter
 
 
 ////DefaultCommands////
@@ -57,7 +58,7 @@ fun main() {
     frame.layout = null
     frame.isResizable = false
     frame.setLocationRelativeTo(null)
-    frame.iconImage = Toolkit.getDefaultToolkit().getImage({class AndroidTool(unit: Unit) {} }::class.java.getResource("/icon/frameIcon.png"))
+    frame.iconImage = Toolkit.getDefaultToolkit().getImage({class AndroidTool() {} }::class.java.getResource("/icon/frameIcon.png"))
     frame.addWindowListener(object : WindowAdapter() { override fun windowClosing(e: WindowEvent) { end() } })
 
 
@@ -73,6 +74,19 @@ fun main() {
     scrollPane.setBounds(325, 25, 550, 225)
     adbPanel.add(scrollPane)
     ////ScrollPane////
+
+    ////JFormattedTextField////
+    var maskIP = MaskFormatter("###.###.****###")
+    var textFieldIP = JFormattedTextField(maskIP)
+    textFieldIP.value="192.168"
+    textFieldIP.addMouseListener(object : MouseAdapter() {
+        override fun mouseClicked(e: MouseEvent?) {
+            textFieldIP.caretPosition=8
+        }
+    })
+    textFieldIP.bounds= Rectangle(25,5,100,25)
+    adbPanel.add(textFieldIP)
+    ////JFormattedTextField////
 
     ////TextArea////
     val textAreaInput=JTextArea("You can enter app package here")
@@ -96,20 +110,30 @@ fun main() {
     ////TextArea////
 
     ////Label////
+    val labelIP=JLabel("IP:")
+    labelIP.bounds= Rectangle(7,5,15,25)
+    labelIP.font = labelIP.font.deriveFont(15.0f)
+    adbPanel.add(labelIP)
+
+    val labelConnect=JLabel("")
+    labelConnect.bounds= Rectangle(230,5,100,23)
+    labelConnect.font = labelIP.font.deriveFont(13.0f)
+    adbPanel.add(labelConnect)
+
     val labelInstallAll=JLabel("Install all APK in the folder")
-    labelInstallAll.bounds= Rectangle(7,51,250,50)
+    labelInstallAll.bounds= Rectangle(7,85,250,50)
     adbPanel.add(labelInstallAll)
 
     val labelInstallOne=JLabel("Install one APK")
-    labelInstallOne.bounds= Rectangle(7,225,250,50)
+    labelInstallOne.bounds= Rectangle(7,260,250,50)
     adbPanel.add(labelInstallOne)
 
     val labelSelectedOne=JLabel("Selected: -")
-    labelSelectedOne.bounds= Rectangle(7,368,250,20)
+    labelSelectedOne.bounds= Rectangle(7,405,250,20)
     adbPanel.add(labelSelectedOne)
 
     val labelSelectedAll=JLabel("Selected: -")
-    labelSelectedAll.bounds= Rectangle(7,180,250,50)
+    labelSelectedAll.bounds= Rectangle(7,215,250,50)
     adbPanel.add(labelSelectedAll)
 
     val labelEnterAdbCommand=JLabel("Enter other command")
@@ -161,8 +185,48 @@ fun main() {
     ////CheckBox////
 
     ////Button////
+    val buttonIpConnect = JButton("Connect")
+    buttonIpConnect.bounds = Rectangle(127, 5, 100, 25)
+    buttonIpConnect.isFocusable = false
+    adbPanel.add(buttonIpConnect)
+    buttonIpConnect.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonIpConnect.isEnabled=false
+                simpleCommand("adb kill-server")
+                simpleCommand("adb tcpip 5555")
+                val builderList = ProcessBuilder("cmd.exe", "/c", "adb connect ${textFieldIP.text}")
+                builderList.redirectErrorStream(true)
+                val valList = builderList.start()
+                val input = valList.inputStream
+                val reader = BufferedReader(InputStreamReader(input))
+                var line: String?
+                var output = ""
+                while (reader.readLine().also { line = it } != null) {
+                    output += "\n"
+                    output += line
+                }
+                valList.waitFor()
+                if(output.indexOf("connected to")!=-1){
+                    if(line!="* daemon not running starting now at tcp:5037" && line!="* daemon started successfully")
+                        labelConnect.text = "Success"
+                    else{
+                        labelConnect.text = "Error"
+                    }
+                }
+
+
+            }
+            override fun done() {
+                buttonIpConnect.isEnabled = true
+            }
+        }
+        val worker = MyWorker()
+        worker.execute()
+    }
+
     val buttonInstallAll = JButton("Install")
-    buttonInstallAll.bounds = Rectangle(5, 86, 285, 50)
+    buttonInstallAll.bounds = Rectangle(5, 120, 285, 50)
     buttonInstallAll.isFocusable = false
     adbPanel.add(buttonInstallAll)
     buttonInstallAll.addActionListener {
@@ -198,7 +262,7 @@ fun main() {
     }
 
     val buttonInstallOne=JButton("Install")
-    buttonInstallOne.bounds= Rectangle(5,260,285,50)
+    buttonInstallOne.bounds= Rectangle(5,295,285,50)
     buttonInstallOne.isFocusable=false
     adbPanel.add(buttonInstallOne)
     buttonInstallOne.addActionListener {
@@ -417,7 +481,7 @@ fun main() {
     }
 
     val buttonReboot=JButton("Reboot")
-    buttonReboot.bounds= Rectangle(5,5,137,25)
+    buttonReboot.bounds= Rectangle(5,40,137,25)
     buttonReboot.isFocusable=false
     adbPanel.add(buttonReboot)
     buttonReboot.addActionListener {
@@ -436,7 +500,7 @@ fun main() {
     }
 
     val buttonRecoveryReboot=JButton("Reboot to Recovery")
-    buttonRecoveryReboot.bounds= Rectangle(80,31,137,25)
+    buttonRecoveryReboot.bounds= Rectangle(5,65,137,25)
     buttonRecoveryReboot.isFocusable=false
     adbPanel.add(buttonRecoveryReboot)
     buttonRecoveryReboot.addActionListener {
@@ -455,7 +519,7 @@ fun main() {
     }
 
     val buttonFastbootReboot=JButton("Reboot to Fastboot")
-    buttonFastbootReboot.bounds= Rectangle(145,5,137,25)
+    buttonFastbootReboot.bounds= Rectangle(145,65,137,25)
     buttonFastbootReboot.isFocusable=false
     adbPanel.add(buttonFastbootReboot)
     buttonFastbootReboot.addActionListener {
@@ -473,8 +537,27 @@ fun main() {
         worker.execute()
     }
 
-    val buttonChooseOne=JButton("Select")
-    buttonChooseOne.bounds= Rectangle(5,320,285,50)
+    val buttonPowerOff=JButton("Shutdown")
+    buttonPowerOff.bounds= Rectangle(145,40,137,25)
+    buttonPowerOff.isFocusable=false
+    adbPanel.add(buttonPowerOff)
+    buttonPowerOff.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonPowerOff.isEnabled=false
+                simpleCommand("adb reboot -p")
+            }
+            override fun done() {
+                buttonPowerOff.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+
+    val buttonChooseOne=JButton("Select APK")
+    buttonChooseOne.bounds= Rectangle(5,355,285,50)
     buttonChooseOne.isFocusable=false
     adbPanel.add(buttonChooseOne)
     buttonChooseOne.addActionListener {
@@ -500,8 +583,8 @@ fun main() {
         worker.execute()
     }
 
-    val buttonChoseAll=JButton("Select")
-    buttonChoseAll.bounds= Rectangle(5,146,285,50)
+    val buttonChoseAll=JButton("Select Folder")
+    buttonChoseAll.bounds= Rectangle(5,180,285,50)
     buttonChoseAll.isFocusable=false
     adbPanel.add(buttonChoseAll)
     buttonChoseAll.addActionListener {
@@ -578,8 +661,12 @@ fun main() {
     fastbootPanel.add(labelEnterFastbootCommand)
 
     val labelInstallRecovery=JLabel("Install or boot recovery")
-    labelInstallRecovery.bounds= Rectangle(7,51,250,50)
+    labelInstallRecovery.bounds= Rectangle(7,60,250,50)
     fastbootPanel.add(labelInstallRecovery)
+
+    val labelErase=JLabel("Erase partition")
+    labelErase.bounds= Rectangle(300,5,250,20)
+    fastbootPanel.add(labelErase)
     ////Label////
 
     ////TextArea////
@@ -592,8 +679,34 @@ fun main() {
     val scroll2 = JScrollPane(textAreaCommandFastbootOutput)
     scroll2.setBounds(315,443,560,98)
     fastbootPanel.add(scroll2)
-
     ////TextArea////
+
+    ////CheckBox////
+    val checkboxPartitionSystem = JCheckBox("System")
+    checkboxPartitionSystem.bounds= Rectangle(300,30,100,20)
+    fastbootPanel.add(checkboxPartitionSystem)
+
+    val checkboxPartitionData = JCheckBox("Data")
+    checkboxPartitionData.bounds= Rectangle(300,55,100,20)
+    fastbootPanel.add(checkboxPartitionData)
+
+    val checkboxPartitionCache = JCheckBox("Cache")
+    checkboxPartitionCache.bounds= Rectangle(300,80,100,20)
+    fastbootPanel.add(checkboxPartitionCache)
+
+    val checkboxPartitionRecovery = JCheckBox("Recovery")
+    checkboxPartitionRecovery.bounds= Rectangle(300,105,100,20)
+    fastbootPanel.add(checkboxPartitionRecovery)
+
+    val checkboxPartitionBoot = JCheckBox("Boot")
+    checkboxPartitionBoot.bounds= Rectangle(300,130,100,20)
+    fastbootPanel.add(checkboxPartitionBoot)
+
+    val checkboxPartitionRadio = JCheckBox("Radio")
+    checkboxPartitionRadio.bounds= Rectangle(300,155,100,20)
+    fastbootPanel.add(checkboxPartitionRadio)
+
+    ////CheckBox////
 
     ////Button////
     val buttonRunCommandFastboot=JButton("Run")
@@ -627,6 +740,41 @@ fun main() {
         val worker = MyWorker()
         worker.execute()
 
+    }
+
+    val buttonErase=JButton("Erase")
+    buttonErase.bounds= Rectangle(300,178,137,25)
+    buttonErase.isFocusable=false
+    fastbootPanel.add(buttonErase)
+    buttonErase.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonErase.isEnabled=false
+                if(checkboxPartitionBoot.isSelected){
+                    simpleCommand("fastboot erase boot")
+                }
+                if(checkboxPartitionSystem.isSelected){
+                    simpleCommand("fastboot erase system")
+                }
+                if(checkboxPartitionData.isSelected){
+                    simpleCommand("fastboot erase userdata")
+                }
+                if(checkboxPartitionCache.isSelected){
+                    simpleCommand("fastboot erase cache")
+                }
+                if(checkboxPartitionRecovery.isSelected){
+                    simpleCommand("fastboot erase recovery")
+                }
+                if(checkboxPartitionRadio.isSelected){
+                    simpleCommand("fastboot erase radio")
+                }
+            }
+            override fun done() {
+                buttonErase.isEnabled=true
+            }
+        }
+        val worker = MyWorker()
+        worker.execute()
     }
 
     val buttonRebootFastboot=JButton("Reboot")
@@ -687,7 +835,7 @@ fun main() {
     }
 
     val buttonChoseRecovery=JButton("Select Recovery")
-    buttonChoseRecovery.bounds= Rectangle(5,86,285,50)
+    buttonChoseRecovery.bounds= Rectangle(5,95,285,50)
     buttonChoseRecovery.isFocusable=false
     fastbootPanel.add(buttonChoseRecovery)
     buttonChoseRecovery.addActionListener {
@@ -714,7 +862,7 @@ fun main() {
     }
 
     val buttonInstallRecovery = JButton("Install")
-    buttonInstallRecovery.bounds= Rectangle(5,143,138,50)
+    buttonInstallRecovery.bounds= Rectangle(5,153,138,50)
     buttonInstallRecovery.isFocusable=false
     fastbootPanel.add(buttonInstallRecovery)
     buttonInstallRecovery.addActionListener {
@@ -733,7 +881,7 @@ fun main() {
     }
 
     val buttonBootToRecovery = JButton("Boot")
-    buttonBootToRecovery.bounds= Rectangle(152,143,138,50)
+    buttonBootToRecovery.bounds= Rectangle(152,153,138,50)
     buttonBootToRecovery.isFocusable=false
     fastbootPanel.add(buttonBootToRecovery)
     buttonBootToRecovery.addActionListener {
