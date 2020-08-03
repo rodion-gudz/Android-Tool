@@ -21,35 +21,16 @@ fun runUrl(url:String){
     val urlString = URI(url)
     Desktop.getDesktop().browse(urlString)
 }
-fun start(){
-    val builderStart = ProcessBuilder("cmd.exe", "/c", "cd \"$directoryWorking\"")
-    val valStart = builderStart.start()
-    valStart.waitFor()
-}
-fun simpleCommand(command:String){
-    val builderCommand = ProcessBuilder("cmd.exe", "/c", command)
-    val valCommand = builderCommand.start()
-    valCommand.waitFor()
-}
-fun end(){
-    val builderEnd = ProcessBuilder("cmd.exe" , "/c", "adb kill-server")
-    val valEnd = builderEnd.start()
-    valEnd.waitFor()
-}
 ////DefaultCommands////
 
 var arrayList = emptyArray<String>()
-val directoryWorking: String = System.getProperty("user.dir")
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
 var selectedFilePath = ""
 val listModel = DefaultListModel<Any?>()
 
 fun main() {
-    start()
-    val builderStartAdb = ProcessBuilder("cmd.exe", "/c", "adb devices")
-    builderStartAdb.start()
-
+    Runtime.getRuntime().exec( "adb devices")
     FlatDarculaLaf.install()
     JFrame.setDefaultLookAndFeelDecorated(true)
     val frame = JFrame("Android Tool")
@@ -59,8 +40,7 @@ fun main() {
     frame.isResizable = false
     frame.setLocationRelativeTo(null)
     frame.iconImage = Toolkit.getDefaultToolkit().getImage({class AndroidTool() {} }::class.java.getResource("/icon/frameIcon.png"))
-    frame.addWindowListener(object : WindowAdapter() { override fun windowClosing(e: WindowEvent) { end() } })
-
+    frame.addWindowListener(object : WindowAdapter() { override fun windowClosing(e: WindowEvent) { Runtime.getRuntime().exec("adb kill-server") } })
 
     val adbPanel = JPanel()
     adbPanel.layout = null
@@ -71,7 +51,7 @@ fun main() {
     val list = JList(listModel)
     val scrollPane = JScrollPane()
     scrollPane.setViewportView(list)
-    scrollPane.setBounds(325, 25, 550, 225)
+    scrollPane.setBounds(328, 25, 550, 225)
     adbPanel.add(scrollPane)
     ////ScrollPane////
 
@@ -90,7 +70,7 @@ fun main() {
 
     ////TextArea////
     val textAreaInput=JTextArea("You can enter app package here")
-    textAreaInput.bounds= Rectangle(605,263,267,45)
+    textAreaInput.bounds= Rectangle(608,263,267,45)
     adbPanel.add(textAreaInput)
     textAreaInput.addMouseListener(object : MouseAdapter() {
         override fun mouseClicked(e: MouseEvent?) {
@@ -111,7 +91,7 @@ fun main() {
 
     ////Label////
     val labelIP=JLabel("IP:")
-    labelIP.bounds= Rectangle(7,5,15,25)
+    labelIP.bounds= Rectangle(7,5,20,25)
     labelIP.font = labelIP.font.deriveFont(15.0f)
     adbPanel.add(labelIP)
 
@@ -147,19 +127,19 @@ fun main() {
 
     ////CheckBox////
     val checkboxDisabled = JCheckBox("Disabled apps")
-    checkboxDisabled.bounds= Rectangle(325,5,100,20)
+    checkboxDisabled.bounds= Rectangle(328,5,120,20)
     adbPanel.add(checkboxDisabled)
 
     val checkboxSystem = JCheckBox("System apps")
-    checkboxSystem.bounds= Rectangle(465,5,100,20)
+    checkboxSystem.bounds= Rectangle(468,5,120,20)
     adbPanel.add(checkboxSystem)
 
     val checkboxEnabled = JCheckBox("Enabled apps")
-    checkboxEnabled.bounds= Rectangle(615,5,100,20)
+    checkboxEnabled.bounds= Rectangle(618,5,120,20)
     adbPanel.add(checkboxEnabled)
 
     val checkboxThird = JCheckBox("Third apps")
-    checkboxThird.bounds= Rectangle(755,5,100,20)
+    checkboxThird.bounds= Rectangle(758,5,120,20)
     adbPanel.add(checkboxThird)
 
     checkboxDisabled.addItemListener {
@@ -193,12 +173,9 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonIpConnect.isEnabled=false
-                simpleCommand("adb kill-server")
-                simpleCommand("adb tcpip 5555")
-                val builderList = ProcessBuilder("cmd.exe", "/c", "adb connect ${textFieldIP.text}")
-                builderList.redirectErrorStream(true)
-                val valList = builderList.start()
-                val input = valList.inputStream
+                Runtime.getRuntime().exec("adb kill-server").waitFor()
+                val builderList = Runtime.getRuntime().exec( "adb connect ${textFieldIP.text}")
+                val input = builderList.inputStream
                 val reader = BufferedReader(InputStreamReader(input))
                 var line: String?
                 var output = ""
@@ -206,7 +183,6 @@ fun main() {
                     output += "\n"
                     output += line
                 }
-                valList.waitFor()
                 if(output.indexOf("connected to")!=-1){
                     if(line!="* daemon not running starting now at tcp:5037" && line!="* daemon started successfully")
                         labelConnect.text = "Success"
@@ -214,7 +190,7 @@ fun main() {
                         labelConnect.text = "Error"
                     }
                 }
-
+                builderList.waitFor()
 
             }
             override fun done() {
@@ -247,7 +223,11 @@ fun main() {
                 }
                 paths = file.listFiles(fileNameFilter)
                 for (path in paths) {
-                    simpleCommand("adb install \"$path\"")
+                    if(System.getProperty("os.name").indexOf("Windows")!=-1){
+                        Runtime.getRuntime().exec("adb install \"$path\"").waitFor()
+                    }else{
+                        Runtime.getRuntime().exec("adb install $path").waitFor()
+                    }
                 }
             }
 
@@ -269,7 +249,11 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonInstallOne.isEnabled=false
-                simpleCommand("adb install \"$selectedFileAbsolutePath\"")
+                if(System.getProperty("os.name").indexOf("Windows")!=-1){
+                    Runtime.getRuntime().exec("adb install \"$selectedFileAbsolutePath\"").waitFor()
+                }else{
+                    Runtime.getRuntime().exec("adb install $selectedFileAbsolutePath").waitFor()
+                }
             }
             override fun done() {
                 buttonInstallOne.isEnabled=true
@@ -281,11 +265,11 @@ fun main() {
     }
 
     val buttonDisable=JButton("Disable")
-    buttonDisable.bounds= Rectangle(325,320,176,50)
+    buttonDisable.bounds= Rectangle(328,320,176,50)
     buttonDisable.isFocusable=false
     adbPanel.add(buttonDisable)
     buttonDisable.addActionListener {
-        val textInput:String = if(textAreaInput.text !="")
+        val textInput:String = if(textAreaInput.text !="You can enter app package here" && textAreaInput.text !="")
             textAreaInput.text
         else
             list.selectedValue.toString()
@@ -293,7 +277,7 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonDisable.isEnabled=false
-                simpleCommand("adb shell pm disable-user --user 0 $textInput")
+                Runtime.getRuntime().exec("adb shell pm disable-user --user 0 $textInput").waitFor()
             }
             override fun done() {
                 buttonDisable.isEnabled=true
@@ -305,11 +289,11 @@ fun main() {
     }
 
     val buttonUninstall=JButton("Uninstall")
-    buttonUninstall.bounds= Rectangle(510,320,176,50)
+    buttonUninstall.bounds= Rectangle(513,320,176,50)
     buttonUninstall.isFocusable=false
     adbPanel.add(buttonUninstall)
     buttonUninstall.addActionListener {
-        val textInput:String = if(textAreaInput.text !="")
+        val textInput:String = if(textAreaInput.text !="You can enter app package here" && textAreaInput.text !="")
             textAreaInput.text
         else
             list.selectedValue.toString()
@@ -317,7 +301,7 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonUninstall.isEnabled=false
-                simpleCommand("adb shell pm uninstall --user 0 $textInput")
+                Runtime.getRuntime().exec("adb shell pm uninstall --user 0 $textInput").waitFor()
             }
             override fun done() {
                 buttonUninstall.isEnabled=true
@@ -329,11 +313,11 @@ fun main() {
     }
 
     val buttonEnable=JButton("Enable")
-    buttonEnable.bounds= Rectangle(695,320,180,50)
+    buttonEnable.bounds= Rectangle(698,320,180,50)
     buttonEnable.isFocusable=false
     adbPanel.add(buttonEnable)
     buttonEnable.addActionListener {
-        val textInput:String = if(textAreaInput.text !="")
+        val textInput:String = if(textAreaInput.text !="You can enter app package here" && textAreaInput.text !="")
             textAreaInput.text
         else
             list.selectedValue.toString()
@@ -341,7 +325,7 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonEnable.isEnabled=false
-                simpleCommand("adb shell pm enable $textInput")
+                Runtime.getRuntime().exec("adb shell pm enable $textInput").waitFor()
             }
             override fun done() {
                 buttonEnable.isEnabled=true
@@ -353,7 +337,7 @@ fun main() {
     }
 
     val buttonCheck=JButton("Get list of packages")
-    buttonCheck.bounds= Rectangle(325,260,270,50)
+    buttonCheck.bounds= Rectangle(328,260,270,50)
     buttonCheck.isFocusable=false
     adbPanel.add(buttonCheck)
     buttonCheck.addActionListener {
@@ -364,10 +348,8 @@ fun main() {
                     checkboxDisabled.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
-                        val builderList = ProcessBuilder("cmd.exe", "/c", "adb shell pm list packages -d")
-                        builderList.redirectErrorStream(true)
-                        val valList = builderList.start()
-                        val input = valList.inputStream
+                        val builderList = Runtime.getRuntime().exec("adb shell pm list packages -d")
+                        val input = builderList.inputStream
                         val reader = BufferedReader(InputStreamReader(input))
                         var line: String?
                         while (reader.readLine().also { line = it } != null) {
@@ -378,18 +360,16 @@ fun main() {
 
                         }
                         arrayList.sort()
-                        valList.waitFor()
                         for(element in arrayList){
                             listModel.addElement(element)
                         }
+                        builderList.waitFor()
                     }
                     checkboxSystem.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
-                        val builderList = ProcessBuilder("cmd.exe", "/c", "adb shell pm list packages -s")
-                        builderList.redirectErrorStream(true)
-                        val valList = builderList.start()
-                        val input = valList.inputStream
+                        val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -s")
+                        val input = builderList.inputStream
                         val reader = BufferedReader(InputStreamReader(input))
                         var line: String?
                         while (reader.readLine().also { line = it } != null) {
@@ -399,18 +379,16 @@ fun main() {
                             }
                         }
                         arrayList.sort()
-                        valList.waitFor()
                         for(element in arrayList){
                             listModel.addElement(element)
                         }
+                        builderList.waitFor()
                     }
                     checkboxEnabled.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
-                        val builderList = ProcessBuilder("cmd.exe", "/c", "adb shell pm list packages -e")
-                        builderList.redirectErrorStream(true)
-                        val valList = builderList.start()
-                        val input = valList.inputStream
+                        val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -e")
+                        val input = builderList.inputStream
                         val reader = BufferedReader(InputStreamReader(input))
                         var line: String?
                         while (reader.readLine().also { line = it } != null) {
@@ -420,18 +398,16 @@ fun main() {
                             }
                         }
                         arrayList.sort()
-                        valList.waitFor()
                         for(element in arrayList){
                             listModel.addElement(element)
                         }
+                        builderList.waitFor()
                     }
                     checkboxThird.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
-                        val builderList = ProcessBuilder("cmd.exe", "/c", "adb shell pm list packages -3")
-                        builderList.redirectErrorStream(true)
-                        val valList = builderList.start()
-                        val input = valList.inputStream
+                        val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -3")
+                        val input = builderList.inputStream
                         val reader = BufferedReader(InputStreamReader(input))
                         var line: String?
                         while (reader.readLine().also { line = it } != null) {
@@ -441,18 +417,16 @@ fun main() {
                             }
                         }
                         arrayList.sort()
-                        valList.waitFor()
                         for(element in arrayList){
                             listModel.addElement(element)
                         }
+                        builderList.waitFor()
                     }
                     else -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
-                        val builderList = ProcessBuilder("cmd.exe", "/c", "adb shell pm list packages")
-                        builderList.redirectErrorStream(true)
-                        val valList = builderList.start()
-                        val input = valList.inputStream
+                        val builderList = Runtime.getRuntime().exec("adb shell pm list packages")
+                        val input = builderList.inputStream
                         val reader = BufferedReader(InputStreamReader(input))
                         var line: String?
                         while (reader.readLine().also { line = it } != null) {
@@ -462,11 +436,11 @@ fun main() {
                             }
                         }
                         arrayList.sort()
-                        valList.waitFor()
                         buttonCheck.isEnabled = true
                         for(element in arrayList){
                             listModel.addElement(element)
                         }
+                        builderList.waitFor()
                     }
                 }
             }
@@ -481,14 +455,14 @@ fun main() {
     }
 
     val buttonReboot=JButton("Reboot")
-    buttonReboot.bounds= Rectangle(5,40,137,25)
+    buttonReboot.bounds= Rectangle(5,40,120,25)
     buttonReboot.isFocusable=false
     adbPanel.add(buttonReboot)
     buttonReboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonReboot.isEnabled=false
-                simpleCommand("adb reboot")
+                Runtime.getRuntime().exec("adb reboot").waitFor()
             }
             override fun done() {
                 buttonReboot.isEnabled=true
@@ -500,14 +474,14 @@ fun main() {
     }
 
     val buttonRecoveryReboot=JButton("Reboot to Recovery")
-    buttonRecoveryReboot.bounds= Rectangle(5,65,137,25)
+    buttonRecoveryReboot.bounds= Rectangle(126,40,163,25)
     buttonRecoveryReboot.isFocusable=false
     adbPanel.add(buttonRecoveryReboot)
     buttonRecoveryReboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonRecoveryReboot.isEnabled=false
-                simpleCommand("adb reboot recovery")
+                Runtime.getRuntime().exec("adb reboot recovery").waitFor()
             }
             override fun done() {
                 buttonRecoveryReboot.isEnabled=true
@@ -519,14 +493,14 @@ fun main() {
     }
 
     val buttonFastbootReboot=JButton("Reboot to Fastboot")
-    buttonFastbootReboot.bounds= Rectangle(145,65,137,25)
+    buttonFastbootReboot.bounds= Rectangle(126,65,163,25)
     buttonFastbootReboot.isFocusable=false
     adbPanel.add(buttonFastbootReboot)
     buttonFastbootReboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonFastbootReboot.isEnabled=false
-                simpleCommand("adb reboot bootloader")
+                Runtime.getRuntime().exec("adb reboot bootloader").waitFor()
             }
             override fun done() {
                 buttonFastbootReboot.isEnabled=true
@@ -538,14 +512,14 @@ fun main() {
     }
 
     val buttonPowerOff=JButton("Shutdown")
-    buttonPowerOff.bounds= Rectangle(145,40,137,25)
+    buttonPowerOff.bounds= Rectangle(5,65,120,25)
     buttonPowerOff.isFocusable=false
     adbPanel.add(buttonPowerOff)
     buttonPowerOff.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonPowerOff.isEnabled=false
-                simpleCommand("adb reboot -p")
+                Runtime.getRuntime().exec("adb reboot -p").waitFor()
             }
             override fun done() {
                 buttonPowerOff.isEnabled=true
@@ -619,10 +593,8 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonRunCommand.isEnabled=false
-                val builderList = ProcessBuilder("cmd.exe", "/c", textAreaCommandInput.text)
-                builderList.redirectErrorStream(true)
-                val valList = builderList.start()
-                val input = valList.inputStream
+                val builderList = Runtime.getRuntime().exec(textAreaCommandInput.text)
+                val input = builderList.inputStream
                 val reader = BufferedReader(InputStreamReader(input))
                 var line: String?
                 var output = ""
@@ -630,12 +602,13 @@ fun main() {
                     output += "\n"
                     output += line
                 }
-                valList.waitFor()
                 textAreaCommandOutput.text = output
+                builderList.waitFor()
             }
             override fun done() {
                 buttonRunCommand.isEnabled=true
             }
+
         }
 
         val worker = MyWorker()
@@ -718,10 +691,8 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonRunCommandFastboot.isEnabled=false
-                val builderList = ProcessBuilder("cmd.exe", "/c", textAreaCommandFastbootInput.text)
-                builderList.redirectErrorStream(true)
-                val valList = builderList.start()
-                val input = valList.inputStream
+                val builderList = Runtime.getRuntime().exec(textAreaCommandFastbootInput.text)
+                val input = builderList.inputStream
                 val reader = BufferedReader(InputStreamReader(input))
                 var line: String?
                 var output = ""
@@ -729,8 +700,8 @@ fun main() {
                     output += "\n"
                     output += line
                 }
-                valList.waitFor()
                 textAreaCommandFastbootOutput.text = output
+                builderList.waitFor()
             }
             override fun done() {
                 buttonRunCommandFastboot.isEnabled=true
@@ -751,22 +722,22 @@ fun main() {
             override fun doInBackground() {
                 buttonErase.isEnabled=false
                 if(checkboxPartitionBoot.isSelected){
-                    simpleCommand("fastboot erase boot")
+                    Runtime.getRuntime().exec("fastboot erase boot").waitFor()
                 }
                 if(checkboxPartitionSystem.isSelected){
-                    simpleCommand("fastboot erase system")
+                    Runtime.getRuntime().exec("fastboot erase system").waitFor()
                 }
                 if(checkboxPartitionData.isSelected){
-                    simpleCommand("fastboot erase userdata")
+                    Runtime.getRuntime().exec("fastboot erase userdata").waitFor()
                 }
                 if(checkboxPartitionCache.isSelected){
-                    simpleCommand("fastboot erase cache")
+                    Runtime.getRuntime().exec("fastboot erase cache").waitFor()
                 }
                 if(checkboxPartitionRecovery.isSelected){
-                    simpleCommand("fastboot erase recovery")
+                    Runtime.getRuntime().exec("fastboot erase recovery").waitFor()
                 }
                 if(checkboxPartitionRadio.isSelected){
-                    simpleCommand("fastboot erase radio")
+                    Runtime.getRuntime().exec("fastboot erase radio").waitFor()
                 }
             }
             override fun done() {
@@ -778,14 +749,14 @@ fun main() {
     }
 
     val buttonRebootFastboot=JButton("Reboot")
-    buttonRebootFastboot.bounds= Rectangle(5,5,137,25)
+    buttonRebootFastboot.bounds= Rectangle(5,5,120,25)
     buttonRebootFastboot.isFocusable=false
     fastbootPanel.add(buttonRebootFastboot)
     buttonRebootFastboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonRebootFastboot.isEnabled=false
-                simpleCommand("fastboot reboot")
+                Runtime.getRuntime().exec("fastboot reboot").waitFor()
             }
             override fun done() {
                 buttonRebootFastboot.isEnabled=true
@@ -797,14 +768,14 @@ fun main() {
     }
 
     val buttonRecoveryRebootFastboot=JButton("Reboot to Recovery")
-    buttonRecoveryRebootFastboot.bounds= Rectangle(80,31,137,25)
+    buttonRecoveryRebootFastboot.bounds= Rectangle(125,31,170,25)
     buttonRecoveryRebootFastboot.isFocusable=false
     fastbootPanel.add(buttonRecoveryRebootFastboot)
     buttonRecoveryRebootFastboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonRecoveryRebootFastboot.isEnabled=false
-                simpleCommand("fastboot oem reboot-recovery")
+                Runtime.getRuntime().exec("fastboot oem reboot-recovery").waitFor()
             }
             override fun done() {
                 buttonRecoveryRebootFastboot.isEnabled=true
@@ -816,14 +787,14 @@ fun main() {
     }
 
     val buttonFastbootRebootFastboot=JButton("Reboot to Fastboot")
-    buttonFastbootRebootFastboot.bounds= Rectangle(145,5,137,25)
+    buttonFastbootRebootFastboot.bounds= Rectangle(125,5,170,25)
     buttonFastbootRebootFastboot.isFocusable=false
     fastbootPanel.add(buttonFastbootRebootFastboot)
     buttonFastbootRebootFastboot.addActionListener {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonFastbootRebootFastboot.isEnabled=false
-                simpleCommand("fastboot reboot-bootloader")
+                Runtime.getRuntime().exec("fastboot reboot-bootloader").waitFor()
             }
             override fun done() {
                 buttonFastbootRebootFastboot.isEnabled=true
@@ -870,7 +841,11 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonInstallRecovery.isEnabled=false
-                simpleCommand("fastboot flash recovery \"$selectedFileAbsolutePath\"")
+                if(System.getProperty("os.name").indexOf("Windows")!=-1){
+                    Runtime.getRuntime().exec("fastboot flash recovery \"$selectedFileAbsolutePath\"").waitFor()
+                }else{
+                    Runtime.getRuntime().exec("fastboot flash recovery $selectedFileAbsolutePath").waitFor()
+                }
             }
             override fun done() {
                 buttonInstallRecovery.isEnabled=true
@@ -889,7 +864,11 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonBootToRecovery.isEnabled=false
-                simpleCommand("fastboot boot \"$selectedFileAbsolutePath\"")
+                if(System.getProperty("os.name").indexOf("Windows")!=-1){
+                    Runtime.getRuntime().exec("fastboot boot \"$selectedFileAbsolutePath\"").waitFor()
+                }else{
+                    Runtime.getRuntime().exec("fastboot boot $selectedFileAbsolutePath").waitFor()
+                }
             }
             override fun done() {
                 buttonBootToRecovery.isEnabled=true
@@ -914,7 +893,7 @@ fun main() {
     linksPanel.add(labelRoms)
 
     val labelPE=JLabel("Pixel Experience")
-    labelPE.bounds= Rectangle(10,45,100,20)
+    labelPE.bounds= Rectangle(10,45,110,20)
     linksPanel.add(labelPE)
 
     val buttonPE=JButton("Official Site")
@@ -976,7 +955,7 @@ fun main() {
     buttonLineageOSDownload.addActionListener { runUrl("https://download.lineageos.org/") }
 
     val labelParanoid=JLabel("Paranoid Android")
-    labelParanoid.bounds= Rectangle(10,365,100,20)
+    labelParanoid.bounds= Rectangle(10,365,120,20)
     linksPanel.add(labelParanoid)
 
     val buttonParanoid=JButton("Official Site")
@@ -991,7 +970,7 @@ fun main() {
     linksPanel.add(buttonParanoidDownload)
 
     val labelDerpFest=JLabel("AOSiP DerpFest")
-    labelDerpFest.bounds= Rectangle(10,445,100,20)
+    labelDerpFest.bounds= Rectangle(10,445,120,20)
     linksPanel.add(labelDerpFest)
 
     val buttonDerpFest=JButton("Official Site")
@@ -1114,7 +1093,7 @@ fun main() {
     buttonMSMXtendedDownload.addActionListener { runUrl("https://sourceforge.net/projects/xtended/files/") }
 
     val labelAOSPExtended=JLabel("AOSP Extended")
-    labelAOSPExtended.bounds= Rectangle(250,125,100,20)
+    labelAOSPExtended.bounds= Rectangle(250,125,120,20)
     linksPanel.add(labelAOSPExtended)
 
     val buttonAOSPExtended=JButton("Official Site")
@@ -1449,7 +1428,7 @@ fun main() {
     buttonSuperSU.addActionListener { runUrl("https://download.chainfire.eu/1220/SuperSU/SR5-SuperSU-v2.82-SR5-20171001224502.zip") }
 
     val labelGcam=JLabel("Google Camera")
-    labelGcam.bounds= Rectangle(760,125,100,20)
+    labelGcam.bounds= Rectangle(760,125,120,20)
     linksPanel.add(labelGcam)
 
     val buttonGcam=JButton("Download")
