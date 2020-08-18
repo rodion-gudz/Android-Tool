@@ -6,10 +6,7 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
-import java.io.BufferedReader
-import java.io.File
-import java.io.FilenameFilter
-import java.io.InputStreamReader
+import java.io.*
 import java.net.URI
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
@@ -26,8 +23,11 @@ fun runUrl(url:String){
 var arrayList = emptyArray<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
+var selectedFileSaveAbsolutePath = ""
 var selectedFilePath = ""
+var selectedZipPath = ""
 val listModel = DefaultListModel<Any?>()
+val listModelLogs = DefaultListModel<Any?>()
 
 fun main() {
     Runtime.getRuntime().exec( "adb devices")
@@ -56,8 +56,8 @@ fun main() {
     ////ScrollPane////
 
     ////JFormattedTextField////
-    var maskIP = MaskFormatter("###.###.****###")
-    var textFieldIP = JFormattedTextField(maskIP)
+    val maskIP = MaskFormatter("###.###.****###")
+    val textFieldIP = JFormattedTextField(maskIP)
     textFieldIP.value="192.168"
     textFieldIP.addMouseListener(object : MouseAdapter() {
         override fun mouseClicked(e: MouseEvent?) {
@@ -126,42 +126,34 @@ fun main() {
     ////Label////
 
     ////CheckBox////
-    val checkboxDisabled = JCheckBox("Disabled apps")
-    checkboxDisabled.bounds= Rectangle(328,5,120,20)
-    adbPanel.add(checkboxDisabled)
 
-    val checkboxSystem = JCheckBox("System apps")
-    checkboxSystem.bounds= Rectangle(468,5,120,20)
-    adbPanel.add(checkboxSystem)
+    val groupApps = ButtonGroup()
 
-    val checkboxEnabled = JCheckBox("Enabled apps")
-    checkboxEnabled.bounds= Rectangle(618,5,120,20)
-    adbPanel.add(checkboxEnabled)
+    val radioButtonAll = JRadioButton("All apps",true)
+    radioButtonAll.bounds= Rectangle(328,5,80,20)
+    adbPanel.add(radioButtonAll)
+    groupApps.add(radioButtonAll)
 
-    val checkboxThird = JCheckBox("Third apps")
-    checkboxThird.bounds= Rectangle(758,5,120,20)
-    adbPanel.add(checkboxThird)
+    val radioButtonDisabled = JRadioButton("Disabled apps",false)
+    radioButtonDisabled.bounds= Rectangle(418,5,120,20)
+    adbPanel.add(radioButtonDisabled)
+    groupApps.add(radioButtonDisabled)
 
-    checkboxDisabled.addItemListener {
-        checkboxSystem.isSelected  = false
-        checkboxEnabled.isSelected = false
-        checkboxThird.isSelected   = false
-    }
-    checkboxSystem.addItemListener {
-        checkboxDisabled.isSelected = false
-        checkboxEnabled.isSelected  = false
-        checkboxThird.isSelected    = false
-    }
-    checkboxEnabled.addItemListener {
-        checkboxSystem.isSelected   = false
-        checkboxDisabled.isSelected = false
-        checkboxThird.isSelected    = false
-    }
-    checkboxThird.addItemListener {
-        checkboxSystem.isSelected   = false
-        checkboxEnabled.isSelected  = false
-        checkboxDisabled.isSelected = false
-    }
+    val radioButtonSystem = JRadioButton("System apps",false)
+    radioButtonSystem.bounds= Rectangle(538,5,120,20)
+    adbPanel.add(radioButtonSystem)
+    groupApps.add(radioButtonSystem)
+
+    val radioButtonEnabled = JRadioButton("Enabled apps",false)
+    radioButtonEnabled.bounds= Rectangle(658,5,100,20)
+    adbPanel.add(radioButtonEnabled)
+    groupApps.add(radioButtonEnabled)
+
+    val radioButtonThird = JRadioButton("Third apps",false)
+    radioButtonThird.bounds= Rectangle(778,5,120,20)
+    adbPanel.add(radioButtonThird)
+    groupApps.add(radioButtonThird)
+
     ////CheckBox////
 
     ////Button////
@@ -345,7 +337,7 @@ fun main() {
             override fun doInBackground() {
                 buttonCheck.isEnabled=false
                 when {
-                    checkboxDisabled.isSelected -> {
+                    radioButtonDisabled.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
                         val builderList = Runtime.getRuntime().exec("adb shell pm list packages -d")
@@ -365,7 +357,7 @@ fun main() {
                         }
                         builderList.waitFor()
                     }
-                    checkboxSystem.isSelected -> {
+                    radioButtonSystem.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
                         val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -s")
@@ -384,7 +376,7 @@ fun main() {
                         }
                         builderList.waitFor()
                     }
-                    checkboxEnabled.isSelected -> {
+                    radioButtonEnabled.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
                         val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -e")
@@ -403,7 +395,7 @@ fun main() {
                         }
                         builderList.waitFor()
                     }
-                    checkboxThird.isSelected -> {
+                    radioButtonThird.isSelected -> {
                         arrayList = emptyArray()
                         listModel.removeAllElements()
                         val builderList = Runtime.getRuntime().exec( "adb shell pm list packages -3")
@@ -619,6 +611,242 @@ fun main() {
 
     ////////AdbPanel////////
 
+
+    val logsPanel = JPanel()
+    logsPanel.layout = null
+
+
+    ////////LogsPane////////
+
+    ////Label////
+
+    ////Label////
+
+    ////ScrollPane////
+    val listLogs = JList(listModelLogs)
+    val scrollPaneLogs = JScrollPane()
+    scrollPaneLogs.setBounds(5, 5, 870, 425)
+    scrollPaneLogs.setViewportView(listLogs)
+    logsPanel.add(scrollPaneLogs)
+    ////ScrollPane////
+
+    val group = ButtonGroup()
+
+    val radioButtonVerbose = JRadioButton("Verbose",false)
+    radioButtonVerbose.bounds= Rectangle(165,436,80,20)
+    logsPanel.add(radioButtonVerbose)
+    group.add(radioButtonVerbose)
+
+    val radioButtonDebug = JRadioButton("Debug",false)
+    radioButtonDebug.bounds= Rectangle(265,436,80,20)
+    logsPanel.add(radioButtonDebug)
+    group.add(radioButtonDebug)
+
+    val radioButtonInfo = JRadioButton("Info",true)
+    radioButtonInfo.bounds= Rectangle(365,436,80,20)
+    radioButtonInfo.isSelected=true
+    logsPanel.add(radioButtonInfo)
+    group.add(radioButtonInfo)
+
+    val radioButtonWarning = JRadioButton("Warning",false)
+    radioButtonWarning.bounds= Rectangle(465,436,80,20)
+    logsPanel.add(radioButtonWarning)
+    group.add(radioButtonWarning)
+
+    val radioButtonError = JRadioButton("Error",false)
+    radioButtonError.bounds= Rectangle(565,436,80,20)
+    logsPanel.add(radioButtonError)
+    group.add(radioButtonError)
+
+    val radioButtonFatal = JRadioButton("Fatal",false)
+    radioButtonFatal.bounds= Rectangle(665,436,80,20)
+    logsPanel.add(radioButtonFatal)
+    group.add(radioButtonFatal)
+
+    val radioButtonSilent = JRadioButton("Silent",false)
+    radioButtonSilent.bounds= Rectangle(765,436,80,20)
+    logsPanel.add(radioButtonSilent)
+    group.add(radioButtonSilent)
+
+    ////Button////
+    val buttonSave=JButton("Save")
+    buttonSave.bounds= Rectangle(5,505,150,35)
+    buttonSave.isFocusable=false
+    buttonSave.isEnabled=false
+    logsPanel.add(buttonSave)
+    buttonSave.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonSave.isEnabled=false
+                val choseFile = JFileChooser()
+                choseFile.dialogTitle = "Save logs file"
+                choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
+                choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
+                choseFile.fileFilter = choseFile.getChoosableFileFilters()[1]
+                val chooseDialog = choseFile.showSaveDialog(frame)
+                if(chooseDialog == JFileChooser.APPROVE_OPTION) {
+                    val file = File(choseFile.getSelectedFile().getCanonicalPath().toString() + "." + (choseFile.getFileFilter() as FileNameExtensionFilter).extensions[0])
+                    if (!file.exists()) {
+                        file.createNewFile()
+                    }
+                    val fw = FileWriter(file.absoluteFile)
+                    val bw = BufferedWriter(fw)
+                    for (element in 0 until listModelLogs.size()) {
+                        bw.write(listModelLogs[element].toString())
+                        bw.write("\n")
+                    }
+                    bw.close()
+                }
+            }
+            override fun done() {
+                buttonSave.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+    val buttonStart=JButton("Start")
+    buttonStart.bounds= Rectangle(5,431,150,35)
+    buttonStart.isFocusable=false
+    logsPanel.add(buttonStart)
+    var functionButtonStart = true
+    var ifStopSelected = false
+    buttonStart.addActionListener {
+        buttonSave.isEnabled=false
+        if(ifStopSelected) {
+            functionButtonStart=true
+        }
+        if(functionButtonStart) {
+            buttonStart.text="Pause"
+            if(ifStopSelected) {
+                listModelLogs.removeAllElements()
+            }
+            class MyWorker : SwingWorker<Unit, Int>() {
+                override fun doInBackground() {
+                    arrayList = emptyArray()
+                    when {
+                        radioButtonVerbose.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:V")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonDebug.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:D")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonInfo.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:I")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonWarning.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:W")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonError.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:E")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonFatal.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:F")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                        radioButtonSilent.isSelected -> {
+                            Runtime.getRuntime().exec("adb logcat -c").waitFor()
+                            val builderList = Runtime.getRuntime().exec("adb logcat *:S")
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system")
+                                    listModelLogs.addElement(line)
+                                listLogs.ensureIndexIsVisible(listModelLogs.size() - 1)
+                            }
+                        }
+                    }
+                }
+            }
+            val worker = MyWorker()
+            worker.execute()
+            functionButtonStart=false
+            ifStopSelected=false
+        }else{
+            if(ifStopSelected) {
+                listModelLogs.removeAllElements()
+            }else {
+                Runtime.getRuntime().exec("adb kill-server")
+                functionButtonStart = true
+                buttonStart.text = "Continue"
+            }
+        }
+    }
+
+    val buttonStop=JButton("Stop")
+    buttonStop.bounds= Rectangle(5,468,150,35)
+    buttonStop.isFocusable=false
+    logsPanel.add(buttonStop)
+    buttonStop.addActionListener {
+        buttonStart.text="Start"
+        Runtime.getRuntime().exec("adb kill-server")
+        ifStopSelected=true
+        buttonSave.isEnabled=true
+    }
+
+
+    
+    ////Button////
+
+
+
+    ////////LogsPane////////
+
     val fastbootPanel = JPanel()
     fastbootPanel.layout = null
 
@@ -654,32 +882,33 @@ fun main() {
     fastbootPanel.add(scroll2)
     ////TextArea////
 
-    ////CheckBox////
-    val checkboxPartitionSystem = JCheckBox("System")
-    checkboxPartitionSystem.bounds= Rectangle(300,30,100,20)
-    fastbootPanel.add(checkboxPartitionSystem)
+    ////radioButton////
 
-    val checkboxPartitionData = JCheckBox("Data")
-    checkboxPartitionData.bounds= Rectangle(300,55,100,20)
-    fastbootPanel.add(checkboxPartitionData)
+    val checkBoxPartitionSystem = JCheckBox("System")
+    checkBoxPartitionSystem.bounds= Rectangle(300,30,100,20)
+    fastbootPanel.add(checkBoxPartitionSystem)
 
-    val checkboxPartitionCache = JCheckBox("Cache")
-    checkboxPartitionCache.bounds= Rectangle(300,80,100,20)
-    fastbootPanel.add(checkboxPartitionCache)
+    val checkBoxPartitionData = JCheckBox("Data")
+    checkBoxPartitionData.bounds= Rectangle(300,55,100,20)
+    fastbootPanel.add(checkBoxPartitionData)
 
-    val checkboxPartitionRecovery = JCheckBox("Recovery")
-    checkboxPartitionRecovery.bounds= Rectangle(300,105,100,20)
-    fastbootPanel.add(checkboxPartitionRecovery)
+    val checkBoxPartitionCache = JCheckBox("Cache")
+    checkBoxPartitionCache.bounds= Rectangle(300,80,100,20)
+    fastbootPanel.add(checkBoxPartitionCache)
 
-    val checkboxPartitionBoot = JCheckBox("Boot")
-    checkboxPartitionBoot.bounds= Rectangle(300,130,100,20)
-    fastbootPanel.add(checkboxPartitionBoot)
+    val checkBoxPartitionRecovery = JCheckBox("Recovery")
+    checkBoxPartitionRecovery.bounds= Rectangle(300,105,100,20)
+    fastbootPanel.add(checkBoxPartitionRecovery)
 
-    val checkboxPartitionRadio = JCheckBox("Radio")
-    checkboxPartitionRadio.bounds= Rectangle(300,155,100,20)
-    fastbootPanel.add(checkboxPartitionRadio)
+    val checkBoxPartitionBoot = JCheckBox("Boot")
+    checkBoxPartitionBoot.bounds= Rectangle(300,130,100,20)
+    fastbootPanel.add(checkBoxPartitionBoot)
 
-    ////CheckBox////
+    val checkBoxPartitionRadio = JCheckBox("Radio")
+    checkBoxPartitionRadio.bounds= Rectangle(300,155,100,20)
+    fastbootPanel.add(checkBoxPartitionRadio)
+
+    ////radioButton////
 
     ////Button////
     val buttonRunCommandFastboot=JButton("Run")
@@ -721,22 +950,22 @@ fun main() {
         class MyWorker : SwingWorker<Unit, Int>() {
             override fun doInBackground() {
                 buttonErase.isEnabled=false
-                if(checkboxPartitionBoot.isSelected){
+                if(checkBoxPartitionBoot.isSelected){
                     Runtime.getRuntime().exec("fastboot erase boot").waitFor()
                 }
-                if(checkboxPartitionSystem.isSelected){
+                if(checkBoxPartitionSystem.isSelected){
                     Runtime.getRuntime().exec("fastboot erase system").waitFor()
                 }
-                if(checkboxPartitionData.isSelected){
+                if(checkBoxPartitionData.isSelected){
                     Runtime.getRuntime().exec("fastboot erase userdata").waitFor()
                 }
-                if(checkboxPartitionCache.isSelected){
+                if(checkBoxPartitionCache.isSelected){
                     Runtime.getRuntime().exec("fastboot erase cache").waitFor()
                 }
-                if(checkboxPartitionRecovery.isSelected){
+                if(checkBoxPartitionRecovery.isSelected){
                     Runtime.getRuntime().exec("fastboot erase recovery").waitFor()
                 }
-                if(checkboxPartitionRadio.isSelected){
+                if(checkBoxPartitionRadio.isSelected){
                     Runtime.getRuntime().exec("fastboot erase radio").waitFor()
                 }
             }
@@ -768,7 +997,7 @@ fun main() {
     }
 
     val buttonRecoveryRebootFastboot=JButton("Reboot to Recovery")
-    buttonRecoveryRebootFastboot.bounds= Rectangle(125,31,170,25)
+    buttonRecoveryRebootFastboot.bounds= Rectangle(126,5,170,25)
     buttonRecoveryRebootFastboot.isFocusable=false
     fastbootPanel.add(buttonRecoveryRebootFastboot)
     buttonRecoveryRebootFastboot.addActionListener {
@@ -787,7 +1016,7 @@ fun main() {
     }
 
     val buttonFastbootRebootFastboot=JButton("Reboot to Fastboot")
-    buttonFastbootRebootFastboot.bounds= Rectangle(125,5,170,25)
+    buttonFastbootRebootFastboot.bounds= Rectangle(126,30,170,25)
     buttonFastbootRebootFastboot.isFocusable=false
     fastbootPanel.add(buttonFastbootRebootFastboot)
     buttonFastbootRebootFastboot.addActionListener {
@@ -880,6 +1109,146 @@ fun main() {
     ////Button////
 
     ////////FastBoot////////
+
+    val recoveryPanel = JPanel()
+    recoveryPanel.layout = null
+
+    ////////RecoveryPane////////
+
+    ////Label////
+    val labelInstallZip=JLabel("Install zip")
+    labelInstallZip.bounds= Rectangle(7,60,250,20)
+    recoveryPanel.add(labelInstallZip)
+    ////Label////
+
+    ////Button////
+    val buttonRebootRecovery=JButton("Reboot")
+    buttonRebootRecovery.bounds= Rectangle(5,5,120,25)
+    buttonRebootRecovery.isFocusable=false
+    recoveryPanel.add(buttonRebootRecovery)
+    buttonRebootRecovery.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonRebootRecovery.isEnabled=false
+                Runtime.getRuntime().exec("adb shell twrp reboot").waitFor()
+            }
+            override fun done() {
+                buttonRebootRecovery.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+
+    val buttonRecoveryRebootRecovery=JButton("Reboot to Recovery")
+    buttonRecoveryRebootRecovery.bounds= Rectangle(126,5,170,25)
+    buttonRecoveryRebootRecovery.isFocusable=false
+    recoveryPanel.add(buttonRecoveryRebootRecovery)
+    buttonRecoveryRebootRecovery.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonRecoveryRebootRecovery.isEnabled=false
+                Runtime.getRuntime().exec("adb shell twrp reboot recovery").waitFor()
+            }
+            override fun done() {
+                buttonRecoveryRebootRecovery.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+
+    val buttonFastbootRebootRecovery=JButton("Reboot to Fastboot")
+    buttonFastbootRebootRecovery.bounds= Rectangle(126,30,170,25)
+    buttonFastbootRebootRecovery.isFocusable=false
+    recoveryPanel.add(buttonFastbootRebootRecovery)
+    buttonFastbootRebootRecovery.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonFastbootRebootRecovery.isEnabled=false
+                Runtime.getRuntime().exec("adb shell twrp reboot bootloader").waitFor()
+            }
+            override fun done() {
+                buttonFastbootRebootRecovery.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+
+    val buttonPowerOffRecovery=JButton("Shutdown")
+    buttonPowerOffRecovery.bounds= Rectangle(5,30,120,25)
+    buttonPowerOffRecovery.isFocusable=false
+    recoveryPanel.add(buttonPowerOffRecovery)
+    buttonPowerOffRecovery.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonPowerOffRecovery.isEnabled=false
+                Runtime.getRuntime().exec("adb shell twrp reboot poweroff").waitFor()
+            }
+            override fun done() {
+                buttonPowerOffRecovery.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+
+    val buttonChooseZip=JButton("Select Zip")
+    buttonChooseZip.bounds= Rectangle(5,135,285,50)
+    buttonChooseZip.isFocusable=false
+    recoveryPanel.add(buttonChooseZip)
+    buttonChooseZip.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonChooseZip.isEnabled=false
+                val choseFile = JFileChooser()
+                val filter = FileNameExtensionFilter("Zip files", "zip")
+                choseFile.fileFilter = filter
+                val chooseDialog = choseFile.showDialog(null, "Select Zip")
+                if(chooseDialog == JFileChooser.APPROVE_OPTION) {
+                    selectedZipPath = choseFile.selectedFile.absolutePath
+                }
+            }
+            override fun done() {
+                buttonChooseZip.isEnabled=true
+            }
+        }
+
+        val worker = MyWorker()
+        worker.execute()
+    }
+    val buttonInstallZip=JButton("Install")
+    buttonInstallZip.bounds= Rectangle(5,80,285,50)
+    buttonInstallZip.isFocusable=false
+    recoveryPanel.add(buttonInstallZip)
+    buttonInstallZip.addActionListener {
+        class MyWorker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                buttonInstallZip.isEnabled=false
+                Runtime.getRuntime().exec("adb shell twrp sideload")
+                Thread.sleep(3_000)
+                if(System.getProperty("os.name").indexOf("Windows")!=-1){
+                        Runtime.getRuntime().exec("adb sideload \"${selectedZipPath}\"").waitFor()
+                }else{
+                        Runtime.getRuntime().exec("adb sideload ${selectedZipPath}").waitFor()
+                }
+            }
+            override fun done() {
+                buttonInstallZip.isEnabled=true
+            }
+        }
+        val worker = MyWorker()
+        worker.execute()
+
+    }
+    ////Button////
+
+    ////////RecoveryPane////////
 
     val linksPanel = JPanel()
     linksPanel.layout = null
@@ -1084,7 +1453,7 @@ fun main() {
     buttonMSMXtended.bounds= Rectangle(250,65,110,25)
     buttonMSMXtended.isFocusable=false
     linksPanel.add(buttonMSMXtended)
-    buttonMSMXtended.addActionListener { runUrl("https://msmxtended.me/") }
+    buttonMSMXtended.addActionListener { runUrl("https://msmxtended.org/") }
 
     val buttonMSMXtendedDownload=JButton("Download")
     buttonMSMXtendedDownload.bounds= Rectangle(250,90,110,25)
@@ -1161,15 +1530,14 @@ fun main() {
 
     val buttonRevengeOS=JButton("Official Site")
     buttonRevengeOS.bounds= Rectangle(250,465,110,25)
-    buttonRevengeOS.isFocusable=false
+    buttonRevengeOS.isEnabled=false
     linksPanel.add(buttonRevengeOS)
-    buttonRevengeOS.addActionListener { runUrl("http://revengeos.com") }
 
     val buttonRevengeOSDownload=JButton("Download")
     buttonRevengeOSDownload.bounds= Rectangle(250,490,110,25)
     buttonRevengeOSDownload.isFocusable=false
     linksPanel.add(buttonRevengeOSDownload)
-    buttonRevengeOSDownload.addActionListener { runUrl("https://osdn.net/projects/revengeos/storage/") }
+    buttonRevengeOSDownload.addActionListener { runUrl("https://get.revengeos.com/") }
 
     val labelXiaomiEU=JLabel("Xiaomi EU")
     labelXiaomiEU.bounds= Rectangle(370,45,100,20)
@@ -1199,9 +1567,8 @@ fun main() {
 
     val buttonMasikDownload=JButton("Download")
     buttonMasikDownload.bounds= Rectangle(370,170,110,25)
-    buttonMasikDownload.isFocusable=false
+    buttonMasikDownload.isEnabled=false
     linksPanel.add(buttonMasikDownload)
-    buttonMasikDownload.addActionListener { runUrl("https://sites.google.com/view/masikupdates/Update") }
 
     val labelMiRoom=JLabel("MiRoom")
     labelMiRoom.bounds= Rectangle(370,205,100,20)
@@ -1465,8 +1832,11 @@ fun main() {
     val tabbedpane = JTabbedPane()
     tabbedpane.setBounds(0,0,880,580)
     tabbedpane.add("ADB", adbPanel)
+    tabbedpane.add("Logcat", logsPanel)
     tabbedpane.add("Fastboot", fastbootPanel)
+    tabbedpane.add("Recovery", recoveryPanel)
     tabbedpane.add("Links", linksPanel)
+
 
     frame.add(tabbedpane)
     frame.isVisible=true
