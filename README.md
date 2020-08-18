@@ -5,16 +5,21 @@
   -----------
   ![screenshot of sample](https://i.imgur.com/645essJ.png)
   ## Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. Dark theme, intuitive interface and other features
+  Latest Version: 0.9
+  -
+  Main Features:
+  -
 
-  Main Features
-  ------------------
-
-  * Adb (Support usb and wifi connection. Installation one apk or mass installation, disable, enable or uninstall(for main user) system apps, you can get list of apps packages (system, third, enabled, disabled or all), reboot to system, recovery, bootloader. You can also run another ADB command, to do this, enter it in the input field and press "Run")
-  ![screenshot of sample](https://i.imgur.com/seYjxDU.png)
-  * Fastboot (Install or boot (without installation) recovery .img, reboot to system, recovery, bootloader, or erase selected partitions. You can also run another Fastboot command, to do this, enter it in the input field and press "Run")
-  ![screenshot of sample](https://i.imgur.com/Ohy7Dhn.png)
-  * Links (For your convenience, I made a tab with links to official sites and pages for downloading ROMs, Recovery, Google Apps and other)
-  ![screenshot of sample](https://i.imgur.com/ySh8UjF.png)
+  * Adb 
+  ![screenshot of sample](https://i.imgur.com/Ckq7NyS.png)
+  * Logcat
+  ![screenshot of sample](https://i.imgur.com/j2cjrzy.png)
+  * Fastboot 
+  ![screenshot of sample](https://i.imgur.com/SJifwiU.png)
+  * Recovery
+  ![screenshot of sample](https://i.imgur.com/Qet6Cz2.png)
+  * Links
+  ![screenshot of sample](https://i.imgur.com/01QR2pU.png)
 
   The Latest Version And Updates
   ------------------
