@@ -5,7 +5,7 @@
   -----------
   ![screenshot of sample](https://i.imgur.com/645essJ.png)
   ## Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. Dark theme, intuitive interface and other features
-  Latest Version: 0.9
+  Latest Version: 0.9.7
   -
   Main Features:
   -
