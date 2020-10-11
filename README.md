@@ -11,15 +11,13 @@
   -
 
   * Adb 
-  ![screenshot of sample](https://i.imgur.com/Ckq7NyS.png)
+  ![screenshot of sample](https://i.imgur.com/JztTKhS.png)
   * Logcat
-  ![screenshot of sample](https://i.imgur.com/j2cjrzy.png)
+  ![screenshot of sample](https://i.imgur.com/O4bz0pS.png)
   * Fastboot 
-  ![screenshot of sample](https://i.imgur.com/SJifwiU.png)
-  * Recovery
-  ![screenshot of sample](https://i.imgur.com/Qet6Cz2.png)
+  ![screenshot of sample](https://i.imgur.com/HEDvDoq.png)
   * Links
-  ![screenshot of sample](https://i.imgur.com/01QR2pU.png)
+  ![screenshot of sample](https://i.imgur.com/gBNdE33.png)
 
   The Latest Version And Updates
   ------------------
