@@ -79,8 +79,8 @@ open class AndroidTool : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
-            val Windows = "Windows" in System.getProperty("os.name")
-            print(Windows)
+            val dfg = "Windows" in System.getProperty("os.name")
+            print(dfg)
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
                 class MyWorker : SwingWorker<Unit, Int>() {
