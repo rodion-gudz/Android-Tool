@@ -1,2 +1,5 @@
 *.class
-production/
+out/production/
+node_modules/
+.idea/
+my_notes.txt
