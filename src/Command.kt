@@ -5,7 +5,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 open class Command : AndroidToolUI() {
-fun kto(){
+fun connectionCheck(){
     if (!CommandRunning) {
         val builderListGetState = Runtime.getRuntime().exec("adb get-state")
         GetStateOutput = BufferedReader(InputStreamReader(builderListGetState.inputStream)).readText()
@@ -71,130 +71,134 @@ fun kto(){
         }
     }
 
-    if (ConnectedViaAdb) {
-        if (FirstAdbConnection) {
-            tabbedpane.selectedIndex = 0
-            FirstAdbConnection = false
-        }
-        frame.isEnabled = true
-        dialogUnauthorizedDevice.dispose()
-        if (enabledAll) {
-            val components: Array<Component> = fastbootPanel.getComponents()
-            for (component in components) {
-                component.setEnabled(false)
+    when {
+        ConnectedViaAdb -> {
+            if (FirstAdbConnection) {
+                tabbedpane.selectedIndex = 0
+                FirstAdbConnection = false
             }
-            val components2: Array<Component> = adbPanel.getComponents()
-            for (component in components2) {
-                component.setEnabled(true)
-            }
-            val components3: Array<Component> = logsPanel.getComponents()
-            for (component in components3) {
-                if (component != buttonStop && component != buttonSave) {
-                    component.setEnabled(true)
-                }
-            }
-        }
-        textAreaCommandFastbootOutput.isFocusable = false
-        textAreaCommandOutput.isFocusable = true
-        textAreaCommandInput.isFocusable = true
-        textAreaCommandFastbootInput.isFocusable = false
-        listLogs.isFocusable = true
-        list.isFocusable = true
-        if (tabbedpane.selectedIndex == 2) {
-            buttonPowerOff.isEnabled = false
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-        } else if (tabbedpane.selectedIndex == 3) {
-            buttonReboot.isEnabled = false
-            buttonRecoveryReboot.isEnabled = false
-            buttonFastbootReboot.isEnabled = false
-            buttonPowerOff.isEnabled = false
-        } else {
-            buttonPowerOff.isEnabled = true
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-        }
-        if (newPhone) {
-            getprop()
-        }
-        if (ConnectedAdbUsb) {
-            labelUSBConnection.text = "Connected via Adb"
-            labelUSBConnection.icon = iconYes
-            buttonIpConnect.isEnabled = false
-            labelIP.isEnabled = false
-            textFieldIP.isEnabled = false
-        } else {
-            if (ConnectedAdbWifi) {
-                labelTCPConnection.text = "Connected to ${AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')}"
-                labelTCPConnection.icon = iconYes
-                labelConnect.text = ""
-            }
-        }
-        newPhone = false
-        enabledAll = false
-    } else if (ConnectedViaFastboot) {
-        if (FirstFastbootConnection) {
-            tabbedpane.selectedIndex = 2
-            FirstFastbootConnection = false
-        }
-        if (enabledAll) {
-            val components: Array<Component> = fastbootPanel.getComponents()
-            for (component in components) {
-                component.setEnabled(true)
-            }
-            val components2: Array<Component> = adbPanel.getComponents()
-            for (component in components2) {
-                component.setEnabled(false)
-            }
-            val components3: Array<Component> = logsPanel.getComponents()
-            for (component in components3) {
-                component.setEnabled(false)
-            }
-        }
-        textAreaCommandFastbootOutput.isFocusable = true
-        textAreaCommandOutput.isFocusable = false
-        textAreaCommandInput.isFocusable = false
-        textAreaCommandFastbootInput.isFocusable = true
-        listLogs.isFocusable = false
-        list.isFocusable = false
-        if (tabbedpane.selectedIndex == 2) {
-            buttonPowerOff.isEnabled = false
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-        } else if (tabbedpane.selectedIndex == 3) {
-            buttonReboot.isEnabled = false
-            buttonRecoveryReboot.isEnabled = false
-            buttonFastbootReboot.isEnabled = false
-            buttonPowerOff.isEnabled = false
-        } else {
-            buttonPowerOff.isEnabled = true
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-        }
-        if (newPhone) {
-            getpropFastboot()
-            labelUSBConnection.text = "Connected via Fastboot"
-            labelUSBConnection.icon = iconYes
-        }
-        newPhone = false
-        enabledAll = false
-    } else {
-        FirstFastbootConnection = true
-        FirstAdbConnection = true
-        enabledAll = true
-        newPhone = true
-        if (!UnauthorizedDevice) {
             frame.isEnabled = true
             dialogUnauthorizedDevice.dispose()
+            if (enabledAll) {
+                val components: Array<Component> = fastbootPanel.getComponents()
+                for (component in components) {
+                    component.setEnabled(false)
+                }
+                val components2: Array<Component> = adbPanel.getComponents()
+                for (component in components2) {
+                    component.setEnabled(true)
+                }
+                val components3: Array<Component> = logsPanel.getComponents()
+                for (component in components3) {
+                    if (component != buttonStop && component != buttonSave) {
+                        component.setEnabled(true)
+                    }
+                }
+            }
+            textAreaCommandFastbootOutput.isFocusable = false
+            textAreaCommandOutput.isFocusable = true
+            textAreaCommandInput.isFocusable = true
+            textAreaCommandFastbootInput.isFocusable = false
+            listLogs.isFocusable = true
+            list.isFocusable = true
+            if (tabbedpane.selectedIndex == 2) {
+                buttonPowerOff.isEnabled = false
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            } else if (tabbedpane.selectedIndex == 3) {
+                buttonReboot.isEnabled = false
+                buttonRecoveryReboot.isEnabled = false
+                buttonFastbootReboot.isEnabled = false
+                buttonPowerOff.isEnabled = false
+            } else {
+                buttonPowerOff.isEnabled = true
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            }
+            if (newPhone) {
+                getprop()
+            }
+            if (ConnectedAdbUsb) {
+                labelUSBConnection.text = "Connected via Adb"
+                labelUSBConnection.icon = iconYes
+                buttonIpConnect.isEnabled = false
+                labelIP.isEnabled = false
+                textFieldIP.isEnabled = false
+            } else {
+                if (ConnectedAdbWifi) {
+                    labelTCPConnection.text = "Connected to ${AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')}"
+                    labelTCPConnection.icon = iconYes
+                    labelConnect.text = ""
+                }
+            }
+            newPhone = false
+            enabledAll = false
         }
-        noConnection()
+        ConnectedViaFastboot -> {
+            if (FirstFastbootConnection) {
+                tabbedpane.selectedIndex = 2
+                FirstFastbootConnection = false
+            }
+            if (enabledAll) {
+                val components: Array<Component> = fastbootPanel.getComponents()
+                for (component in components) {
+                    component.setEnabled(true)
+                }
+                val components2: Array<Component> = adbPanel.getComponents()
+                for (component in components2) {
+                    component.setEnabled(false)
+                }
+                val components3: Array<Component> = logsPanel.getComponents()
+                for (component in components3) {
+                    component.setEnabled(false)
+                }
+            }
+            textAreaCommandFastbootOutput.isFocusable = true
+            textAreaCommandOutput.isFocusable = false
+            textAreaCommandInput.isFocusable = false
+            textAreaCommandFastbootInput.isFocusable = true
+            listLogs.isFocusable = false
+            list.isFocusable = false
+            if (tabbedpane.selectedIndex == 2) {
+                buttonPowerOff.isEnabled = false
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            } else if (tabbedpane.selectedIndex == 3) {
+                buttonReboot.isEnabled = false
+                buttonRecoveryReboot.isEnabled = false
+                buttonFastbootReboot.isEnabled = false
+                buttonPowerOff.isEnabled = false
+            } else {
+                buttonPowerOff.isEnabled = true
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            }
+            if (newPhone) {
+                getPropFastboot()
+                labelUSBConnection.text = "Connected via Fastboot"
+                labelUSBConnection.icon = iconYes
+            }
+            newPhone = false
+            enabledAll = false
+        }
+        else -> {
+            FirstFastbootConnection = true
+            FirstAdbConnection = true
+            enabledAll = true
+            newPhone = true
+            if (!UnauthorizedDevice) {
+                frame.isEnabled = true
+                dialogUnauthorizedDevice.dispose()
+            }
+            noConnection()
+        }
     }
 }
-    fun getprop() {
+    private fun getprop() {
         val builderList = Runtime.getRuntime().exec("adb shell getprop ro.product.manufacturer")
         val input = builderList.inputStream
         val reader = BufferedReader(InputStreamReader(input))
@@ -347,27 +351,27 @@ fun kto(){
         labelTrebleValue.text = Treble
     }
 
-    fun getpropFastboot() {
-        Unlock = exec("fastboot getvar unlocked", stdIn = "yes").toString().substringAfter(":")
-        FastbootCodename = exec("fastboot getvar product", stdIn = "yes").toString().substringAfter(":")
-        FastbootSN = exec("fastboot getvar serialno", stdIn = "yes").toString().substringAfter(":")
-        SystemFS = exec("fastboot getvar partition-type:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val SystemDec = exec("fastboot getvar partition-size:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+    private fun getPropFastboot() {
+        Unlock = exece("fastboot getvar unlocked", stdIn = "yes").toString().substringAfter(":")
+        FastbootCodename = exece("fastboot getvar product", stdIn = "yes").toString().substringAfter(":")
+        FastbootSN = exece("fastboot getvar serialno", stdIn = "yes").toString().substringAfter(":")
+        SystemFS = exece("fastboot getvar partition-type:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val SystemDec = exece("fastboot getvar partition-size:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         SystemCapacity = (java.lang.Long.parseLong(SystemDec, 16) / 1048576).toString()
-        DataFS = exec("fastboot getvar partition-type:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val DataDec = exec("fastboot getvar partition-size:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        DataFS = exece("fastboot getvar partition-type:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val DataDec = exece("fastboot getvar partition-size:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         DataCapacity = (java.lang.Long.parseLong(DataDec, 16) / 1048576).toString()
-        BootFS = exec("fastboot getvar partition-type:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val BootDec = exec("fastboot getvar partition-size:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        BootFS = exece("fastboot getvar partition-type:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val BootDec = exece("fastboot getvar partition-size:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         BootCapacity = (java.lang.Long.parseLong(BootDec, 16) / 1048576).toString()
-        RecoveryFS = exec("fastboot getvar partition-type:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val RecoveryDec = exec("fastboot getvar partition-size:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        RecoveryFS = exece("fastboot getvar partition-type:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val RecoveryDec = exece("fastboot getvar partition-size:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         RecoveryCapacity = (java.lang.Long.parseLong(RecoveryDec, 16) / 1048576).toString()
-        CacheFS = exec("fastboot getvar partition-type:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val CacheDec = exec("fastboot getvar partition-size:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        CacheFS = exece("fastboot getvar partition-type:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val CacheDec = exece("fastboot getvar partition-size:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         CacheCapacity = (java.lang.Long.parseLong(CacheDec, 16) / 1048576).toString()
-        VendorFS = exec("fastboot getvar partition-type:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val VendorDec = exec("fastboot getvar partition-size:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        VendorFS = exece("fastboot getvar partition-type:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
+        val VendorDec = exece("fastboot getvar partition-size:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
         VendorCapacity = (java.lang.Long.parseLong(VendorDec, 16) / 1048576).toString()
         AllCapacity = (SystemCapacity.toInt() + DataCapacity.toInt() + BootCapacity.toInt() + RecoveryCapacity.toInt() + CacheCapacity.toInt() + VendorCapacity.toInt()).toString()
         labelUnlockValue.text = if (Unlock != "< waiting for any device >") {
@@ -454,7 +458,7 @@ fun kto(){
 
 
 
-    fun exec(cmd: String, stdIn: String = "", captureOutput: Boolean = true, workingDir: File = File(".")): String? {
+    fun exece(cmd: String, stdIn: String = "", captureOutput: Boolean = true, workingDir: File = File(".")): String? {
         try {
             val process = ProcessBuilder(*cmd.split("\\s".toRegex()).toTypedArray())
                     .directory(workingDir)

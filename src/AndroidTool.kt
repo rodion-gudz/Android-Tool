@@ -62,7 +62,6 @@ var ConnectedViaAdb = false
 var ConnectedViaFastboot = false
 var UnauthorizedDevice = false
 var MultipleDevicesConnected = false
-var MultipleDevicesConnectedDialog = false
 var CommandRunning = false
 var ConnectedAdbUsb = false
 var ConnectedAdbWifi = false
@@ -71,7 +70,8 @@ var FirstAdbConnection = true
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 
-open class AndroidTool() : Command() {
+open class AndroidTool : Command() {
+
     init {
         AndroidToolUI()
         Command()
@@ -79,6 +79,8 @@ open class AndroidTool() : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
+            val Windows = "Windows" in System.getProperty("os.name")
+            print(Windows)
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
                 class MyWorker : SwingWorker<Unit, Int>() {
@@ -420,7 +422,7 @@ open class AndroidTool() : Command() {
             val run = Thread {
                 while (true) {
                     try {
-                        kto()
+                        connectionCheck()
                         Thread.sleep(1000) //1000 - 1 сек
                     } catch (ex: InterruptedException) {
                     }
