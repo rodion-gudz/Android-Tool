@@ -3,7 +3,7 @@
 
   What is it?
   -----------
-  ![screenshot of sample](https://i.imgur.com/645essJ.png)
+  ![Logo](https://i.imgur.com/645essJ.png)
   ## Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. Dark theme, intuitive interface and other features
   Latest Version: 0.9.7
   -
@@ -11,13 +11,13 @@
   -
 
   * Adb 
-  ![screenshot of sample](https://i.imgur.com/JztTKhS.png)
+  ![Adb Screenshot](https://i.imgur.com/JztTKhS.png)
   * Logcat
-  ![screenshot of sample](https://i.imgur.com/O4bz0pS.png)
+  ![Logcat Screenshot](https://i.imgur.com/O4bz0pS.png)
   * Fastboot 
-  ![screenshot of sample](https://i.imgur.com/HEDvDoq.png)
+  ![Fastgeek Screenshot](https://i.imgur.com/HEDvDoq.png)
   * Links
-  ![screenshot of sample](https://i.imgur.com/gBNdE33.png)
+  ![Links Screenshot](https://i.imgur.com/gBNdE33.png)
 
   The Latest Version And Updates
   ------------------
