@@ -69,9 +69,11 @@ var FirstFastbootConnection = true
 var FirstAdbConnection = true
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
-
+val Windows = "Windows" in System.getProperty("os.name")
+val Linux = "Linux" in System.getProperty("os.name")
+val MacOS = "Mac" in System.getProperty("os.name")
+val WorkingDir = ""
 open class AndroidTool : Command() {
-
     init {
         AndroidToolUI()
         Command()
@@ -79,40 +81,25 @@ open class AndroidTool : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
-            val dfg = "Windows" in System.getProperty("os.name")
-            print(dfg)
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonIpConnect.isEnabled = false
                         Runtime.getRuntime().exec("adb kill-server").waitFor()
-                        val builderList = Runtime.getRuntime().exec("adb connect ${textFieldIP.text}")
-                        val input = builderList.inputStream
-                        val reader = BufferedReader(InputStreamReader(input))
-                        var line: String?
-                        var output = ""
-                        while (reader.readLine().also { line = it } != null) {
-                            output += "\n"
-                            output += line
-                        }
-                        if (output.indexOf("connected to") != -1) {
+                        var output = exec("adb connect ${textFieldIP.text}", output = true)
+                        if ("connected to" in output) {
                             labelTCPConnection.text = "Connected to ${textFieldIP.text}"
                             labelTCPConnection.icon = iconYes
                         } else {
                             labelConnect.text = "Failed"
                         }
-                        builderList.waitFor()
-
                     }
-
                     override fun done() {
                         buttonIpConnect.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
@@ -129,7 +116,7 @@ open class AndroidTool : Command() {
                     }
                 }
                 listModel = filteredItems
-                list.setModel(listModel)
+                list.model = listModel
             }
 
             textFieldIPa.addKeyListener(object : KeyAdapter() {
@@ -331,34 +318,31 @@ open class AndroidTool : Command() {
 
 
             buttonReboot.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonReboot.isEnabled = false
-                        when {
-                            tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 -> Runtime.getRuntime().exec("adb reboot")
-                            tabbedpane.selectedIndex == 2 -> Runtime.getRuntime().exec("fastboot reboot")
-                            tabbedpane.selectedIndex == 3 -> Runtime.getRuntime().exec("adb shell twrp reboot")
+                        when (tabbedpane.selectedIndex) {
+                            0, 1 -> exec("adb reboot")
+                            2 -> exec("fastboot reboot")
+                            3 -> exec("adb shell twrp reboot")
                         }
                     }
-
                     override fun done() {
                         buttonReboot.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonRecoveryReboot.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRecoveryReboot.isEnabled = false
-                        when {
-                            tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 -> Runtime.getRuntime().exec("adb reboot recovery")
-                            tabbedpane.selectedIndex == 2 -> Runtime.getRuntime().exec("fastboot oem reboot-recovery")
-                            tabbedpane.selectedIndex == 3 -> Runtime.getRuntime().exec("adb shell twrp reboot recovery")
+                        when (tabbedpane.selectedIndex) {
+                            0, 1 -> exec("adb reboot recovery")
+                            2 -> exec("fastboot oem reboot-recovery")
+                            3 -> exec("adb shell twrp reboot recovery")
                         }
                     }
 
@@ -366,20 +350,18 @@ open class AndroidTool : Command() {
                         buttonRecoveryReboot.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonFastbootReboot.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonFastbootReboot.isEnabled = false
-                        when {
-                            tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 -> Runtime.getRuntime().exec("adb reboot bootloader")
-                            tabbedpane.selectedIndex == 2 -> Runtime.getRuntime().exec("fastboot reboot-bootloader")
-                            tabbedpane.selectedIndex == 3 -> Runtime.getRuntime().exec("adb shell twrp reboot bootloader")
+                        when (tabbedpane.selectedIndex) {
+                            0, 1 -> exec("adb reboot bootloader")
+                            2 -> exec("fastboot reboot-bootloader")
+                            3 -> exec("adb shell twrp reboot bootloader")
                         }
                     }
 
@@ -387,19 +369,17 @@ open class AndroidTool : Command() {
                         buttonFastbootReboot.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonPowerOff.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonPowerOff.isEnabled = false
-                        when {
-                            tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 -> Runtime.getRuntime().exec("adb reboot -p")
-                            tabbedpane.selectedIndex == 3 -> Runtime.getRuntime().exec("adb shell twrp reboot poweroff")
+                        when (tabbedpane.selectedIndex) {
+                            0, 1 -> exec("adb reboot -p")
+                            3 -> exec("adb shell twrp reboot poweroff")
                         }
                     }
 
@@ -407,9 +387,7 @@ open class AndroidTool : Command() {
                         buttonPowerOff.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
             dialogUnauthorizedDevice.addWindowListener(object : WindowAdapter() {
@@ -423,7 +401,7 @@ open class AndroidTool : Command() {
                 while (true) {
                     try {
                         connectionCheck()
-                        Thread.sleep(1000) //1000 - 1 сек
+                        Thread.sleep(1000)
                     } catch (ex: InterruptedException) {
                     }
                 }
@@ -484,7 +462,7 @@ open class AndroidTool : Command() {
             }
 
             buttonInstallAll.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallAll.isEnabled = false
                         val paths: Array<File>?
@@ -501,44 +479,32 @@ open class AndroidTool : Command() {
                         }
                         paths = file.listFiles(fileNameFilter)
                         for (path in paths) {
-                            if (System.getProperty("os.name").indexOf("Windows") != -1) {
-                                Runtime.getRuntime().exec("adb install \"$path\"").waitFor()
+                            if (Windows) {
+                                exec("adb install \"$path\"")
                             } else {
-                                Runtime.getRuntime().exec("adb install $path").waitFor()
+                                exec("adb install $path")
                             }
                         }
                     }
-
-                    override fun done() {
-                        buttonInstallAll.isEnabled = true
-                    }
+                    override fun done() { buttonInstallAll.isEnabled = true }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
             buttonInstallOne.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallOne.isEnabled = false
-                        if (System.getProperty("os.name").indexOf("Windows") != -1) {
-                            Runtime.getRuntime().exec("adb install \"$selectedFileAbsolutePath\"").waitFor()
+                        if (Windows) {
+                            exec("adb install \"$selectedFileAbsolutePath\"")
                         } else {
-                            Runtime.getRuntime().exec("adb install $selectedFileAbsolutePath").waitFor()
+                            exec("adb install $selectedFileAbsolutePath")
                         }
                     }
-
-                    override fun done() {
-                        buttonInstallOne.isEnabled = true
-                    }
+                    override fun done() { buttonInstallOne.isEnabled = true }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
@@ -549,21 +515,16 @@ open class AndroidTool : Command() {
                     list.selectedValue.toString()
                 }
 
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonDisable.isEnabled = false
-                        Runtime.getRuntime().exec("adb shell pm disable-user --user 0 $textInput").waitFor()
+                        exec("adb shell pm disable-user --user 0 $textInput")
                     }
-
                     override fun done() {
                         buttonDisable.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
@@ -574,21 +535,17 @@ open class AndroidTool : Command() {
                     list.selectedValue.toString()
                 }
 
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonUninstall.isEnabled = false
-                        Runtime.getRuntime().exec("adb shell pm uninstall --user 0 $textInput").waitFor()
+                        exec("adb shell pm uninstall --user 0 $textInput")
                     }
 
                     override fun done() {
                         buttonUninstall.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
@@ -599,26 +556,21 @@ open class AndroidTool : Command() {
                     list.selectedValue.toString()
                 }
 
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonEnable.isEnabled = false
-                        Runtime.getRuntime().exec("adb shell pm enable $textInput").waitFor()
+                        exec("adb shell pm enable $textInput")
                     }
-
                     override fun done() {
                         buttonEnable.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
             buttonCheck.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonCheck.isEnabled = false
                         textFieldIPa.isFocusable = true
@@ -626,37 +578,29 @@ open class AndroidTool : Command() {
                             radioButtonDisabled.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val builderList = Runtime.getRuntime().exec("adb shell pm list packages -d")
-                                val input = builderList.inputStream
-                                val reader = BufferedReader(InputStreamReader(input))
-                                var line: String?
-                                while (reader.readLine().also { line = it } != null) {
-                                    if (line?.indexOf("no devices/emulators found") == -1 && line?.indexOf("device unauthorized.") == -1 && line?.indexOf("kill-server") == -1 && line?.indexOf("server's") == -1 && line?.indexOf("a confirmation dialog") == -1) {
-                                        if (line != "* daemon not running starting now at tcp:5037" && line != "* daemon started successfully") {
+                                val reader = execa("adb shell pm list packages -d")
+                                for(element in reader){
+                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                            arrayList += element.substring(8)
                                         }
-                                        arrayList += line?.substring(8).toString()
                                     }
-
                                 }
                                 arrayList.sort()
                                 for (element in arrayList) {
                                     listModel.addElement(element)
                                     stars.add(element)
                                 }
-                                builderList.waitFor()
                             }
                             radioButtonSystem.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val builderList = Runtime.getRuntime().exec("adb shell pm list packages -s")
-                                val input = builderList.inputStream
-                                val reader = BufferedReader(InputStreamReader(input))
-                                var line: String?
-                                while (reader.readLine().also { line = it } != null) {
-                                    if (line?.indexOf("no devices/emulators found") == -1 && line?.indexOf("device unauthorized.") == -1 && line?.indexOf("kill-server") == -1 && line?.indexOf("server's") == -1 && line?.indexOf("a confirmation dialog") == -1) {
-                                        if (line != "* daemon not running starting now at tcp:5037" && line != "* daemon started successfully") {
+                                val reader = execa("adb shell pm list packages -s")
+                                for(element in reader){
+                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                            arrayList += element.substring(8)
                                         }
-                                        arrayList += line?.substring(8).toString()
                                     }
                                 }
                                 arrayList.sort()
@@ -664,20 +608,16 @@ open class AndroidTool : Command() {
                                     listModel.addElement(element)
                                     stars.add(element)
                                 }
-                                builderList.waitFor()
                             }
                             radioButtonEnabled.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val builderList = Runtime.getRuntime().exec("adb shell pm list packages -e")
-                                val input = builderList.inputStream
-                                val reader = BufferedReader(InputStreamReader(input))
-                                var line: String?
-                                while (reader.readLine().also { line = it } != null) {
-                                    if (line?.indexOf("no devices/emulators found") == -1 && line?.indexOf("device unauthorized.") == -1 && line?.indexOf("kill-server") == -1 && line?.indexOf("server's") == -1 && line?.indexOf("a confirmation dialog") == -1) {
-                                        if (line != "* daemon not running starting now at tcp:5037" && line != "* daemon started successfully") {
+                                val reader = execa("adb shell pm list packages -e")
+                                for(element in reader){
+                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                            arrayList += element.substring(8)
                                         }
-                                        arrayList += line?.substring(8).toString()
                                     }
                                 }
                                 arrayList.sort()
@@ -685,20 +625,16 @@ open class AndroidTool : Command() {
                                     listModel.addElement(element)
                                     stars.add(element)
                                 }
-                                builderList.waitFor()
                             }
                             radioButtonThird.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val builderList = Runtime.getRuntime().exec("adb shell pm list packages -3")
-                                val input = builderList.inputStream
-                                val reader = BufferedReader(InputStreamReader(input))
-                                var line: String?
-                                while (reader.readLine().also { line = it } != null) {
-                                    if (line?.indexOf("no devices/emulators found") == -1 && line?.indexOf("device unauthorized.") == -1 && line?.indexOf("kill-server") == -1 && line?.indexOf("server's") == -1 && line?.indexOf("a confirmation dialog") == -1) {
-                                        if (line != "* daemon not running starting now at tcp:5037" && line != "* daemon started successfully") {
+                                val reader = execa("adb shell pm list packages -3")
+                                for(element in reader){
+                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                            arrayList += element.substring(8)
                                         }
-                                        arrayList += line?.substring(8).toString()
                                     }
                                 }
                                 arrayList.sort()
@@ -706,20 +642,16 @@ open class AndroidTool : Command() {
                                     listModel.addElement(element)
                                     stars.add(element)
                                 }
-                                builderList.waitFor()
                             }
                             else -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val builderList = Runtime.getRuntime().exec("adb shell pm list packages")
-                                val input = builderList.inputStream
-                                val reader = BufferedReader(InputStreamReader(input))
-                                var line: String?
-                                while (reader.readLine().also { line = it } != null) {
-                                    if (line?.indexOf("no devices/emulators found") == -1 && line?.indexOf("device unauthorized.") == -1 && line?.indexOf("kill-server") == -1 && line?.indexOf("server's") == -1 && line?.indexOf("a confirmation dialog") == -1) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully") {
+                                val reader = execa("adb shell pm list packages")
+                                for(element in reader){
+                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                            arrayList += element.substring(8)
                                         }
-                                        arrayList += line?.substring(8).toString()
                                     }
                                 }
                                 arrayList.sort()
@@ -728,25 +660,18 @@ open class AndroidTool : Command() {
                                     listModel.addElement(element)
                                     stars.add(element)
                                 }
-                                builderList.waitFor()
                             }
                         }
                     }
-
                     override fun done() {
                         buttonCheck.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
-
-
             buttonChooseOne.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonChooseOne.isEnabled = false
                         val choseFile = JFileChooser()
@@ -759,22 +684,18 @@ open class AndroidTool : Command() {
                             labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
                         }
                     }
-
                     override fun done() {
                         buttonChooseOne.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonChoseAll.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonChoseAll.isEnabled = false
-
                         val choseDirectory = JFileChooser()
                         choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
                         val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
@@ -783,99 +704,65 @@ open class AndroidTool : Command() {
                             labelSelectedAll.text = "Selected: ${choseDirectory.selectedFile.path}"
                         }
                     }
-
                     override fun done() {
                         buttonChoseAll.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
             buttonRunCommand.addActionListener {
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRunCommand.isEnabled = false
-                        val builderList = Runtime.getRuntime().exec(textAreaCommandInput.text)
-                        val input = builderList.inputStream
-                        val reader = BufferedReader(InputStreamReader(input))
-                        var line: String?
-                        var output = ""
-                        while (reader.readLine().also { line = it } != null) {
-                            output += line
-                            output += "\n"
-                        }
-                        textAreaCommandOutput.text = output
-                        builderList.waitFor()
+                        textAreaCommandOutput.text = exec(textAreaCommandInput.text, output = true)
                     }
-
                     override fun done() {
                         buttonRunCommand.isEnabled = true
                     }
-
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
 
             buttonRunCommandFastboot.addActionListener {
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRunCommandFastboot.isEnabled = false
-                        val builderList = Runtime.getRuntime().exec(textAreaCommandFastbootInput.text)
-                        val input = builderList.inputStream
-                        val reader = BufferedReader(InputStreamReader(input))
-                        var line: String?
-                        var output = ""
-                        while (reader.readLine().also { line = it } != null) {
-                            output += line
-                            output += "\n"
-                        }
-                        textAreaCommandFastbootOutput.text = output
-                        builderList.waitFor()
+                        textAreaCommandFastbootOutput.text = exec(textAreaCommandFastbootInput.text, output = true)
                     }
 
                     override fun done() {
                         buttonRunCommandFastboot.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
 
 
             buttonErase.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonErase.isEnabled = false
                         if (checkBoxPartitionBoot.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase boot").waitFor()
+                            exec("fastboot erase boot")
                         }
                         if (checkBoxPartitionSystem.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase system").waitFor()
+                            exec("fastboot erase system")
                         }
                         if (checkBoxPartitionData.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase userdata").waitFor()
+                            exec("fastboot erase userdata")
                         }
                         if (checkBoxPartitionCache.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase cache").waitFor()
+                            exec("fastboot erase cache")
                         }
                         if (checkBoxPartitionRecovery.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase recovery").waitFor()
+                            exec("fastboot erase recovery")
                         }
                         if (checkBoxPartitionRadio.isSelected) {
-                            Runtime.getRuntime().exec("fastboot erase radio").waitFor()
+                            exec("fastboot erase radio")
                         }
                     }
 
@@ -883,15 +770,13 @@ open class AndroidTool : Command() {
                         buttonErase.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
 
             buttonChoseRecovery.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonChoseRecovery.isEnabled = false
                         val choseFile = JFileChooser()
@@ -904,48 +789,40 @@ open class AndroidTool : Command() {
                             labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
                         }
                     }
-
                     override fun done() {
                         buttonChoseRecovery.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonInstallRecovery.addActionListener {
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallRecovery.isEnabled = false
-                        if (System.getProperty("os.name").indexOf("Windows") != -1) {
-                            Runtime.getRuntime().exec("fastboot flash recovery \"$selectedFileAbsolutePath\"").waitFor()
+                        if (Windows) {
+                            exec("fastboot flash recovery \"$selectedFileAbsolutePath\"")
                         } else {
-                            Runtime.getRuntime().exec("fastboot flash recovery $selectedFileAbsolutePath").waitFor()
+                            exec("fastboot flash recovery $selectedFileAbsolutePath")
                         }
                     }
-
                     override fun done() {
                         buttonInstallRecovery.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
 
             buttonBootToRecovery.addActionListener {
-
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonBootToRecovery.isEnabled = false
-                        if (System.getProperty("os.name").indexOf("Windows") != -1) {
-                            Runtime.getRuntime().exec("fastboot boot \"$selectedFileAbsolutePath\"").waitFor()
+                        if (Windows) {
+                            exec("fastboot boot \"$selectedFileAbsolutePath\"")
                         } else {
-                            Runtime.getRuntime().exec("fastboot boot $selectedFileAbsolutePath").waitFor()
+                            exec("fastboot boot $selectedFileAbsolutePath")
                         }
                     }
 
@@ -953,13 +830,11 @@ open class AndroidTool : Command() {
                         buttonBootToRecovery.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
             buttonChooseZip.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonChooseZip.isEnabled = false
                         val choseFile = JFileChooser()
@@ -970,37 +845,30 @@ open class AndroidTool : Command() {
                             selectedZipPath = choseFile.selectedFile.absolutePath
                         }
                     }
-
                     override fun done() {
                         buttonChooseZip.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
+                Worker().execute()
             }
 
             buttonInstallZip.addActionListener {
-                class MyWorker : SwingWorker<Unit, Int>() {
+                class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallZip.isEnabled = false
-                        Runtime.getRuntime().exec("adb shell twrp sideload")
+                        exec("adb shell twrp sideload")
                         Thread.sleep(3_000)
-                        if (System.getProperty("os.name").indexOf("Windows") != -1) {
-                            Runtime.getRuntime().exec("adb sideload \"${selectedZipPath}\"").waitFor()
+                        if (Windows) {
+                            exec("adb sideload \"${selectedZipPath}\"")
                         } else {
-                            Runtime.getRuntime().exec("adb sideload ${selectedZipPath}").waitFor()
+                            exec("adb sideload ${selectedZipPath}")
                         }
                     }
-
                     override fun done() {
                         buttonInstallZip.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
-
+                Worker().execute()
             }
             boardInfoPanel.isVisible = true
             softInfoPanel.isVisible = true

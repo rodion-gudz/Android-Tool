@@ -199,137 +199,92 @@ fun connectionCheck(){
     }
 }
     private fun getprop() {
-        val builderList = Runtime.getRuntime().exec("adb shell getprop ro.product.manufacturer")
-        val input = builderList.inputStream
-        val reader = BufferedReader(InputStreamReader(input))
-        var lineValue1 = reader.readLine()
-        Manufacturer = if (lineValue1 != "") {
+        var lineValue1 = exec("adb shell getprop ro.product.manufacturer", output = true)
+        Manufacturer = if (!lineValue1.isBlank()) {
             lineValue1
         } else {
             "Unknown"
         }
-        val builderList2 = Runtime.getRuntime().exec("adb shell getprop ro.product.brand")
-        val input2 = builderList2.inputStream
-        val reader2 = BufferedReader(InputStreamReader(input2))
-        var lineValue2 = reader2.readLine()
-        Brand = if (lineValue2 != "") {
+        var lineValue2 = exec("adb shell getprop ro.product.brand", output = true)
+        Brand = if (!lineValue2.isBlank()) {
             lineValue2
         } else {
             "Unknown"
         }
-        val builderList3 = Runtime.getRuntime().exec("adb shell getprop ro.product.model")
-        val input3 = builderList3.inputStream
-        val reader3 = BufferedReader(InputStreamReader(input3))
-        var lineValue3 = reader3.readLine()
-        Model = if (lineValue3 != "") {
+        var lineValue3 = exec("adb shell getprop ro.product.model", output = true)
+        Model = if (!lineValue3.isBlank()) {
             lineValue3
         } else {
             "Unknown"
         }
-        val builderList4 = Runtime.getRuntime().exec("adb shell getprop ro.product.name")
-        val input4 = builderList4.inputStream
-        val reader4 = BufferedReader(InputStreamReader(input4))
-        var lineValue4 = reader4.readLine()
-        Codename = if (lineValue4 != "") {
+        var lineValue4 = exec("adb shell getprop ro.product.name", output = true)
+        Codename = if (!lineValue4.isBlank()) {
             lineValue4
         } else {
             "Unknown"
         }
-        val builderList5 = Runtime.getRuntime().exec("adb shell getprop ro.product.board")
-        val input5 = builderList5.inputStream
-        val reader5 = BufferedReader(InputStreamReader(input5))
-        var lineValue5 = reader5.readLine()
-        CPU = if (lineValue5 != "") {
+        var lineValue5 = exec("adb shell getprop ro.product.board", output = true)
+        CPU = if (!lineValue5.isBlank()) {
             lineValue5
         } else {
             "Unknown"
         }
-        val builderList6 = Runtime.getRuntime().exec("adb shell getprop ro.product.cpu.abi")
-        val input6 = builderList6.inputStream
-        val reader6 = BufferedReader(InputStreamReader(input6))
-        var lineValue6 = reader6.readLine()
-        CPUA = if (lineValue6 != "") {
+        var lineValue6 = exec("adb shell getprop ro.product.cpu.abi", output = true)
+        CPUA = if (!lineValue6.isBlank()) {
             lineValue6
         } else {
             "Unknown"
         }
-        val builderList7 = Runtime.getRuntime().exec("adb shell getprop ro.serialno")
-        val input7 = builderList7.inputStream
-        val reader7 = BufferedReader(InputStreamReader(input7))
-        var lineValue7 = reader7.readLine()
-        SN = if (lineValue7 != "") {
+        var lineValue7 = exec("adb shell getprop ro.serialno", output = true)
+        SN = if (!lineValue7.isBlank()) {
             lineValue7
         } else {
             "Unknown"
         }
-        val builderList8 = Runtime.getRuntime().exec("adb shell getprop gsm.operator.alpha")
-        val input8 = builderList8.inputStream
-        val reader8 = BufferedReader(InputStreamReader(input8))
-        var lineValue8 = reader8.readLine()
-        GsmOperator = if (lineValue8 != "" && lineValue8 != ",") {
+        var lineValue8 = exec("adb shell getprop gsm.operator.alpha", output = true)
+        GsmOperator = if (!lineValue8.isBlank() && lineValue8 != ",") {
             lineValue8
         } else {
             "Unknown"
         }
-        val builderList9 = Runtime.getRuntime().exec("adb shell getprop ro.build.fingerprint")
-        val input9 = builderList9.inputStream
-        val reader9 = BufferedReader(InputStreamReader(input9))
-        var lineValue9 = reader9.readLine()
-        Fingerprint = if (lineValue9 != "") {
+        var lineValue9 = exec("adb shell getprop ro.build.fingerprint", output = true)
+        Fingerprint = if (!lineValue9.isBlank()) {
             lineValue9
         } else {
             "Unknown"
         }
-        val builderList10 = Runtime.getRuntime().exec("adb shell getprop ro.build.version.release")
-        val input10 = builderList10.inputStream
-        val reader10 = BufferedReader(InputStreamReader(input10))
-        var lineValue10 = reader10.readLine()
-        VersionRelease = if (lineValue10 != "") {
+        var lineValue10 = exec("adb shell getprop ro.build.version.release", output = true)
+        VersionRelease = if (!lineValue10.isBlank()) {
             lineValue10
         } else {
             "Unknown"
         }
-        val builderList11 = Runtime.getRuntime().exec("adb shell getprop ro.build.version.sdk")
-        val input11 = builderList11.inputStream
-        val reader11 = BufferedReader(InputStreamReader(input11))
-        var lineValue11 = reader11.readLine()
-        SDK = if (lineValue11 != "") {
+        var lineValue11 = exec("adb shell getprop ro.build.version.sdk", output = true)
+        SDK = if (!lineValue11.isBlank()) {
             lineValue11
         } else {
             "Unknown"
         }
-        val builderList12 = Runtime.getRuntime().exec("adb shell getprop ro.build.version.security_patch")
-        val input12 = builderList12.inputStream
-        val reader12 = BufferedReader(InputStreamReader(input12))
-        var lineValue12 = reader12.readLine()
-        SecurityPatch = if (lineValue12 != "") {
+        var lineValue12 = exec("adb shell getprop ro.build.version.security_patch", output = true)
+        SecurityPatch = if (!lineValue12.isBlank()) {
             lineValue12
         } else {
             "Unknown"
         }
-        val builderList13 = Runtime.getRuntime().exec("adb shell getprop ro.product.locale")
-        val input13 = builderList13.inputStream
-        val reader13 = BufferedReader(InputStreamReader(input13))
-        var lineValue13 = reader13.readLine()
-        Language = if (lineValue13 != "") {
+        var lineValue13 = exec("adb shell getprop ro.product.locale", output = true)
+        Language = if (!lineValue13.isBlank()) {
             lineValue13
         } else {
             "Unknown"
         }
-        val builderList14 = Runtime.getRuntime().exec("adb shell getprop ro.boot.selinux")
-        val input14 = builderList14.inputStream
-        val reader14 = BufferedReader(InputStreamReader(input14))
-        var lineValue14 = reader14.readLine()
-        Selinux = if (lineValue14 != "") {
+        var lineValue14 = exec("adb shell getprop ro.boot.selinux", output = true)
+        Selinux = if (!lineValue14.isBlank()) {
             lineValue14
         } else {
             "Unknown"
         }
-        val builderList15 = Runtime.getRuntime().exec("adb shell getprop ro.treble.enabled")
-        val input15 = builderList15.inputStream
-        val reader15 = BufferedReader(InputStreamReader(input15))
-        var lineValue15 = reader15.readLine()
-        Treble = if (lineValue15 != "") {
+        var lineValue15 = exec("adb shell getprop ro.treble.enabled", output = true)
+        Treble = if (!lineValue15.isBlank()) {
             lineValue15
         } else {
             "Unknown"
@@ -455,8 +410,25 @@ fun connectionCheck(){
             "-"
         }
     }
-
-
+    fun exec(command: String, output: Boolean = false, streamType: String = "Input"): String {
+        try {
+            val process = Runtime.getRuntime().exec("$WorkingDir$command")
+            if (output) {
+                return if (streamType == "Input")
+                    process.inputStream.bufferedReader().readText()
+                else
+                    process.errorStream.bufferedReader().readText()
+            }
+            process.waitFor()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return ""
+    }
+    fun execa(command: String): List<String> {
+        val process = Runtime.getRuntime().exec("$WorkingDir$command")
+        return process.inputStream.bufferedReader().readLines()
+    }
 
     fun exece(cmd: String, stdIn: String = "", captureOutput: Boolean = true, workingDir: File = File(".")): String? {
         try {
