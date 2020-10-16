@@ -82,16 +82,16 @@ fun connectionCheck(){
             if (enabledAll) {
                 val components: Array<Component> = fastbootPanel.getComponents()
                 for (component in components) {
-                    component.setEnabled(false)
+                    component.isEnabled = false
                 }
                 val components2: Array<Component> = adbPanel.getComponents()
                 for (component in components2) {
-                    component.setEnabled(true)
+                    component.isEnabled = true
                 }
                 val components3: Array<Component> = logsPanel.getComponents()
                 for (component in components3) {
                     if (component != buttonStop && component != buttonSave) {
-                        component.setEnabled(true)
+                        component.isEnabled = true
                     }
                 }
             }
@@ -199,91 +199,92 @@ fun connectionCheck(){
     }
 }
     private fun getprop() {
-        var lineValue1 = exec("adb shell getprop ro.product.manufacturer", output = true)
+        var deviceProps = exec("adb shell getprop", output = true)
+        var lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
         Manufacturer = if (!lineValue1.isBlank()) {
             lineValue1
         } else {
             "Unknown"
         }
-        var lineValue2 = exec("adb shell getprop ro.product.brand", output = true)
+        var lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
         Brand = if (!lineValue2.isBlank()) {
             lineValue2
         } else {
             "Unknown"
         }
-        var lineValue3 = exec("adb shell getprop ro.product.model", output = true)
+        var lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
         Model = if (!lineValue3.isBlank()) {
             lineValue3
         } else {
             "Unknown"
         }
-        var lineValue4 = exec("adb shell getprop ro.product.name", output = true)
+        var lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
         Codename = if (!lineValue4.isBlank()) {
             lineValue4
         } else {
             "Unknown"
         }
-        var lineValue5 = exec("adb shell getprop ro.product.board", output = true)
+        var lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
         CPU = if (!lineValue5.isBlank()) {
             lineValue5
         } else {
             "Unknown"
         }
-        var lineValue6 = exec("adb shell getprop ro.product.cpu.abi", output = true)
+        var lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
         CPUA = if (!lineValue6.isBlank()) {
             lineValue6
         } else {
             "Unknown"
         }
-        var lineValue7 = exec("adb shell getprop ro.serialno", output = true)
+        var lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
         SN = if (!lineValue7.isBlank()) {
             lineValue7
         } else {
             "Unknown"
         }
-        var lineValue8 = exec("adb shell getprop gsm.operator.alpha", output = true)
+        var lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
         GsmOperator = if (!lineValue8.isBlank() && lineValue8 != ",") {
             lineValue8
         } else {
             "Unknown"
         }
-        var lineValue9 = exec("adb shell getprop ro.build.fingerprint", output = true)
+        var lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
         Fingerprint = if (!lineValue9.isBlank()) {
             lineValue9
         } else {
             "Unknown"
         }
-        var lineValue10 = exec("adb shell getprop ro.build.version.release", output = true)
+        var lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
         VersionRelease = if (!lineValue10.isBlank()) {
             lineValue10
         } else {
             "Unknown"
         }
-        var lineValue11 = exec("adb shell getprop ro.build.version.sdk", output = true)
+        var lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
         SDK = if (!lineValue11.isBlank()) {
             lineValue11
         } else {
             "Unknown"
         }
-        var lineValue12 = exec("adb shell getprop ro.build.version.security_patch", output = true)
+        var lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
         SecurityPatch = if (!lineValue12.isBlank()) {
             lineValue12
         } else {
             "Unknown"
         }
-        var lineValue13 = exec("adb shell getprop ro.product.locale", output = true)
+        var lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
         Language = if (!lineValue13.isBlank()) {
             lineValue13
         } else {
             "Unknown"
         }
-        var lineValue14 = exec("adb shell getprop ro.boot.selinux", output = true)
-        Selinux = if (!lineValue14.isBlank()) {
+        var lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
+        Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) {
             lineValue14
         } else {
             "Unknown"
         }
-        var lineValue15 = exec("adb shell getprop ro.treble.enabled", output = true)
+        var lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
         Treble = if (!lineValue15.isBlank()) {
             lineValue15
         } else {
@@ -456,16 +457,16 @@ fun connectionCheck(){
     fun noConnection() {
         val components: Array<Component> = fastbootPanel.getComponents()
         for (component in components) {
-            component.setEnabled(false)
+            component.isEnabled = false
         }
         val components2: Array<Component> = adbPanel.getComponents()
         for (component in components2) {
-            component.setEnabled(false)
+            component.isEnabled = false
         }
         val components3: Array<Component> = logsPanel.getComponents()
         for (component in components3) {
             if(component != buttonStop && component != buttonSave) {
-                component.setEnabled(false)
+                component.isEnabled = false
             }
         }
         buttonReboot.isEnabled = false

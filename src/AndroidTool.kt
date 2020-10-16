@@ -14,12 +14,11 @@ import javax.swing.filechooser.FileNameExtensionFilter
 var arrayList = emptyArray<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
-var selectedFileSaveAbsolutePath = ""
 var selectedFilePath = ""
 var selectedZipPath = ""
 var listModel = DefaultListModel<Any?>()
 var listModelLogs = DefaultListModel<Any?>()
-var stars: ArrayList<Any> = ArrayList<Any>()
+var stars: ArrayList<Any> = ArrayList()
 var Manufacturer = ""
 var Brand = ""
 var Model = ""
@@ -53,7 +52,6 @@ var VendorCapacity = ""
 var AllCapacity = ""
 var newPhone = true
 var enabledAll = true
-var moreThan2 = false
 var GetStateOutput = ""
 var GetStateErrorOutput = ""
 var AdbDevicesOutput = ""
@@ -72,7 +70,7 @@ var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
-val WorkingDir = ""
+val WorkingDir = System.getProperty("user.dir") + '\\'
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
@@ -87,7 +85,7 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonIpConnect.isEnabled = false
                         Runtime.getRuntime().exec("adb kill-server").waitFor()
-                        var output = exec("adb connect ${textFieldIP.text}", output = true)
+                        val output = exec("adb connect ${textFieldIP.text}", output = true)
                         if ("connected to" in output) {
                             labelTCPConnection.text = "Connected to ${textFieldIP.text}"
                             labelTCPConnection.icon = iconYes
@@ -105,7 +103,7 @@ open class AndroidTool : Command() {
 
 
             fun searchFilter(searchTerm: String) {
-                val filteredItems: DefaultListModel<Any?> = DefaultListModel<Any?>()
+                val filteredItems: DefaultListModel<Any?> = DefaultListModel()
                 val stars = stars
                 stars.stream().forEach { star: Any ->
                     val starName = star.toString().toLowerCase()
@@ -137,10 +135,10 @@ open class AndroidTool : Command() {
                         choseFile.dialogTitle = "Save logs file"
                         choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
                         choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
-                        choseFile.fileFilter = choseFile.getChoosableFileFilters()[1]
+                        choseFile.fileFilter = choseFile.choosableFileFilters[1]
                         val chooseDialog = choseFile.showSaveDialog(frame)
                         if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-                            val file = File(choseFile.getSelectedFile().getCanonicalPath().toString() + "." + (choseFile.getFileFilter() as FileNameExtensionFilter).extensions[0])
+                            val file = File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
                             if (!file.exists()) {
                                 file.createNewFile()
                             }
@@ -164,7 +162,7 @@ open class AndroidTool : Command() {
             }
             var functionButtonStart = true
             var ifStopSelected = false
-            var LogsWorking: Boolean
+            var logsWorking: Boolean
             buttonStart.addActionListener {
                 buttonStop.isEnabled =true
                 buttonSave.isEnabled = false
@@ -173,7 +171,7 @@ open class AndroidTool : Command() {
                 }
                 if (functionButtonStart) {
                     buttonSave.isEnabled = false
-                    LogsWorking = true
+                    logsWorking = true
                     buttonStart.text = "Pause"
                     if (ifStopSelected) {
                         listModelLogs.removeAllElements()
@@ -190,7 +188,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -205,7 +203,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -220,7 +218,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -235,7 +233,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -250,7 +248,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -265,7 +263,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -280,7 +278,7 @@ open class AndroidTool : Command() {
                                     var line: String?
                                     while (reader.readLine().also { line = it } != null) {
                                         if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (LogsWorking) {
+                                            if (logsWorking) {
                                                 listModelLogs.addElement(line)
                                                 listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                             }
@@ -299,7 +297,7 @@ open class AndroidTool : Command() {
                     if (ifStopSelected) {
                         listModelLogs.removeAllElements()
                     } else {
-                        LogsWorking = false
+                        logsWorking = false
                         functionButtonStart = true
                         buttonStart.text = "Continue"
                     }
@@ -309,7 +307,7 @@ open class AndroidTool : Command() {
             buttonStop.addActionListener {
                 buttonStop.isEnabled = false
                 buttonStart.text = "Start"
-                LogsWorking = false
+                logsWorking = false
                 ifStopSelected = true
                 buttonSave.isEnabled = true
                 functionButtonStart = true
@@ -861,7 +859,7 @@ open class AndroidTool : Command() {
                         if (Windows) {
                             exec("adb sideload \"${selectedZipPath}\"")
                         } else {
-                            exec("adb sideload ${selectedZipPath}")
+                            exec("adb sideload $selectedZipPath")
                         }
                     }
                     override fun done() {
