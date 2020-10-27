@@ -576,7 +576,7 @@ open class AndroidTool : Command() {
                             radioButtonDisabled.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val reader = execa("adb shell pm list packages -d")
+                                val reader = execLines("adb shell pm list packages -d")
                                 for(element in reader){
                                     if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
@@ -593,7 +593,7 @@ open class AndroidTool : Command() {
                             radioButtonSystem.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val reader = execa("adb shell pm list packages -s")
+                                val reader = execLines("adb shell pm list packages -s")
                                 for(element in reader){
                                     if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
@@ -610,7 +610,7 @@ open class AndroidTool : Command() {
                             radioButtonEnabled.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val reader = execa("adb shell pm list packages -e")
+                                val reader = execLines("adb shell pm list packages -e")
                                 for(element in reader){
                                     if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
@@ -627,7 +627,7 @@ open class AndroidTool : Command() {
                             radioButtonThird.isSelected -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val reader = execa("adb shell pm list packages -3")
+                                val reader = execLines("adb shell pm list packages -3")
                                 for(element in reader){
                                     if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
@@ -644,7 +644,7 @@ open class AndroidTool : Command() {
                             else -> {
                                 arrayList = emptyArray()
                                 listModel.removeAllElements()
-                                val reader = execa("adb shell pm list packages")
+                                val reader = execLines("adb shell pm list packages")
                                 for(element in reader){
                                     if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {

@@ -308,26 +308,27 @@ fun connectionCheck(){
     }
 
     private fun getPropFastboot() {
-        Unlock = exece("fastboot getvar unlocked", stdIn = "yes").toString().substringAfter(":")
-        FastbootCodename = exece("fastboot getvar product", stdIn = "yes").toString().substringAfter(":")
-        FastbootSN = exece("fastboot getvar serialno", stdIn = "yes").toString().substringAfter(":")
-        SystemFS = exece("fastboot getvar partition-type:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val SystemDec = exece("fastboot getvar partition-size:system", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
-        SystemCapacity = (java.lang.Long.parseLong(SystemDec, 16) / 1048576).toString()
-        DataFS = exece("fastboot getvar partition-type:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val DataDec = exece("fastboot getvar partition-size:userdata", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
-        DataCapacity = (java.lang.Long.parseLong(DataDec, 16) / 1048576).toString()
-        BootFS = exece("fastboot getvar partition-type:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val BootDec = exece("fastboot getvar partition-size:boot", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
-        BootCapacity = (java.lang.Long.parseLong(BootDec, 16) / 1048576).toString()
-        RecoveryFS = exece("fastboot getvar partition-type:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val RecoveryDec = exece("fastboot getvar partition-size:recovery", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
-        RecoveryCapacity = (java.lang.Long.parseLong(RecoveryDec, 16) / 1048576).toString()
-        CacheFS = exece("fastboot getvar partition-type:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val CacheDec = exece("fastboot getvar partition-size:cache", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
-        CacheCapacity = (java.lang.Long.parseLong(CacheDec, 16) / 1048576).toString()
-        VendorFS = exece("fastboot getvar partition-type:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":")
-        val VendorDec = exece("fastboot getvar partition-size:vendor", stdIn = "yes").toString().substringAfter(":").substringAfter(":").substringAfter("x")
+        var fastbootProps = exec("fastboot getvar all", output = true, streamType = "Error")
+        Unlock = fastbootProps.substringAfter("(bootloader) unlocked:").substringBefore( "(bootloader) ").trimMargin()
+        FastbootCodename = fastbootProps.substringAfter("(bootloader) product:").substringBefore( "(bootloader) ").trimMargin()
+        FastbootSN = fastbootProps.substringAfter("(bootloader) serialno:").substringBefore( "(bootloader) ").trimMargin()
+        SystemFS = fastbootProps.substringAfter("(bootloader) partition-type:system:"). substringBefore( "(bootloader) ").trimMargin()
+        val SystemDec = fastbootProps.substringAfter("(bootloader) partition-size:system: 0x").substringBefore("(bootloader) ").trimMargin()
+        SystemCapacity = (java.lang.Long.parseLong(SystemDec, 16) / 1048576).toString().trimMargin()
+        DataFS = fastbootProps.substringAfter("(bootloader) partition-type:userdata:"). substringBefore( "(bootloader) ").trimMargin()
+        val DataDec = fastbootProps.substringAfter("(bootloader) partition-size:userdata: 0x").substringBefore( "(bootloader) ").trimMargin()
+        DataCapacity = (java.lang.Long.parseLong(DataDec, 16) / 1048576).toString().trimMargin()
+        BootFS = fastbootProps.substringAfter("(bootloader) partition-type:boot:"). substringBefore( "(bootloader) ").trimMargin()
+        val BootDec = fastbootProps.substringAfter("(bootloader) partition-size:boot: 0x").substringBefore( "(bootloader) ").trimMargin()
+        BootCapacity = (java.lang.Long.parseLong(BootDec, 16) / 1048576).toString().trimMargin()
+        RecoveryFS = fastbootProps.substringAfter("(bootloader) partition-type:recovery:"). substringBefore( "(bootloader) ").trimMargin()
+        val RecoveryDec = fastbootProps.substringAfter("(bootloader) partition-size:recovery: 0x").substringBefore( "(bootloader) ").trimMargin()
+        RecoveryCapacity = (java.lang.Long.parseLong(RecoveryDec, 16) / 1048576).toString().trimMargin()
+        CacheFS = fastbootProps.substringAfter("(bootloader) partition-type:cache:"). substringBefore( "(bootloader) ").trimMargin()
+        val CacheDec = fastbootProps.substringAfter("(bootloader) partition-size:cache: 0x").substringBefore( "(bootloader) ").trimMargin()
+        CacheCapacity = (java.lang.Long.parseLong(CacheDec, 16) / 1048576).toString().trimMargin()
+        VendorFS = fastbootProps.substringAfter("(bootloader) partition-type:vendor:"). substringBefore( "(bootloader) ").trimMargin()
+        val VendorDec = fastbootProps.substringAfter("(bootloader) partition-size:vendor: 0x").substringBefore( "(bootloader) ").trimMargin()
         VendorCapacity = (java.lang.Long.parseLong(VendorDec, 16) / 1048576).toString()
         AllCapacity = (SystemCapacity.toInt() + DataCapacity.toInt() + BootCapacity.toInt() + RecoveryCapacity.toInt() + CacheCapacity.toInt() + VendorCapacity.toInt()).toString()
         labelUnlockValue.text = if (Unlock != "< waiting for any device >") {
@@ -426,32 +427,9 @@ fun connectionCheck(){
         }
         return ""
     }
-    fun execa(command: String): List<String> {
+    fun execLines(command: String): List<String> {
         val process = Runtime.getRuntime().exec("$WorkingDir$command")
         return process.inputStream.bufferedReader().readLines()
-    }
-
-    fun exece(cmd: String, stdIn: String = "", captureOutput: Boolean = true, workingDir: File = File(".")): String? {
-        try {
-            val process = ProcessBuilder(*cmd.split("\\s".toRegex()).toTypedArray())
-                    .directory(workingDir)
-                    .start().apply {
-                        if (stdIn != "") {
-                            outputStream.bufferedWriter().apply {
-                                write(stdIn)
-                                flush()
-                                close()
-                            }
-                        }
-                        waitFor()
-                    }
-            if (captureOutput) {
-                return process.errorStream.bufferedReader().readLine()
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return null
     }
 
     fun noConnection() {
