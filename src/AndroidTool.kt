@@ -1,3 +1,4 @@
+import java.awt.Rectangle
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
@@ -34,6 +35,9 @@ var SecurityPatch = ""
 var Language = ""
 var Selinux = ""
 var Treble = ""
+var DeviceHost = ""
+var SecureBoot = ""
+var MockLocation = ""
 var Unlock = ""
 var FastbootCodename = ""
 var FastbootSN = ""
@@ -58,12 +62,14 @@ var AdbDevicesOutput = ""
 var FastbootDevicesOutput = ""
 var ConnectedViaAdb = false
 var ConnectedViaFastboot = false
+var ConnectedViaRecovery = false
 var UnauthorizedDevice = false
 var MultipleDevicesConnected = false
 var CommandRunning = false
 var ConnectedAdbUsb = false
 var ConnectedAdbWifi = false
 var FirstFastbootConnection = true
+var FirstRecoveryConnection = true
 var FirstAdbConnection = true
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
@@ -84,8 +90,8 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonIpConnect.isEnabled = false
-                        Runtime.getRuntime().exec("adb kill-server").waitFor()
-                        val output = exec("adb connect ${textFieldIP.text}", output = true)
+                        exec("adb", "kill-server")
+                        val output = exec("adb", "connect ${textFieldIP.text}", output = true)
                         if ("connected to" in output) {
                             labelTCPConnection.text = "Connected to ${textFieldIP.text}"
                             labelTCPConnection.icon = iconYes
@@ -181,8 +187,8 @@ open class AndroidTool : Command() {
                             arrayList = emptyArray()
                             when {
                                 radioButtonVerbose.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:V")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:V")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -196,8 +202,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonDebug.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:D")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:D")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -211,8 +217,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonInfo.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:I")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:I")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -226,8 +232,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonWarning.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:W")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:W")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -241,8 +247,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonError.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:E")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:E")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -256,8 +262,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonFatal.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:F")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:F")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -271,8 +277,8 @@ open class AndroidTool : Command() {
                                     }
                                 }
                                 radioButtonSilent.isSelected -> {
-                                    Runtime.getRuntime().exec("adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("adb logcat *:S")
+                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:S")
                                     val input = builderList.inputStream
                                     val reader = BufferedReader(InputStreamReader(input))
                                     var line: String?
@@ -320,9 +326,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonReboot.isEnabled = false
                         when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb reboot")
-                            2 -> exec("fastboot reboot")
-                            3 -> exec("adb shell twrp reboot")
+                            0, 1 -> exec("adb", "reboot")
+                            2 -> exec("fastboot", "reboot")
+                            3 -> exec("adb", "shell twrp reboot")
                         }
                     }
                     override fun done() {
@@ -338,9 +344,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonRecoveryReboot.isEnabled = false
                         when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb reboot recovery")
-                            2 -> exec("fastboot oem reboot-recovery")
-                            3 -> exec("adb shell twrp reboot recovery")
+                            0, 1 -> exec("adb", "reboot recovery")
+                            2 -> exec("fastboot", "oem reboot-recovery")
+                            3 -> exec("adb", "shell twrp reboot recovery")
                         }
                     }
 
@@ -357,9 +363,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonFastbootReboot.isEnabled = false
                         when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb reboot bootloader")
-                            2 -> exec("fastboot reboot-bootloader")
-                            3 -> exec("adb shell twrp reboot bootloader")
+                            0, 1 -> exec("adb", "reboot bootloader")
+                            2 -> exec("fastboot", "reboot-bootloader")
+                            3 -> exec("adb", "shell twrp reboot bootloader")
                         }
                     }
 
@@ -376,8 +382,8 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonPowerOff.isEnabled = false
                         when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb reboot -p")
-                            3 -> exec("adb shell twrp reboot poweroff")
+                            0, 1 -> exec("adb", "reboot -p")
+                            3 -> exec("adb", "shell twrp reboot poweroff")
                         }
                     }
 
@@ -412,12 +418,29 @@ open class AndroidTool : Command() {
                     textFieldIP.text = AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
                 } catch (e: Exception) { }
                 if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
+                    labelGsmOperator.text = "Cellular provider:"
+                    labelGsmOperator.bounds = Rectangle(15, 156, 110, 20)
+                    labelGsmOperatorValue.bounds = Rectangle(125, 156, 155, 20)
+                    labelCPU.text = "CPU:"
+                    labelCPU.bounds = Rectangle(15, 96, 30, 20)
+                    labelCPUValue.bounds = Rectangle(50, 96, 230, 20)
+                    labelVersionRelease.text = "Android version:"
+                    labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
+                    labelLanguage.text = "Language:"
+                    labelLanguageValue.setBounds(85, 93, 195, 20)
+                    labelSecureBoot.isVisible = false
+                    labelDeviceHostname.isVisible = false
+                    labelLocations.isVisible = false
+                    labelSecureBootValue.isVisible = false
+                    labelDeviceHostnameValue.isVisible = false
+                    labelLocationsValue.isVisible = false
                     boardInfoPanel.isVisible = true
                     softInfoPanel.isVisible = true
                     BootloaderFastbootInfoPanel.isVisible = false
                     softFastbootInfoPanel.isVisible = false
                     StorageFastbootInfoPanel.isVisible = false
-                    deviceInfoPanel.setBounds(5, 5, 310, 380)
+                    softInfoPanel.setBounds(10, 205, 290, 160)
+                    deviceInfoPanel.setBounds(5, 5, 310, 376)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
                     labelTCP.isVisible = true
@@ -426,12 +449,24 @@ open class AndroidTool : Command() {
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
+                    if (ConnectedViaAdb) {
+                        buttonPowerOff.isEnabled = true
+                        buttonReboot.isEnabled = true
+                        buttonRecoveryReboot.isEnabled = true
+                        buttonFastbootReboot.isEnabled = true
+                    }else{
+                        buttonReboot.isEnabled = false
+                        buttonRecoveryReboot.isEnabled = false
+                        buttonFastbootReboot.isEnabled = false
+                        buttonPowerOff.isEnabled = false
+                    }
                 } else if (tabbedpane.selectedIndex == 2) {
                     boardInfoPanel.isVisible = false
                     softInfoPanel.isVisible = false
                     BootloaderFastbootInfoPanel.isVisible = true
                     softFastbootInfoPanel.isVisible = true
                     StorageFastbootInfoPanel.isVisible = true
+                    softInfoPanel.setBounds(10, 205, 290, 165)
                     deviceInfoPanel.setBounds(5, 5, 310, 430)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
                     deviceConnection.setBounds(5, 525, 310, 50)
@@ -441,7 +476,62 @@ open class AndroidTool : Command() {
                     textFieldIP.isVisible = false
                     labelConnect.isVisible = false
                     labelIP.isVisible = false
+                    if (ConnectedViaFastboot) {
+                        buttonPowerOff.isEnabled = false
+                        buttonReboot.isEnabled = true
+                        buttonRecoveryReboot.isEnabled = true
+                        buttonFastbootReboot.isEnabled = true
+                    }else{
+                        buttonReboot.isEnabled = false
+                        buttonRecoveryReboot.isEnabled = false
+                        buttonFastbootReboot.isEnabled = false
+                        buttonPowerOff.isEnabled = false
+                    }
                 } else if (tabbedpane.selectedIndex == 3) {
+                    labelGsmOperator.text = "USB mode:"
+                    labelGsmOperator.bounds = Rectangle(15, 156, 70, 20)
+                    labelGsmOperatorValue.bounds = Rectangle(90, 156, 175, 20)
+                    labelCPU.text = "CPU vendor:"
+                    labelCPU.bounds = Rectangle(15, 96, 80, 20)
+                    labelVersionRelease.text = "Recovery version:"
+                    labelVersionReleaseValue.bounds = Rectangle(125, 34, 160, 20)
+                    labelCPUValue.bounds = Rectangle(100, 96, 280, 20)
+                    labelLanguage.text = "Build ID:"
+                    labelLanguageValue.setBounds(73, 93, 195, 20)
+                    labelSecureBoot.isVisible = true
+                    labelDeviceHostname.isVisible = true
+                    labelLocations.isVisible = true
+                    labelSecureBootValue.isVisible = true
+                    labelDeviceHostnameValue.isVisible = true
+                    labelLocationsValue.isVisible = true
+                    boardInfoPanel.isVisible = true
+                    softInfoPanel.isVisible = true
+                    BootloaderFastbootInfoPanel.isVisible = false
+                    softFastbootInfoPanel.isVisible = false
+                    StorageFastbootInfoPanel.isVisible = false
+                    softInfoPanel.setBounds(10, 205, 290, 215)
+                    deviceInfoPanel.setBounds(5, 5, 310, 430)
+                    deviceControlPanel.setBounds(5, 435, 310, 85)
+                    deviceConnection.setBounds(5, 525, 310, 50)
+                    labelTCP.isVisible = false
+                    labelTCPConnection.isVisible = false
+                    buttonIpConnect.isVisible = false
+                    textFieldIP.isVisible = false
+                    labelConnect.isVisible = false
+                    labelIP.isVisible = false
+                    if (ConnectedViaRecovery) {
+                        buttonReboot.isEnabled = true
+                        buttonRecoveryReboot.isEnabled = true
+                        buttonFastbootReboot.isEnabled = true
+                        buttonPowerOff.isEnabled = true
+                    }else{
+                        buttonReboot.isEnabled = false
+                        buttonRecoveryReboot.isEnabled = false
+                        buttonFastbootReboot.isEnabled = false
+                        buttonPowerOff.isEnabled = false
+                    }
+                }
+                else if (tabbedpane.selectedIndex == 4) {
                     boardInfoPanel.isVisible = true
                     softInfoPanel.isVisible = true
                     BootloaderFastbootInfoPanel.isVisible = false
@@ -456,6 +546,10 @@ open class AndroidTool : Command() {
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
+                    buttonReboot.isEnabled = false
+                    buttonRecoveryReboot.isEnabled = false
+                    buttonFastbootReboot.isEnabled = false
+                    buttonPowerOff.isEnabled = false
                 }
             }
 
@@ -478,9 +572,9 @@ open class AndroidTool : Command() {
                         paths = file.listFiles(fileNameFilter)
                         for (path in paths) {
                             if (Windows) {
-                                exec("adb install \"$path\"")
+                                exec("adb", "install \"$path\"")
                             } else {
-                                exec("adb install $path")
+                                exec("adb", "install $path")
                             }
                         }
                     }
@@ -495,9 +589,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonInstallOne.isEnabled = false
                         if (Windows) {
-                            exec("adb install \"$selectedFileAbsolutePath\"")
+                            exec("adb", "install \"$selectedFileAbsolutePath\"")
                         } else {
-                            exec("adb install $selectedFileAbsolutePath")
+                            exec("adb", "install $selectedFileAbsolutePath")
                         }
                     }
                     override fun done() { buttonInstallOne.isEnabled = true }
@@ -516,7 +610,7 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonDisable.isEnabled = false
-                        exec("adb shell pm disable-user --user 0 $textInput")
+                        exec("adb", "shell pm disable-user --user 0 $textInput")
                     }
                     override fun done() {
                         buttonDisable.isEnabled = true
@@ -536,7 +630,7 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonUninstall.isEnabled = false
-                        exec("adb shell pm uninstall --user 0 $textInput")
+                        exec("adb", "shell pm uninstall --user 0 $textInput")
                     }
 
                     override fun done() {
@@ -557,7 +651,7 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonEnable.isEnabled = false
-                        exec("adb shell pm enable $textInput")
+                        exec("adb", "shell pm enable $textInput")
                     }
                     override fun done() {
                         buttonEnable.isEnabled = true
@@ -714,7 +808,7 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRunCommand.isEnabled = false
-                        textAreaCommandOutput.text = exec(textAreaCommandInput.text, output = true)
+                        textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
                     }
                     override fun done() {
                         buttonRunCommand.isEnabled = true
@@ -729,7 +823,7 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRunCommandFastboot.isEnabled = false
-                        textAreaCommandFastbootOutput.text = exec(textAreaCommandFastbootInput.text, output = true)
+                        textAreaCommandFastbootOutput.text = exec("fastboot", textAreaCommandFastbootInput.text, output = true)
                     }
 
                     override fun done() {
@@ -745,22 +839,22 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonErase.isEnabled = false
                         if (checkBoxPartitionBoot.isSelected) {
-                            exec("fastboot erase boot")
+                            exec("fastboot", "erase boot")
                         }
                         if (checkBoxPartitionSystem.isSelected) {
-                            exec("fastboot erase system")
+                            exec("fastboot", "erase system")
                         }
                         if (checkBoxPartitionData.isSelected) {
-                            exec("fastboot erase userdata")
+                            exec("fastboot", "erase userdata")
                         }
                         if (checkBoxPartitionCache.isSelected) {
-                            exec("fastboot erase cache")
+                            exec("fastboot", "erase cache")
                         }
                         if (checkBoxPartitionRecovery.isSelected) {
-                            exec("fastboot erase recovery")
+                            exec("fastboot", "erase recovery")
                         }
                         if (checkBoxPartitionRadio.isSelected) {
-                            exec("fastboot erase radio")
+                            exec("fastboot", "erase radio")
                         }
                     }
 
@@ -800,9 +894,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonInstallRecovery.isEnabled = false
                         if (Windows) {
-                            exec("fastboot flash recovery \"$selectedFileAbsolutePath\"")
+                            exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
                         } else {
-                            exec("fastboot flash recovery $selectedFileAbsolutePath")
+                            exec("fastboot", "flash recovery $selectedFileAbsolutePath")
                         }
                     }
                     override fun done() {
@@ -818,9 +912,9 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonBootToRecovery.isEnabled = false
                         if (Windows) {
-                            exec("fastboot boot \"$selectedFileAbsolutePath\"")
+                            exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
                         } else {
-                            exec("fastboot boot $selectedFileAbsolutePath")
+                            exec("fastboot", "boot $selectedFileAbsolutePath")
                         }
                     }
 
@@ -854,12 +948,12 @@ open class AndroidTool : Command() {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallZip.isEnabled = false
-                        exec("adb shell twrp sideload")
+                        exec("adb", "shell twrp sideload")
                         Thread.sleep(3_000)
                         if (Windows) {
-                            exec("adb sideload \"${selectedZipPath}\"")
+                            exec("adb", "sideload \"${selectedZipPath}\"")
                         } else {
-                            exec("adb sideload $selectedZipPath")
+                            exec("adb", "sideload $selectedZipPath")
                         }
                     }
                     override fun done() {
@@ -873,7 +967,7 @@ open class AndroidTool : Command() {
             BootloaderFastbootInfoPanel.isVisible = false
             softFastbootInfoPanel.isVisible = false
             StorageFastbootInfoPanel.isVisible = false
-            deviceInfoPanel.setBounds(5, 5, 310, 380)
+            deviceInfoPanel.setBounds(5, 5, 310, 376)
             deviceControlPanel.setBounds(5, 385, 310, 85)
             deviceConnection.setBounds(5, 475, 310, 100)
             labelTCP.isVisible = true

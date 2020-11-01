@@ -8,7 +8,7 @@ import javax.swing.*
 import javax.swing.border.TitledBorder
 
 open class AndroidToolUI{
-    fun runUrl(url: String){
+    private fun runUrl(url: String){
         val urlString = URI(url)
         Desktop.getDesktop().browse(urlString)
     }
@@ -18,7 +18,7 @@ open class AndroidToolUI{
         JDialog.setDefaultLookAndFeelDecorated(true)
     }
     val frame = JFrame("Android Tool")
-    var sdf = ""
+    private var sdf = ""
     var labelManufacturerValue = JLabel("-")
     var labelBrandValue = JLabel("-")
     var labelModelValue = JLabel("-")
@@ -55,6 +55,12 @@ open class AndroidToolUI{
     var labelSelinuxValue = JLabel("-")
     var labelTreble = JLabel("Project treble support:")
     var labelTrebleValue = JLabel("-")
+    var labelSecureBoot = JLabel("Secure boot:")
+    var labelSecureBootValue = JLabel("-")
+    var labelDeviceHostname = JLabel("Build hostname:")
+    var labelDeviceHostnameValue = JLabel("-")
+    var labelLocations = JLabel("Mock location allowed:")
+    var labelLocationsValue = JLabel("-")
     var labelDataFSValue = JLabel("-")
     var labelDataCapacity = JLabel("/data Capacity (MB):")
     var labelDataCapacityValue = JLabel("-")
@@ -1031,7 +1037,7 @@ open class AndroidToolUI{
         frame.layout = null
         frame.isResizable = false
         frame.setLocationRelativeTo(null)
-        frame.iconImage = Toolkit.getDefaultToolkit().getImage(this::class.java.getResource("/icon/frameIcon.png"))
+        frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/frameIcon.png")).image
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
                 Runtime.getRuntime().exec("adb kill-server")
@@ -1264,7 +1270,7 @@ open class AndroidToolUI{
 
 
         deviceInfoPanel.layout = null
-        deviceInfoPanel.setBounds(5, 5, 310, 380)
+        deviceInfoPanel.setBounds(5, 5, 310, 376)
 
         title1.titleJustification = TitledBorder.CENTER;
         deviceInfoPanel.border = title1
@@ -1343,82 +1349,116 @@ open class AndroidToolUI{
 
 
         softInfoPanel.layout = null
-        softInfoPanel.setBounds(10, 205, 290, 165)
+        softInfoPanel.setBounds(10, 205, 290, 160)
 
         title6.titleJustification = TitledBorder.LEFT;
         softInfoPanel.border = title6
         deviceInfoPanel.add(softInfoPanel)
 
 
-        labelFingerprint.bounds = Rectangle(15, 16, 90, 20)
+        labelFingerprint.bounds = Rectangle(15, 15, 90, 20)
         labelFingerprint.font = labelFingerprint.font.deriveFont(14.0f)
         softInfoPanel.add(labelFingerprint)
 
 
-        labelFingerprintValue.bounds = Rectangle(90, 16, 195, 20)
+        labelFingerprintValue.bounds = Rectangle(90, 15, 195, 20)
         labelFingerprintValue.font = labelFingerprintValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelFingerprintValue)
 
 
-        labelVersionRelease.bounds = Rectangle(15, 36, 110, 20)
+        labelVersionRelease.bounds = Rectangle(15, 34, 110, 20)
         labelVersionRelease.font = labelVersionRelease.font.deriveFont(14.0f)
         softInfoPanel.add(labelVersionRelease)
 
 
-        labelVersionReleaseValue.bounds = Rectangle(120, 36, 160, 20)
+        labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
         labelVersionReleaseValue.font = labelVersionReleaseValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelVersionReleaseValue)
 
 
-        labelSDK.bounds = Rectangle(15, 56, 95, 20)
+        labelSDK.bounds = Rectangle(15, 54, 95, 20)
         labelSDK.font = labelSDK.font.deriveFont(14.0f)
         softInfoPanel.add(labelSDK)
 
 
-        labelSDKValue.bounds = Rectangle(100, 56, 180, 20)
+        labelSDKValue.bounds = Rectangle(100, 54, 180, 20)
         labelSDKValue.font = labelSDKValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSDKValue)
 
 
-        labelSecurityPatch.bounds = Rectangle(15, 76, 90, 20)
+        labelSecurityPatch.bounds = Rectangle(15, 73, 90, 20)
         labelSecurityPatch.font = labelSecurityPatch.font.deriveFont(14.0f)
         softInfoPanel.add(labelSecurityPatch)
 
 
-        labelSecurityPatchValue.bounds = Rectangle(110, 76, 170, 20)
+        labelSecurityPatchValue.bounds = Rectangle(110, 73, 170, 20)
         labelSecurityPatchValue.font = labelSecurityPatchValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSecurityPatchValue)
 
 
-        labelLanguage.bounds = Rectangle(15, 96, 70, 20)
+        labelLanguage.bounds = Rectangle(15, 93, 70, 20)
         labelLanguage.font = labelLanguage.font.deriveFont(14.0f)
         softInfoPanel.add(labelLanguage)
 
 
-        labelLanguageValue.bounds = Rectangle(85, 96, 195, 20)
+        labelLanguageValue.bounds = Rectangle(85, 93, 195, 20)
         labelLanguageValue.font = labelLanguageValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelLanguageValue)
 
 
-        labelSelinux.bounds = Rectangle(15, 116, 50, 20)
+        labelSelinux.bounds = Rectangle(15, 113, 50, 18 )
         labelSelinux.font = labelSelinux.font.deriveFont(14.0f)
         softInfoPanel.add(labelSelinux)
 
 
-        labelSelinuxValue.bounds = Rectangle(65, 116, 210, 20)
+        labelSelinuxValue.bounds = Rectangle(65, 113, 210, 18)
         labelSelinuxValue.font = labelSelinuxValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSelinuxValue)
 
 
 
-        labelTreble.bounds = Rectangle(15, 136, 140, 20)
+        labelTreble.bounds = Rectangle(15, 131, 140, 20)
         labelTreble.font = labelTreble.font.deriveFont(14.0f)
         softInfoPanel.add(labelTreble)
 
 
-        labelTrebleValue.bounds = Rectangle(158, 136, 125, 20)
+        labelTrebleValue.bounds = Rectangle(158, 131, 125, 20)
         labelTrebleValue.font = labelTrebleValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelTrebleValue)
+
+        labelSecureBoot.bounds = Rectangle(15, 150, 140, 20)
+        labelSecureBoot.font = labelSecureBoot.font.deriveFont(14.0f)
+        softInfoPanel.add(labelSecureBoot)
+        labelSecureBoot.isVisible = false
+
+
+        labelSecureBootValue.bounds = Rectangle(98, 150, 125, 20)
+        labelSecureBootValue.font = labelSecureBootValue.font.deriveFont(12.0f)
+        softInfoPanel.add(labelSecureBootValue)
+        labelSecureBootValue.isVisible = false
+
+        labelDeviceHostname.bounds = Rectangle(15, 170, 140, 20)
+        labelDeviceHostname.font = labelDeviceHostname.font.deriveFont(14.0f)
+        softInfoPanel.add(labelDeviceHostname)
+        labelSecureBoot.isVisible = false
+
+
+        labelDeviceHostnameValue.bounds = Rectangle(120, 170, 120, 20)
+        labelDeviceHostnameValue.font = labelDeviceHostnameValue.font.deriveFont(12.0f)
+        softInfoPanel.add(labelDeviceHostnameValue)
+        labelSecureBootValue.isVisible = false
+
+        labelLocations.bounds = Rectangle(15, 190, 140, 20)
+        labelLocations.font = labelLocations.font.deriveFont(14.0f)
+        softInfoPanel.add(labelLocations)
+        labelSecureBoot.isVisible = false
+
+
+        labelLocationsValue.bounds = Rectangle(158, 190, 125, 20)
+        labelLocationsValue.font = labelLocationsValue.font.deriveFont(12.0f)
+        softInfoPanel.add(labelLocationsValue)
+        labelSecureBootValue.isVisible = false
+
 
 
         scrollPaneLogs.setBounds(5, 5, 870, 425)
@@ -1538,24 +1578,26 @@ open class AndroidToolUI{
         }
         tabbedpane.add("App Manager", adbPanel)
         tabbedpane.add("Logcat", logsPanel)
-        //tabbedpane.add("Scrcpy", scrcpyPanel)
         tabbedpane.add("Fastboot", fastbootPanel)
-        //tabbedpane.add("Recovery", recoveryPanel)
+        tabbedpane.add("Recovery", recoveryPanel)
         tabbedpane.add("Links", linksPanel)
 
-        val components: Array<Component> = fastbootPanel.getComponents()
+        val components: Array<Component> = fastbootPanel.components
         for (component in components) {
-            component.setEnabled(false)
+            component.isEnabled = false
         }
-        val components2: Array<Component> = adbPanel.getComponents()
+        val components2: Array<Component> = adbPanel.components
         for (component in components2) {
-            component.setEnabled(false)
+            component.isEnabled = false
         }
-        val components3: Array<Component> = logsPanel.getComponents()
+        val components3: Array<Component> = logsPanel.components
         for (component in components3) {
-            component.setEnabled(false)
+            component.isEnabled = false
         }
-
+        val components4: Array<Component> = recoveryPanel.components
+        for (component in components4) {
+            component.isEnabled = false
+        }
         frame.add(tabbedpane)
     }
 
