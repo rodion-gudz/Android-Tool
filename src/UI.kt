@@ -1,11 +1,17 @@
 import com.formdev.flatlaf.FlatDarculaLaf
-import java.awt.*
+import java.awt.Color
+import java.awt.Component
+import java.awt.Desktop
+import java.awt.Font
+import java.awt.Rectangle
 import java.awt.event.*
+import java.io.InputStream
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.URI
 import javax.swing.*
 import javax.swing.border.TitledBorder
+
 
 open class AndroidToolUI{
     private fun runUrl(url: String){
@@ -13,6 +19,10 @@ open class AndroidToolUI{
         Desktop.getDesktop().browse(urlString)
     }
     init{
+        val `is`: InputStream = this::class.java.getResourceAsStream("sans.ttf")
+        val font = Font.createFont(Font.PLAIN, `is`)
+        val sizedFont = font.deriveFont(13f)
+        UIManager.getLookAndFeelDefaults()["defaultFont"] = sizedFont
         FlatDarculaLaf.install()
         JFrame.setDefaultLookAndFeelDecorated(true)
         JDialog.setDefaultLookAndFeelDecorated(true)
@@ -1406,7 +1416,7 @@ open class AndroidToolUI{
         softInfoPanel.add(labelLanguageValue)
 
 
-        labelSelinux.bounds = Rectangle(15, 113, 50, 18 )
+        labelSelinux.bounds = Rectangle(15, 113, 50, 18)
         labelSelinux.font = labelSelinux.font.deriveFont(14.0f)
         softInfoPanel.add(labelSelinux)
 
