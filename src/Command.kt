@@ -1,20 +1,19 @@
 import java.awt.Component
 import java.io.BufferedReader
-import java.io.File
 import java.io.IOException
 import java.io.InputStreamReader
 
 open class Command : AndroidToolUI() {
 fun connectionCheck(){
     if (!CommandRunning) {
-        val builderListGetState = Runtime.getRuntime().exec("adb get-state")
-        GetStateOutput = BufferedReader(InputStreamReader(builderListGetState.inputStream)).readText()
-        GetStateErrorOutput = BufferedReader(InputStreamReader(builderListGetState.errorStream)).readText()
-        AdbDevicesOutput = BufferedReader(InputStreamReader(Runtime.getRuntime().exec("adb devices").inputStream)).readText()
-        FastbootDevicesOutput = BufferedReader(InputStreamReader(Runtime.getRuntime().exec("fastboot devices").inputStream)).readText()
+        GetStateOutput = exec("adb", "get-state", output = true)
+        GetStateErrorOutput = exec("adb", "get-state", streamType = "Error", output = true)
+        AdbDevicesOutput = exec("adb", "devices", output = true)
+        FastbootDevicesOutput = exec("fastboot", "devices", output = true)
     }
 
     ConnectedViaFastboot = "fastboot" in FastbootDevicesOutput
+    ConnectedViaRecovery = "recovery" in GetStateOutput
     ConnectedViaAdb = "device" in GetStateOutput
     ConnectedAdbUsb = "192.168" !in AdbDevicesOutput
     ConnectedAdbWifi = "offline" !in GetStateOutput
@@ -80,15 +79,19 @@ fun connectionCheck(){
             frame.isEnabled = true
             dialogUnauthorizedDevice.dispose()
             if (enabledAll) {
-                val components: Array<Component> = fastbootPanel.getComponents()
+                val components: Array<Component> = fastbootPanel.components
                 for (component in components) {
                     component.isEnabled = false
                 }
-                val components2: Array<Component> = adbPanel.getComponents()
+                val components4: Array<Component> = recoveryPanel.components
+                for (component in components4) {
+                    component.isEnabled = false
+                }
+                val components2: Array<Component> = adbPanel.components
                 for (component in components2) {
                     component.isEnabled = true
                 }
-                val components3: Array<Component> = logsPanel.getComponents()
+                val components3: Array<Component> = logsPanel.components
                 for (component in components3) {
                     if (component != buttonStop && component != buttonSave) {
                         component.isEnabled = true
@@ -101,24 +104,9 @@ fun connectionCheck(){
             textAreaCommandFastbootInput.isFocusable = false
             listLogs.isFocusable = true
             list.isFocusable = true
-            if (tabbedpane.selectedIndex == 2) {
-                buttonPowerOff.isEnabled = false
-                buttonReboot.isEnabled = true
-                buttonRecoveryReboot.isEnabled = true
-                buttonFastbootReboot.isEnabled = true
-            } else if (tabbedpane.selectedIndex == 3) {
-                buttonReboot.isEnabled = false
-                buttonRecoveryReboot.isEnabled = false
-                buttonFastbootReboot.isEnabled = false
-                buttonPowerOff.isEnabled = false
-            } else {
-                buttonPowerOff.isEnabled = true
-                buttonReboot.isEnabled = true
-                buttonRecoveryReboot.isEnabled = true
-                buttonFastbootReboot.isEnabled = true
-            }
+
             if (newPhone) {
-                getprop()
+                getProp()
             }
             if (ConnectedAdbUsb) {
                 labelUSBConnection.text = "Connected via Adb"
@@ -142,17 +130,21 @@ fun connectionCheck(){
                 FirstFastbootConnection = false
             }
             if (enabledAll) {
-                val components: Array<Component> = fastbootPanel.getComponents()
+                val components: Array<Component> = fastbootPanel.components
                 for (component in components) {
-                    component.setEnabled(true)
+                    component.isEnabled = true
                 }
-                val components2: Array<Component> = adbPanel.getComponents()
+                val components2: Array<Component> = adbPanel.components
                 for (component in components2) {
-                    component.setEnabled(false)
+                    component.isEnabled = false
                 }
-                val components3: Array<Component> = logsPanel.getComponents()
+                val components4: Array<Component> = recoveryPanel.components
+                for (component in components4) {
+                    component.isEnabled = false
+                }
+                val components3: Array<Component> = logsPanel.components
                 for (component in components3) {
-                    component.setEnabled(false)
+                    component.isEnabled = false
                 }
             }
             textAreaCommandFastbootOutput.isFocusable = true
@@ -161,22 +153,7 @@ fun connectionCheck(){
             textAreaCommandFastbootInput.isFocusable = true
             listLogs.isFocusable = false
             list.isFocusable = false
-            if (tabbedpane.selectedIndex == 2) {
-                buttonPowerOff.isEnabled = false
-                buttonReboot.isEnabled = true
-                buttonRecoveryReboot.isEnabled = true
-                buttonFastbootReboot.isEnabled = true
-            } else if (tabbedpane.selectedIndex == 3) {
-                buttonReboot.isEnabled = false
-                buttonRecoveryReboot.isEnabled = false
-                buttonFastbootReboot.isEnabled = false
-                buttonPowerOff.isEnabled = false
-            } else {
-                buttonPowerOff.isEnabled = true
-                buttonReboot.isEnabled = true
-                buttonRecoveryReboot.isEnabled = true
-                buttonFastbootReboot.isEnabled = true
-            }
+
             if (newPhone) {
                 getPropFastboot()
                 labelUSBConnection.text = "Connected via Fastboot"
@@ -185,9 +162,52 @@ fun connectionCheck(){
             newPhone = false
             enabledAll = false
         }
+        ConnectedViaRecovery -> {
+            if (FirstRecoveryConnection) {
+                tabbedpane.selectedIndex = 3
+                FirstRecoveryConnection = false
+            }
+            frame.isEnabled = true
+            dialogUnauthorizedDevice.dispose()
+            if (enabledAll) {
+                val components: Array<Component> = fastbootPanel.components
+                for (component in components) {
+                    component.isEnabled = false
+                }
+                val components2: Array<Component> = adbPanel.components
+                for (component in components2) {
+                    component.isEnabled = false
+                }
+                val components4: Array<Component> = recoveryPanel.components
+                for (component in components4) {
+                    component.isEnabled = true
+                }
+                val components3: Array<Component> = logsPanel.components
+                for (component in components3) {
+                    if (component != buttonStop && component != buttonSave) {
+                        component.isEnabled = false
+                    }
+                }
+            }
+            textAreaCommandFastbootOutput.isFocusable = false
+            textAreaCommandOutput.isFocusable = false
+            textAreaCommandInput.isFocusable = false
+            textAreaCommandFastbootInput.isFocusable = false
+            listLogs.isFocusable = false
+            list.isFocusable = false
+
+            if (newPhone) {
+                getPropRecovery()
+                labelUSBConnection.text = "Connected via Adb"
+                labelUSBConnection.icon = iconYes
+            }
+            newPhone = false
+            enabledAll = false
+        }
         else -> {
             FirstFastbootConnection = true
             FirstAdbConnection = true
+            FirstRecoveryConnection = true
             enabledAll = true
             newPhone = true
             if (!UnauthorizedDevice) {
@@ -198,39 +218,39 @@ fun connectionCheck(){
         }
     }
 }
-    private fun getprop() {
-        var deviceProps = exec("adb shell getprop", output = true)
-        var lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
+    private fun getProp() {
+        val deviceProps = exec("adb", "shell getprop", output = true)
+        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
         Manufacturer = if (!lineValue1.isBlank()) {
             lineValue1
         } else {
             "Unknown"
         }
-        var lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
+        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
         Brand = if (!lineValue2.isBlank()) {
             lineValue2
         } else {
             "Unknown"
         }
-        var lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
+        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
         Model = if (!lineValue3.isBlank()) {
             lineValue3
         } else {
             "Unknown"
         }
-        var lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
+        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
         Codename = if (!lineValue4.isBlank()) {
             lineValue4
         } else {
             "Unknown"
         }
-        var lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
+        val lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
         CPU = if (!lineValue5.isBlank()) {
             lineValue5
         } else {
             "Unknown"
         }
-        var lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
+        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
         CPUA = if (!lineValue6.isBlank()) {
             lineValue6
         } else {
@@ -307,8 +327,157 @@ fun connectionCheck(){
         labelTrebleValue.text = Treble
     }
 
+    private fun getPropRecovery() {
+        val deviceProps = exec("adb", "shell getprop", output = true)
+        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
+        Manufacturer = if (!lineValue1.isBlank()) {
+            lineValue1
+        } else {
+            "Unknown"
+        }
+        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
+        Brand = if (!lineValue2.isBlank()) {
+            lineValue2
+        } else {
+            "Unknown"
+        }
+        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
+        Model = if (!lineValue3.isBlank()) {
+            lineValue3
+        } else {
+            "Unknown"
+        }
+        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
+        Codename = if (!lineValue4.isBlank()) {
+            lineValue4
+        } else {
+            "Unknown"
+        }
+        val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [").substringBefore(']')
+        CPU = if (!lineValue5.isBlank()) {
+            lineValue5
+        } else {
+            "Unknown"
+        }
+        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
+        CPUA = if (!lineValue6.isBlank()) {
+            lineValue6
+        } else {
+            "Unknown"
+        }
+        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
+        SN = if (!lineValue7.isBlank()) {
+            lineValue7
+        } else {
+            "Unknown"
+        }
+        val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [").substringBefore(']')
+        GsmOperator = if (!lineValue8.isBlank()) {
+            lineValue8
+        } else {
+            "Unknown"
+        }
+        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
+        Fingerprint = if (!lineValue9.isBlank()) {
+            lineValue9
+        } else {
+            "Unknown"
+        }
+        var lineValue10 = deviceProps.substringAfter("ro.orangefox.version]: [").substringBefore(']')
+        if (!lineValue10.isBlank()) {
+            VersionRelease = lineValue10
+        } else {
+            lineValue10 = deviceProps.substringAfter("ro.twrp.version]: [").substringBefore(']')
+            VersionRelease = if (!lineValue10.isBlank()) {
+                lineValue10
+            } else {
+                "Unknown"
+            }
+        }
+        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
+        SDK = if (!lineValue11.isBlank()) {
+            lineValue11
+        } else {
+            "Unknown"
+        }
+        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
+        SecurityPatch = if (!lineValue12.isBlank()) {
+            lineValue12
+        } else {
+            "Unknown"
+        }
+        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
+        Language = if (!lineValue13.isBlank()) {
+            lineValue13
+        } else {
+            "Unknown"
+        }
+        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
+        Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) {
+            lineValue14
+        } else {
+            "Unknown"
+        }
+        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
+        Treble = if (!lineValue15.isBlank()) {
+            lineValue15
+        } else {
+            "Unknown"
+        }
+        val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [").substringBefore(']')
+        SecureBoot = if (!lineValue17.isBlank()) {
+            if (lineValue17 == "1") {
+                "true"
+            } else {
+                "false"
+            }
+        } else {
+            "Unknown"
+        }
+        val lineValue18 = deviceProps.substringAfter("ro.build.host]: [").substringBefore(']')
+        DeviceHost = if (!lineValue18.isBlank() && "DEVICE" !in lineValue14) {
+            lineValue18
+        } else {
+            "Unknown"
+        }
+        val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [").substringBefore(']')
+        MockLocation = if (!lineValue16.isBlank()) {
+            if (lineValue16 == "1") {
+                "true"
+            } else {
+                "false"
+            }
+        } else {
+            "Unknown"
+        }
+        val lineValue19 = deviceProps.substringAfter("ro.build.id]: [").substringBefore(']')
+        Language = if (!lineValue19.isBlank()) {
+            lineValue19
+        } else {
+            "Unknown"
+        }
+        labelManufacturerValue.text = Manufacturer
+        labelBrandValue.text = Brand
+        labelModelValue.text = Model
+        labelCodenameValue.text = Codename
+        labelCPUValue.text = CPU
+        labelCPUAValue.text = CPUA
+        labelSNValue.text = SN
+        labelGsmOperatorValue.text = GsmOperator
+        labelFingerprintValue.text = Fingerprint
+        labelVersionReleaseValue.text = VersionRelease
+        labelSDKValue.text = SDK
+        labelSecurityPatchValue.text = SecurityPatch
+        labelLanguageValue.text = Language
+        labelSelinuxValue.text = Selinux
+        labelTrebleValue.text = Treble
+        labelDeviceHostnameValue.text = DeviceHost
+        labelSecureBootValue.text = SecureBoot
+        labelLocationsValue.text = MockLocation
+    }
+
     private fun getPropFastboot() {
-        var fastbootProps = exec("fastboot getvar all", output = true, streamType = "Error")
+        var fastbootProps = exec("fastboot", "getvar all", output = true, streamType = "Error")
         Unlock = fastbootProps.substringAfter("(bootloader) unlocked:").substringBefore( "(bootloader) ").trimMargin()
         FastbootCodename = fastbootProps.substringAfter("(bootloader) product:").substringBefore( "(bootloader) ").trimMargin()
         FastbootSN = fastbootProps.substringAfter("(bootloader) serialno:").substringBefore( "(bootloader) ").trimMargin()
@@ -412,9 +581,9 @@ fun connectionCheck(){
             "-"
         }
     }
-    fun exec(command: String, output: Boolean = false, streamType: String = "Input"): String {
+    fun exec(app: String, command: String, output: Boolean = false, streamType: String = "Input"): String {
         try {
-            val process = Runtime.getRuntime().exec("$WorkingDir$command")
+            val process = Runtime.getRuntime().exec("$WorkingDir$app $command")
             if (output) {
                 return if (streamType == "Input")
                     process.inputStream.bufferedReader().readText()
@@ -432,16 +601,20 @@ fun connectionCheck(){
         return process.inputStream.bufferedReader().readLines()
     }
 
-    fun noConnection() {
-        val components: Array<Component> = fastbootPanel.getComponents()
+    private fun noConnection() {
+        val components: Array<Component> = fastbootPanel.components
         for (component in components) {
             component.isEnabled = false
         }
-        val components2: Array<Component> = adbPanel.getComponents()
+        val components2: Array<Component> = adbPanel.components
         for (component in components2) {
             component.isEnabled = false
         }
-        val components3: Array<Component> = logsPanel.getComponents()
+        val components4: Array<Component> = recoveryPanel.components
+        for (component in components4) {
+            component.isEnabled = false
+        }
+        val components3: Array<Component> = logsPanel.components
         for (component in components3) {
             if(component != buttonStop && component != buttonSave) {
                 component.isEnabled = false
