@@ -1,3 +1,5 @@
 *.class
 *.log
+*.exe
+*.dll
 out/
