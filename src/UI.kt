@@ -19,10 +19,6 @@ open class AndroidToolUI{
         Desktop.getDesktop().browse(urlString)
     }
     init{
-        val `is`: InputStream = this::class.java.getResourceAsStream("sans.ttf")
-        val font = Font.createFont(Font.PLAIN, `is`)
-        val sizedFont = font.deriveFont(13f)
-        UIManager.getLookAndFeelDefaults()["defaultFont"] = sizedFont
         FlatDarculaLaf.install()
         JFrame.setDefaultLookAndFeelDecorated(true)
         JDialog.setDefaultLookAndFeelDecorated(true)
