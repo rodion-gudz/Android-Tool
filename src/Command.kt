@@ -129,6 +129,7 @@ fun connectionCheck(){
                 tabbedpane.selectedIndex = 2
                 FirstFastbootConnection = false
             }
+            buttonIpConnect.isEnabled = false
             if (enabledAll) {
                 val components: Array<Component> = fastbootPanel.components
                 for (component in components) {
@@ -167,6 +168,7 @@ fun connectionCheck(){
                 tabbedpane.selectedIndex = 3
                 FirstRecoveryConnection = false
             }
+            buttonIpConnect.isEnabled = false
             frame.isEnabled = true
             dialogUnauthorizedDevice.dispose()
             if (enabledAll) {
@@ -205,6 +207,7 @@ fun connectionCheck(){
             enabledAll = false
         }
         else -> {
+            buttonIpConnect.isEnabled = true
             FirstFastbootConnection = true
             FirstAdbConnection = true
             FirstRecoveryConnection = true
