@@ -185,116 +185,30 @@ open class AndroidTool : Command() {
                     class MyWorker : SwingWorker<Unit, Int>() {
                         override fun doInBackground() {
                             arrayList = emptyArray()
-                            when {
-                                radioButtonVerbose.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:V")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonDebug.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:D")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonInfo.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:I")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonWarning.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:W")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonError.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:E")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonFatal.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:F")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
-                                    }
-                                }
-                                radioButtonSilent.isSelected -> {
-                                    Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
-                                    val builderList = Runtime.getRuntime().exec("${WorkingDir}adb logcat *:S")
-                                    val input = builderList.inputStream
-                                    val reader = BufferedReader(InputStreamReader(input))
-                                    var line: String?
-                                    while (reader.readLine().also { line = it } != null) {
-                                        if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-                                            if (logsWorking) {
-                                                listModelLogs.addElement(line)
-                                                listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-                                            }
-                                        }
+                            Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                            val builderList = when {
+                                radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:V")
+                                radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:D")
+                                radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:I")
+                                radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:W")
+                                radioButtonError.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:E")
+                                radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:F")
+                                radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:S")
+                                else -> Runtime.getRuntime().exec("${WorkingDir}adb logcat -c")
+                            }
+                            val input = builderList.inputStream
+                            val reader = BufferedReader(InputStreamReader(input))
+                            var line: String?
+                            while (reader.readLine().also { line = it } != null) {
+                                if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
+                                    if (logsWorking) {
+                                        listModelLogs.addElement(line)
+                                        listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
                                     }
                                 }
                             }
                         }
                     }
-
                     val worker = MyWorker()
                     worker.execute()
                     functionButtonStart = false
@@ -666,93 +580,27 @@ open class AndroidTool : Command() {
                     override fun doInBackground() {
                         buttonCheck.isEnabled = false
                         textFieldIPa.isFocusable = true
-                        when {
-                            radioButtonDisabled.isSelected -> {
-                                arrayList = emptyArray()
-                                listModel.removeAllElements()
-                                val reader = execLines("adb shell pm list packages -d")
-                                for(element in reader){
-                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                            arrayList += element.substring(8)
-                                        }
-                                    }
-                                }
-                                arrayList.sort()
-                                for (element in arrayList) {
-                                    listModel.addElement(element)
-                                    stars.add(element)
+                        arrayList = emptyArray()
+                        listModel.removeAllElements()
+                        val reader = when {
+                            radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
+                            radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
+                            radioButtonEnabled.isSelected -> execLines("adb shell pm list packages -e")
+                            radioButtonThird.isSelected -> execLines("adb shell pm list packages -3")
+                            else -> execLines("adb shell pm list packages")
+                        }
+                        for(element in reader){
+                            if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                                if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                                    arrayList += element.substring(8)
                                 }
                             }
-                            radioButtonSystem.isSelected -> {
-                                arrayList = emptyArray()
-                                listModel.removeAllElements()
-                                val reader = execLines("adb shell pm list packages -s")
-                                for(element in reader){
-                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                            arrayList += element.substring(8)
-                                        }
-                                    }
-                                }
-                                arrayList.sort()
-                                for (element in arrayList) {
-                                    listModel.addElement(element)
-                                    stars.add(element)
-                                }
-                            }
-                            radioButtonEnabled.isSelected -> {
-                                arrayList = emptyArray()
-                                listModel.removeAllElements()
-                                val reader = execLines("adb shell pm list packages -e")
-                                for(element in reader){
-                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                            arrayList += element.substring(8)
-                                        }
-                                    }
-                                }
-                                arrayList.sort()
-                                for (element in arrayList) {
-                                    listModel.addElement(element)
-                                    stars.add(element)
-                                }
-                            }
-                            radioButtonThird.isSelected -> {
-                                arrayList = emptyArray()
-                                listModel.removeAllElements()
-                                val reader = execLines("adb shell pm list packages -3")
-                                for(element in reader){
-                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                            arrayList += element.substring(8)
-                                        }
-                                    }
-                                }
-                                arrayList.sort()
-                                for (element in arrayList) {
-                                    listModel.addElement(element)
-                                    stars.add(element)
-                                }
-                            }
-                            else -> {
-                                arrayList = emptyArray()
-                                listModel.removeAllElements()
-                                val reader = execLines("adb shell pm list packages")
-                                for(element in reader){
-                                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                            arrayList += element.substring(8)
-                                        }
-                                    }
-                                }
-                                arrayList.sort()
-                                buttonCheck.isEnabled = true
-                                for (element in arrayList) {
-                                    listModel.addElement(element)
-                                    stars.add(element)
-                                }
-                            }
+                        }
+                        arrayList.sort()
+                        buttonCheck.isEnabled = true
+                        for (element in arrayList) {
+                            listModel.addElement(element)
+                            stars.add(element)
                         }
                     }
                     override fun done() {
