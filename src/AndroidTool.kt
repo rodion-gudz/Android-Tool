@@ -332,6 +332,39 @@ open class AndroidTool : Command() {
                     textFieldIP.text = AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
                 } catch (e: Exception) { }
                 if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
+                    if (!ConnectedViaAdb){
+                        labelManufacturerValue.text = "-"
+                        labelBrandValue.text = "-"
+                        labelModelValue.text = "-"
+                        labelCodenameValue.text = "-"
+                        labelCPUValue.text = "-"
+                        labelCPUAValue.text = "-"
+                        labelSNValue.text = "-"
+                        labelGsmOperatorValue.text = "-"
+                        labelFingerprintValue.text = "-"
+                        labelVersionReleaseValue.text = "-"
+                        labelSDKValue.text = "-"
+                        labelSecurityPatchValue.text = "-"
+                        labelLanguageValue.text = "-"
+                        labelSelinuxValue.text = "-"
+                        labelTrebleValue.text = "-"
+                    }else{
+                        labelManufacturerValue.text = Manufacturer
+                        labelBrandValue.text = Brand
+                        labelModelValue.text = Model
+                        labelCodenameValue.text = Codename
+                        labelCPUValue.text = CPU
+                        labelCPUAValue.text = CPUA
+                        labelSNValue.text = SN
+                        labelGsmOperatorValue.text = GsmOperator
+                        labelFingerprintValue.text = Fingerprint
+                        labelVersionReleaseValue.text = VersionRelease
+                        labelSDKValue.text = SDK
+                        labelSecurityPatchValue.text = SecurityPatch
+                        labelLanguageValue.text = Language
+                        labelSelinuxValue.text = Selinux
+                        labelTrebleValue.text = Treble
+                    }
                     labelGsmOperator.text = "Cellular provider:"
                     labelGsmOperator.bounds = Rectangle(15, 156, 110, 20)
                     labelGsmOperatorValue.bounds = Rectangle(125, 156, 155, 20)
@@ -402,6 +435,45 @@ open class AndroidTool : Command() {
                         buttonPowerOff.isEnabled = false
                     }
                 } else if (tabbedpane.selectedIndex == 3) {
+                    if (!ConnectedViaRecovery){
+                        labelManufacturerValue.text = "-"
+                        labelBrandValue.text = "-"
+                        labelModelValue.text = "-"
+                        labelCodenameValue.text = "-"
+                        labelCPUValue.text = "-"
+                        labelCPUAValue.text = "-"
+                        labelSNValue.text = "-"
+                        labelGsmOperatorValue.text = "-"
+                        labelFingerprintValue.text = "-"
+                        labelVersionReleaseValue.text = "-"
+                        labelSDKValue.text = "-"
+                        labelSecurityPatchValue.text = "-"
+                        labelLanguageValue.text = "-"
+                        labelSelinuxValue.text = "-"
+                        labelTrebleValue.text = "-"
+                        labelDeviceHostnameValue.text = "-"
+                        labelLocationsValue.text = "-"
+                        labelSecureBootValue.text = "-"
+                    }else{
+                        labelManufacturerValue.text = Manufacturer
+                        labelBrandValue.text = Brand
+                        labelModelValue.text = Model
+                        labelCodenameValue.text = Codename
+                        labelCPUValue.text = CPU
+                        labelCPUAValue.text = CPUA
+                        labelSNValue.text = SN
+                        labelGsmOperatorValue.text = GsmOperator
+                        labelFingerprintValue.text = Fingerprint
+                        labelVersionReleaseValue.text = VersionRelease
+                        labelSDKValue.text = SDK
+                        labelSecurityPatchValue.text = SecurityPatch
+                        labelLanguageValue.text = Language
+                        labelSelinuxValue.text = Selinux
+                        labelTrebleValue.text = Treble
+                        labelDeviceHostnameValue.text = DeviceHost
+                        labelSecureBootValue.text = SecureBoot
+                        labelLocationsValue.text = MockLocation
+                    }
                     labelGsmOperator.text = "USB mode:"
                     labelGsmOperator.bounds = Rectangle(15, 156, 70, 20)
                     labelGsmOperatorValue.bounds = Rectangle(90, 156, 175, 20)
