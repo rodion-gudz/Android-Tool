@@ -33,7 +33,7 @@
   ## Usage
   
 
-  #####Unzip release archive, run the Android Tool.jar file, enjoy)
+  ##### Unzip release archive, run the Android Tool.jar file, enjoy)
 
   ## Requirements
   
