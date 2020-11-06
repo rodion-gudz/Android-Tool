@@ -105,9 +105,8 @@ fun connectionCheck(){
             listLogs.isFocusable = true
             list.isFocusable = true
 
-            if (newPhone) {
-                getProp()
-            }
+            if (newPhone) { getProp() }
+
             if (ConnectedAdbUsb) {
                 labelUSBConnection.text = "Connected via Adb"
                 labelUSBConnection.icon = iconYes

@@ -771,10 +771,7 @@ open class AndroidTool : Command() {
                             exec("fastboot", "erase radio")
                         }
                     }
-
-                    override fun done() {
-                        buttonErase.isEnabled = true
-                    }
+                    override fun done() { buttonErase.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -795,9 +792,7 @@ open class AndroidTool : Command() {
                             labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
                         }
                     }
-                    override fun done() {
-                        buttonChoseRecovery.isEnabled = true
-                    }
+                    override fun done() { buttonChoseRecovery.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -813,9 +808,7 @@ open class AndroidTool : Command() {
                             exec("fastboot", "flash recovery $selectedFileAbsolutePath")
                         }
                     }
-                    override fun done() {
-                        buttonInstallRecovery.isEnabled = true
-                    }
+                    override fun done() { buttonInstallRecovery.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -831,10 +824,7 @@ open class AndroidTool : Command() {
                             exec("fastboot", "boot $selectedFileAbsolutePath")
                         }
                     }
-
-                    override fun done() {
-                        buttonBootToRecovery.isEnabled = true
-                    }
+                    override fun done() { buttonBootToRecovery.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -851,9 +841,7 @@ open class AndroidTool : Command() {
                             selectedZipPath = choseFile.selectedFile.absolutePath
                         }
                     }
-                    override fun done() {
-                        buttonChooseZip.isEnabled = true
-                    }
+                    override fun done() { buttonChooseZip.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -870,9 +858,7 @@ open class AndroidTool : Command() {
                             exec("adb", "sideload $selectedZipPath")
                         }
                     }
-                    override fun done() {
-                        buttonInstallZip.isEnabled = true
-                    }
+                    override fun done() { buttonInstallZip.isEnabled = true }
                 }
                 Worker().execute()
             }
