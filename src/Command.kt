@@ -72,6 +72,12 @@ fun connectionCheck(){
 
     when {
         ConnectedViaAdb -> {
+
+            buttonPowerOff.isEnabled = true
+            buttonReboot.isEnabled = true
+            buttonRecoveryReboot.isEnabled = true
+            buttonFastbootReboot.isEnabled = true
+
             if (FirstAdbConnection) {
                 tabbedpane.selectedIndex = 0
                 FirstAdbConnection = false
@@ -124,6 +130,12 @@ fun connectionCheck(){
             enabledAll = false
         }
         ConnectedViaFastboot -> {
+
+            buttonPowerOff.isEnabled = false
+            buttonReboot.isEnabled = true
+            buttonRecoveryReboot.isEnabled = true
+            buttonFastbootReboot.isEnabled = true
+
             if (FirstFastbootConnection) {
                 tabbedpane.selectedIndex = 2
                 FirstFastbootConnection = false
@@ -163,6 +175,12 @@ fun connectionCheck(){
             enabledAll = false
         }
         ConnectedViaRecovery -> {
+
+            buttonReboot.isEnabled = true
+            buttonRecoveryReboot.isEnabled = true
+            buttonFastbootReboot.isEnabled = true
+            buttonPowerOff.isEnabled = true
+
             if (FirstRecoveryConnection) {
                 tabbedpane.selectedIndex = 3
                 FirstRecoveryConnection = false
@@ -252,9 +270,9 @@ fun connectionCheck(){
         Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) { lineValue14 } else { "-" }
         var lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
         Treble = if (!lineValue15.isBlank()) { lineValue15 } else { "-" }
-        labelManufacturerValue.text = Manufacturer
-        labelBrandValue.text = Brand
-        labelModelValue.text = Model
+        labelManufacturerValue.text ="Xiaomi"
+        labelBrandValue.text = "Xiaomi"
+        labelModelValue.text = "Mi 8"
         labelCodenameValue.text = Codename
         labelCPUValue.text = CPU
         labelCPUAValue.text = CPUA
