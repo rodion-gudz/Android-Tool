@@ -2,3 +2,4 @@
 *.log
 out/
 sdk-tools/
+.idea/dictionaries/
