@@ -282,10 +282,7 @@ open class AndroidTool : Command() {
                             3 -> exec("adb", "shell twrp reboot bootloader")
                         }
                     }
-
-                    override fun done() {
-                        buttonFastbootReboot.isEnabled = true
-                    }
+                    override fun done() { buttonFastbootReboot.isEnabled = true }
                 }
                 Worker().execute()
             }
@@ -300,10 +297,7 @@ open class AndroidTool : Command() {
                             3 -> exec("adb", "shell twrp reboot poweroff")
                         }
                     }
-
-                    override fun done() {
-                        buttonPowerOff.isEnabled = true
-                    }
+                    override fun done() { buttonPowerOff.isEnabled = true }
                 }
                 Worker().execute()
             }
