@@ -270,9 +270,9 @@ fun connectionCheck(){
         Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) { lineValue14 } else { "-" }
         var lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
         Treble = if (!lineValue15.isBlank()) { lineValue15 } else { "-" }
-        labelManufacturerValue.text ="Xiaomi"
-        labelBrandValue.text = "Xiaomi"
-        labelModelValue.text = "Mi 8"
+        labelManufacturerValue.text = Manufacturer
+        labelBrandValue.text = Brand
+        labelModelValue.text = Model
         labelCodenameValue.text = Codename
         labelCPUValue.text = CPU
         labelCPUAValue.text = CPUA

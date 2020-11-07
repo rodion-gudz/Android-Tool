@@ -343,9 +343,9 @@ open class AndroidTool : Command() {
                         labelSelinuxValue.text = "-"
                         labelTrebleValue.text = "-"
                     }else{
-                        labelManufacturerValue.text = "Xiaomi"
-                        labelBrandValue.text = "Xiaomi"
-                        labelModelValue.text = "Mi 8"
+                        labelManufacturerValue.text = Manufacturer
+                        labelBrandValue.text = Brand
+                        labelModelValue.text = Model
                         labelCodenameValue.text = Codename
                         labelCPUValue.text = CPU
                         labelCPUAValue.text = CPUA
