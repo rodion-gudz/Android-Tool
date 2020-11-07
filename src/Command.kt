@@ -252,23 +252,23 @@ fun connectionCheck(){
         CPU = if (!lineValue5.isBlank()) { lineValue5 } else { "-" }
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
         CPUA = if (!lineValue6.isBlank()) { lineValue6 } else { "-" }
-        var lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
+        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
         SN = if (!lineValue7.isBlank()) { lineValue7 } else { "-" }
-        var lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
+        val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
         GsmOperator = if (!lineValue8.isBlank() && lineValue8 != ",") { lineValue8 } else { "-" }
-        var lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
+        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
         Fingerprint = if (!lineValue9.isBlank()) { lineValue9 } else { "-" }
-        var lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
+        val lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
         VersionRelease = if (!lineValue10.isBlank()) { lineValue10 } else { "-" }
-        var lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
+        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
         SDK = if (!lineValue11.isBlank()) { lineValue11 } else { "-" }
-        var lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
+        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
         SecurityPatch = if (!lineValue12.isBlank()) { lineValue12 } else { "-" }
-        var lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
+        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
         Language = if (!lineValue13.isBlank()) { lineValue13 } else { "-" }
-        var lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
+        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
         Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) { lineValue14 } else { "-" }
-        var lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
+        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
         Treble = if (!lineValue15.isBlank()) { lineValue15 } else { "-" }
         labelManufacturerValue.text = Manufacturer
         labelBrandValue.text = Brand
@@ -351,7 +351,7 @@ fun connectionCheck(){
     }
 
     private fun getPropFastboot() {
-        var fastbootProps = exec("fastboot", "getvar all", output = true, streamType = "Error")
+        val fastbootProps = exec("fastboot", "getvar all", output = true, streamType = "Error")
         Unlock = fastbootProps.substringAfter("(bootloader) unlocked:").substringBefore( "(bootloader) ").trimMargin()
         FastbootCodename = fastbootProps.substringAfter("(bootloader) product:").substringBefore( "(bootloader) ").trimMargin()
         FastbootSN = fastbootProps.substringAfter("(bootloader) serialno:").substringBefore( "(bootloader) ").trimMargin()
