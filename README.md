@@ -14,7 +14,11 @@
   * #### Install or boot custom recovery or wipe partitions
   * #### Always relevant links to firmware and everything you need
   * #### And not only 😉
-
+  
+  ## Links:
+  * #### Telegram channel - [@android_tooI](https://t.me/android_tooI)
+  * #### 4PDA thread - [Android Tool](https://4pda.ru/forum/index.php?showtopic=1000362)
+  
   ## Screenshots:
   * ##### Adb 
   ![Adb Screenshot](https://i.imgur.com/xJH0I76.png)
@@ -31,9 +35,9 @@
   ##### You can find the latest version on Github Repository
 
   ## Usage
-  
-
-  ##### Unzip release archive, run the Android Tool.jar file, enjoy)
+  * #### Download program archive to your OS
+  * #### Extract it to the desired location
+  * #### Run executable file "Android Tool.jar"
 
   ## Requirements
   
