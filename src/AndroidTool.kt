@@ -75,7 +75,7 @@ var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png")
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
-var MacOS = "Mac" in System.getProperty("os.name")
+val MacOS = "Mac" in System.getProperty("os.name")
 val WorkingDir = System.getProperty("user.dir") + if (Windows) { "\\sdk-tools\\"} else { "/sdk-tools/" }
 open class AndroidTool : Command() {
     init {
