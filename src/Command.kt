@@ -72,11 +72,12 @@ fun connectionCheck(){
 
     when {
         ConnectedViaAdb -> {
-
-            buttonPowerOff.isEnabled = true
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
+            if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
+                buttonPowerOff.isEnabled = true
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            }
 
             if (FirstAdbConnection) {
                 tabbedpane.selectedIndex = 0
@@ -130,12 +131,12 @@ fun connectionCheck(){
             enabledAll = false
         }
         ConnectedViaFastboot -> {
-
-            buttonPowerOff.isEnabled = false
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-
+            if (tabbedpane.selectedIndex == 2) {
+                buttonPowerOff.isEnabled = false
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+            }
             if (FirstFastbootConnection) {
                 tabbedpane.selectedIndex = 2
                 FirstFastbootConnection = false
@@ -175,12 +176,12 @@ fun connectionCheck(){
             enabledAll = false
         }
         ConnectedViaRecovery -> {
-
-            buttonReboot.isEnabled = true
-            buttonRecoveryReboot.isEnabled = true
-            buttonFastbootReboot.isEnabled = true
-            buttonPowerOff.isEnabled = true
-
+            if (tabbedpane.selectedIndex == 3) {
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+                buttonPowerOff.isEnabled = true
+            }
             if (FirstRecoveryConnection) {
                 tabbedpane.selectedIndex = 3
                 FirstRecoveryConnection = false

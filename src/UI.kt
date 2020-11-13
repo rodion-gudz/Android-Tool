@@ -1046,7 +1046,7 @@ open class AndroidToolUI{
         frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/frameIcon.png")).image
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
-                Runtime.getRuntime().exec("adb kill-server")
+                Runtime.getRuntime().exec("${WorkingDir}adb kill-server")
             }
         })
 
