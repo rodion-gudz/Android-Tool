@@ -25,7 +25,7 @@ var Brand = ""
 var Model = ""
 var Codename = ""
 var CPU = ""
-var CPUA = ""
+var CPUArch = ""
 var SN = ""
 var GsmOperator = ""
 var Fingerprint = ""
@@ -348,7 +348,7 @@ open class AndroidTool : Command() {
                         labelModelValue.text = Model
                         labelCodenameValue.text = Codename
                         labelCPUValue.text = CPU
-                        labelCPUAValue.text = CPUA
+                        labelCPUAValue.text = CPUArch
                         labelSNValue.text = SN
                         labelGsmOperatorValue.text = GsmOperator
                         labelFingerprintValue.text = Fingerprint
@@ -454,7 +454,7 @@ open class AndroidTool : Command() {
                         labelModelValue.text = Model
                         labelCodenameValue.text = Codename
                         labelCPUValue.text = CPU
-                        labelCPUAValue.text = CPUA
+                        labelCPUAValue.text = CPUArch
                         labelSNValue.text = SN
                         labelGsmOperatorValue.text = GsmOperator
                         labelFingerprintValue.text = Fingerprint

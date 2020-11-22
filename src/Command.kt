@@ -1,7 +1,5 @@
 import java.awt.Component
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
 
 open class Command : AndroidToolUI() {
 fun connectionCheck(){
@@ -252,7 +250,7 @@ fun connectionCheck(){
         val lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
         CPU = if (!lineValue5.isBlank()) { lineValue5 } else { "-" }
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUA = if (!lineValue6.isBlank()) { lineValue6 } else { "-" }
+        CPUArch = if (!lineValue6.isBlank()) { lineValue6 } else { "-" }
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
         SN = if (!lineValue7.isBlank()) { lineValue7 } else { "-" }
         val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
@@ -276,7 +274,7 @@ fun connectionCheck(){
         labelModelValue.text = Model
         labelCodenameValue.text = Codename
         labelCPUValue.text = CPU
-        labelCPUAValue.text = CPUA
+        labelCPUAValue.text = CPUArch
         labelSNValue.text = SN
         labelGsmOperatorValue.text = GsmOperator
         labelFingerprintValue.text = Fingerprint
@@ -301,7 +299,7 @@ fun connectionCheck(){
         val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [").substringBefore(']')
         CPU = if (!lineValue5.isBlank()) { lineValue5 } else { "-" }
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUA = if (!lineValue6.isBlank()) { lineValue6 } else { "-" }
+        CPUArch = if (!lineValue6.isBlank()) { lineValue6 } else { "-" }
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
         SN = if (!lineValue7.isBlank()) { lineValue7 } else { "-" }
         val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [").substringBefore(']')
@@ -336,7 +334,7 @@ fun connectionCheck(){
         labelModelValue.text = Model
         labelCodenameValue.text = Codename
         labelCPUValue.text = CPU
-        labelCPUAValue.text = CPUA
+        labelCPUAValue.text = CPUArch
         labelSNValue.text = SN
         labelGsmOperatorValue.text = GsmOperator
         labelFingerprintValue.text = Fingerprint
