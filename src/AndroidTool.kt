@@ -19,7 +19,7 @@ var selectedFilePath = ""
 var selectedZipPath = ""
 var listModel = DefaultListModel<Any?>()
 var listModelLogs = DefaultListModel<Any?>()
-var stars: ArrayList<Any> = ArrayList()
+var apps: ArrayList<Any> = ArrayList()
 var Manufacturer = ""
 var Brand = ""
 var Model = ""
@@ -110,13 +110,13 @@ open class AndroidTool : Command() {
 
             fun searchFilter(searchTerm: String) {
                 val filteredItems: DefaultListModel<Any?> = DefaultListModel()
-                val stars = stars
-                stars.stream().forEach { star: Any ->
-                    val starName = star.toString().toLowerCase()
+                val apps = apps
+                apps.stream().forEach { app: Any ->
+                    val starName = app.toString().toLowerCase()
                     if (starName.contains(searchTerm.toLowerCase())) {
-                        if (!filteredItems.contains(star)) {
+                        if (!filteredItems.contains(app)) {
+                            filteredItems.addElement(app)
                         }
-                        filteredItems.addElement(star)
                     }
                 }
                 listModel = filteredItems
@@ -666,7 +666,7 @@ open class AndroidTool : Command() {
                         buttonCheck.isEnabled = true
                         for (element in arrayList) {
                             listModel.addElement(element)
-                            stars.add(element)
+                            apps.add(element)
                         }
                     }
                     override fun done() {
