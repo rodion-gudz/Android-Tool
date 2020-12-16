@@ -2,10 +2,8 @@ import com.formdev.flatlaf.FlatDarculaLaf
 import java.awt.Color
 import java.awt.Component
 import java.awt.Desktop
-import java.awt.Font
 import java.awt.Rectangle
 import java.awt.event.*
-import java.io.InputStream
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.URI
@@ -1046,7 +1044,7 @@ open class AndroidToolUI{
         frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/frameIcon.png")).image
         frame.addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
-                Runtime.getRuntime().exec("${WorkingDir}adb kill-server")
+                Runtime.getRuntime().exec("${SDKDir}adb kill-server")
             }
         })
 

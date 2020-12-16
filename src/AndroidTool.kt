@@ -76,7 +76,7 @@ var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 var Linux = "Linux" in System.getProperty("os.name")
 var MacOS = "Mac" in System.getProperty("os.name")
-val WorkingDir = System.getProperty("user.dir") + if (Windows) { "\\sdk-tools\\"} else { "/sdk-tools/" }
+val SDKDir = System.getProperty("user.dir") + if (Windows) { "\\sdk-tools\\"} else { "/sdk-tools/" }
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
@@ -185,16 +185,16 @@ open class AndroidTool : Command() {
                     class MyWorker : SwingWorker<Unit, Int>() {
                         override fun doInBackground() {
                             arrayList = emptyArray()
-                            Runtime.getRuntime().exec("${WorkingDir}adb logcat -c").waitFor()
+                            Runtime.getRuntime().exec("${SDKDir}adb logcat -c").waitFor()
                             val builderList = when {
-                                radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:V")
-                                radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:D")
-                                radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:I")
-                                radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:W")
-                                radioButtonError.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:E")
-                                radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:F")
-                                radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${WorkingDir}adb logcat *:S")
-                                else -> Runtime.getRuntime().exec("${WorkingDir}adb logcat -c")
+                                radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:V")
+                                radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:D")
+                                radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:I")
+                                radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:W")
+                                radioButtonError.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:E")
+                                radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:F")
+                                radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${SDKDir}adb logcat *:S")
+                                else -> Runtime.getRuntime().exec("${SDKDir}adb logcat -c")
                             }
                             val input = builderList.inputStream
                             val reader = BufferedReader(InputStreamReader(input))

@@ -392,7 +392,7 @@ fun connectionCheck(){
     }
     fun exec(app: String, command: String, output: Boolean = false, streamType: String = "Input"): String {
         try {
-            val process = Runtime.getRuntime().exec("$WorkingDir$app $command")
+            val process = Runtime.getRuntime().exec("$SDKDir$app $command")
             if (output) {
                 return if (streamType == "Input")
                     process.inputStream.bufferedReader().readText()
@@ -406,7 +406,7 @@ fun connectionCheck(){
         return ""
     }
     fun execLines(command: String): List<String> {
-        val process = Runtime.getRuntime().exec("$WorkingDir$command")
+        val process = Runtime.getRuntime().exec("$SDKDir$command")
         return process.inputStream.bufferedReader().readLines()
     }
 
