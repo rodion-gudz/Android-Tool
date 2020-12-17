@@ -74,9 +74,11 @@ var FirstAdbConnection = true
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
-var Linux = "Linux" in System.getProperty("os.name")
-var MacOS = "Mac" in System.getProperty("os.name")
-val SdkDir = System.getProperty("user.dir") + if (Windows) { "\\sdk-tools\\"} else { "/sdk-tools/" }
+val Linux = "Linux" in System.getProperty("os.name")
+val MacOS = "Mac" in System.getProperty("os.name")
+val userFolder = System.getProperty("user.home").toString()
+val SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/android_tool/SDK-Tools/"}
+val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/android_tool/"}
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
