@@ -271,6 +271,16 @@ open class AndroidTool : Command() {
                 Worker().execute()
             }
 
+            buttonGetLogs.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonGetLogs.isEnabled = false
+                        exec("adb", "shell cp -f /tmp/recovery.log /sdcard")
+                    }
+                    override fun done() { buttonGetLogs.isEnabled = true }
+                }
+                Worker().execute()
+            }
 
             buttonFastbootReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
