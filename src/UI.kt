@@ -151,8 +151,10 @@ open class AndroidToolUI{
     val labelUnauthorized = JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
     val labelSample = JLabel("Sample:")
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
-    val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
+    val dialogMultipleDevice = JDialog(frame, "No SDK found!")
+    val dialogSdkDownload = JDialog(frame, "Multiple devices connected")
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
+    val labelSdkDownload = JLabel("<html><font size='4'>No SDK found in system, please click button to install</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
@@ -302,6 +304,7 @@ open class AndroidToolUI{
     val buttonInstallRecovery = JButton("Install")
     val buttonBootToRecovery = JButton("Boot")
     val buttonChooseZip = JButton("Select Zip")
+    val buttonSdkDownload = JButton("Install")
     val labelInstallZip = JLabel("Install zip")
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
@@ -994,6 +997,20 @@ open class AndroidToolUI{
 
         labelMultipleDevice.bounds = Rectangle(20, 5, 400, 35)
         dialogMultipleDevice.add(labelMultipleDevice)
+
+        dialogSdkDownload.setSize(380, 100)
+        dialogSdkDownload.isResizable = false
+        dialogSdkDownload.layout = null
+        dialogSdkDownload.setLocationRelativeTo(null)
+        dialogSdkDownload.rootPane.border = BorderFactory.createLineBorder(Color.decode("#585858"))
+
+        labelSdkDownload.bounds = Rectangle(20, 5, 400, 35)
+        dialogSdkDownload.add(labelSdkDownload)
+
+        buttonSdkDownload.bounds = Rectangle(260, 40, 100, 25)
+        dialogSdkDownload.add(buttonSdkDownload)
+
+
         buttonStop.bounds = Rectangle(5, 468, 150, 35)
         buttonStop.isFocusable = false
         buttonStop.isEnabled = false

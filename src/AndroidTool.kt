@@ -87,6 +87,7 @@ open class AndroidTool : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
+            dialogSdkDownload.isVisible = true
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
                 class Worker : SwingWorker<Unit, Int>() {
@@ -235,7 +236,29 @@ open class AndroidTool : Command() {
                 functionButtonStart = true
             }
 
-
+            buttonSdkDownload.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonSdkDownload.isEnabled = false
+                        createFolder()
+                        when{
+                            Windows -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/windows.zip", "$SdkDir\\windows.zip")
+                            Linux -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/linux.zip", "$SdkDir/linux.zip")
+                            MacOS -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/macos.zip", "$SdkDir/macos.zip")
+                        }
+                        when{
+                            Windows -> unZipFile("$SdkDir\\windows.zip")
+                            Linux -> unZipFile("$SdkDir/linux.zip")
+                            MacOS -> unZipFile("$SdkDir/macos.zip")
+                        }
+                        hideFolder(userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/android_tool/"})
+                    }
+                    override fun done() {
+                        buttonSdkDownload.isEnabled = true
+                    }
+                }
+                Worker().execute()
+            }
 
             buttonReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {

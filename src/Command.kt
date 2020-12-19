@@ -8,12 +8,10 @@ import java.util.zip.ZipFile
 
 open class Command : AndroidToolUI() {
     fun createFolder() {
-        if (Windows) {
-            File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
-        } else if (Linux) {
-            File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
-        } else {
-            File("$userFolder/android_tool", "SDK-Tools").mkdirs()
+        when {
+            Windows -> File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
+            Linux -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
+            else -> File("$userFolder/android_tool", "SDK-Tools").mkdirs()
         }
     }
     fun downloadFile(urlStr: String, file: String) {
@@ -27,6 +25,12 @@ open class Command : AndroidToolUI() {
         }
         fis.close()
         bis.close()
+    }
+    fun hideFolder(urlStr: String){
+        when{
+            Windows -> Runtime.getRuntime().exec("attrib +H $urlStr")
+            MacOS -> Runtime.getRuntime().exec("chflags hidden $urlStr")
+        }
     }
     fun unZipFile(urlStr: String){
         ZipFile(File(urlStr)).use { zip ->
@@ -43,7 +47,7 @@ open class Command : AndroidToolUI() {
                     }
                 }
             }
-            File(ProgramDir + if (Windows){ "windows.zip" } else if (Linux){ "linux.zip" } else { "macos.zip" }).delete()
+        File(ProgramDir + if (Windows) "windows.zip" else if (Linux) "linux.zip" else "macos.zip").delete()
     }
 
     fun connectionCheck() {
