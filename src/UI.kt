@@ -11,16 +11,18 @@ import javax.swing.*
 import javax.swing.border.TitledBorder
 
 
-open class AndroidToolUI{
-    private fun runUrl(url: String){
+open class AndroidToolUI {
+    private fun runUrl(url: String) {
         val urlString = URI(url)
         Desktop.getDesktop().browse(urlString)
     }
-    init{
+
+    init {
         FlatDarculaLaf.install()
         JFrame.setDefaultLookAndFeelDecorated(true)
         JDialog.setDefaultLookAndFeelDecorated(true)
     }
+
     val frame = JFrame("Android Tool")
     private var sdf = ""
     var labelManufacturerValue = JLabel("-")
@@ -309,12 +311,12 @@ open class AndroidToolUI{
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
 
-//    val menuBar = JMenuBar()
+    //    val menuBar = JMenuBar()
 //    val fileMenu = JMenu("Program")
 //    val settingsMenu = JMenuItem("Settings")
 //    val aboutItem = JMenuItem("About")
 //    val exitItem = JMenuItem("Exit")
-    init{
+    init {
 //        settingsMenu.addActionListener {
 //
 //        }
@@ -926,7 +928,6 @@ open class AndroidToolUI{
         ////CheckBox////
 
         ////Button////
-
 
 
         buttonInstallAll.bounds = Rectangle(5, 25, 285, 50)

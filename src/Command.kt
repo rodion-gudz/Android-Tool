@@ -14,6 +14,9 @@ open class Command : AndroidToolUI() {
             else -> File("$userFolder/android_tool", "SDK-Tools").mkdirs()
         }
     }
+    fun sdkCheck(): Boolean {
+        // TODO Sdk checker
+    }
     fun downloadFile(urlStr: String, file: String) {
         val url = URL(urlStr)
         val bis = BufferedInputStream(url.openStream())
