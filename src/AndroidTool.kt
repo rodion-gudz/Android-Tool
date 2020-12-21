@@ -76,8 +76,9 @@ var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
+val JarDir = System.getProperty("user.dir")
 val userFolder = System.getProperty("user.home").toString()
-val SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/android_tool/SDK-Tools/"}
+var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/android_tool/"}
 open class AndroidTool : Command() {
     init {
@@ -87,7 +88,7 @@ open class AndroidTool : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
-            dialogSdkDownload.isVisible = true
+            sdkCheck()
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
                 class Worker : SwingWorker<Unit, Int>() {
@@ -131,7 +132,6 @@ open class AndroidTool : Command() {
                     searchFilter(textFieldIPa.text)
                 }
             })
-
 
 
 
@@ -333,6 +333,25 @@ open class AndroidTool : Command() {
                 }
             })
 
+            dialogSdkDownload.addWindowListener(object : WindowAdapter() {
+                override fun windowClosing(e: WindowEvent) {
+                    when{
+                        Windows -> {
+                            if (File("$ProgramDir\\SDK-Tools").exists())
+                                SdkDir = "$ProgramDir\\SDK-Tools"
+                        }
+                        Linux -> {
+                            if (File("$ProgramDir/SDK-Tools").exists())
+                                SdkDir = "$ProgramDir/SDK-Tools"
+                        }
+                        MacOS -> {
+                            if (File("$ProgramDir/SDK-Tools").exists())
+                                SdkDir = "$ProgramDir/SDK-Tools"
+                        }
+                    }
+
+                }
+            })
 
             val run = Thread {
                 while (true) {

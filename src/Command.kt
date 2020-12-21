@@ -15,7 +15,40 @@ open class Command : AndroidToolUI() {
         }
     }
     fun sdkCheck(): Boolean {
-        // TODO Sdk checker
+        when{
+            Windows -> {
+                if (File("adb.exe").exists() && File("fastboot.exe").exists() && File("AdbWinApi.dll").exists() && File("AdbWinUsbApi.dll").exists()){
+                    SdkDir = "$JarDir\\"
+                    return true
+                }
+                else if (File("\\SDK-Tools\\adb.exe").exists() && File("\\SDK-Tools\\fastboot.exe").exists() && File("\\SDK-Tools\\AdbWinApi.dll").exists() && File("\\SDK-Tools\\AdbWinUsbApi.dll").exists()){
+                    SdkDir = "$JarDir\\SDK-Tools\\"
+                    return true
+                }
+            }
+            Linux -> {
+                if (File("adb").exists() && File("fastboot").exists()) {
+                    SdkDir = "$JarDir/"
+                    return true
+                }
+                else if (File("/SDK-Tools/adb").exists() && File("/SDK-Tools/fastboot").exists()) {
+                    SdkDir = "$JarDir/SDK-Tools/"
+                    return true
+                }
+            }
+            MacOS -> {
+                if (File("adb").exists() && File("fastboot").exists()){
+                    SdkDir = "$JarDir/"
+                    return true
+                }
+                else if (File("/SDK-Tools/adb").exists() && File("/SDK-Tools/fastboot").exists()){
+                    SdkDir = "$JarDir/SDK-Tools/"
+                    return true
+                }
+            }
+        }
+        dialogSdkDownload.isVisible = true
+        return false
     }
     fun downloadFile(urlStr: String, file: String) {
         val url = URL(urlStr)
