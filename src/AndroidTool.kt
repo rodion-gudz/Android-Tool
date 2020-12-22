@@ -4,12 +4,17 @@ import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.*
+import java.net.URL
 import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
 import javax.swing.JFileChooser
 import javax.swing.SwingWorker
 import javax.swing.filechooser.FileNameExtensionFilter
+import java.io.InputStream
+
+
+
 
 
 var arrayList = emptyArray<String>()
@@ -78,8 +83,8 @@ val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
 val JarDir = System.getProperty("user.dir")
 val userFolder = System.getProperty("user.home").toString()
-var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/android_tool/SDK-Tools/"}
-val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/android_tool/"}
+var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
+val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
@@ -251,10 +256,15 @@ open class AndroidTool : Command() {
                             Linux -> unZipFile("$SdkDir/linux.zip")
                             MacOS -> unZipFile("$SdkDir/macos.zip")
                         }
-                        hideFolder(userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/android_tool/"})
+                        hideFolder(userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"})
+                        when{
+                            Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+                            Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                            MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                        }
                     }
                     override fun done() {
-                        buttonSdkDownload.isEnabled = true
+                        dialogSdkDownload.dispose()
                     }
                 }
                 Worker().execute()
@@ -333,25 +343,25 @@ open class AndroidTool : Command() {
                 }
             })
 
-            dialogSdkDownload.addWindowListener(object : WindowAdapter() {
-                override fun windowClosing(e: WindowEvent) {
-                    when{
-                        Windows -> {
-                            if (File("$ProgramDir\\SDK-Tools").exists())
-                                SdkDir = "$ProgramDir\\SDK-Tools"
-                        }
-                        Linux -> {
-                            if (File("$ProgramDir/SDK-Tools").exists())
-                                SdkDir = "$ProgramDir/SDK-Tools"
-                        }
-                        MacOS -> {
-                            if (File("$ProgramDir/SDK-Tools").exists())
-                                SdkDir = "$ProgramDir/SDK-Tools"
-                        }
-                    }
-
-                }
-            })
+//            dialogSdkDownload.addWindowListener(object : WindowAdapter() {
+//                override fun windowClosing(e: WindowEvent) {
+//                    when{
+//                        Windows -> {
+//                            if (File("$ProgramDir\\SDK-Tools").exists())
+//                                SdkDir = "$ProgramDir\\SDK-Tools"
+//                        }
+//                        Linux -> {
+//                            if (File("$ProgramDir/SDK-Tools").exists())
+//                                SdkDir = "$ProgramDir/SDK-Tools"
+//                        }
+//                        MacOS -> {
+//                            if (File("$ProgramDir/SDK-Tools").exists())
+//                                SdkDir = "$ProgramDir/SDK-Tools"
+//                        }
+//                    }
+//
+//                }
+//            })
 
             val run = Thread {
                 while (true) {

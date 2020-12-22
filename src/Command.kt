@@ -3,53 +3,92 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.lang.Exception
 import java.net.URL
+import java.net.URLConnection
 import java.util.zip.ZipFile
+import javax.crypto.Mac
 
 open class Command : AndroidToolUI() {
     fun createFolder() {
         when {
             Windows -> File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
             Linux -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
-            else -> File("$userFolder/android_tool", "SDK-Tools").mkdirs()
+            else -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
         }
     }
-    fun sdkCheck(): Boolean {
-        when{
+
+    fun versionCheck() {
+        //TODO Version update check function
+//        val properties = Properties()
+//        val inputStream = URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
+//        properties.load(inputStream)
+//        print(properties.getProperty("latestVersion"))
+    }
+
+    fun internetConnection(): Boolean {
+        return try {
+            URL("https://google.com").openConnection().connect()
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    fun sdkCheck() {
+        when {
             Windows -> {
-                if (File("adb.exe").exists() && File("fastboot.exe").exists() && File("AdbWinApi.dll").exists() && File("AdbWinUsbApi.dll").exists()){
+                if (File("adb.exe").exists() && File("fastboot.exe").exists() && File("AdbWinApi.dll").exists() && File("AdbWinUsbApi.dll").exists()) {
                     SdkDir = "$JarDir\\"
-                    return true
-                }
-                else if (File("\\SDK-Tools\\adb.exe").exists() && File("\\SDK-Tools\\fastboot.exe").exists() && File("\\SDK-Tools\\AdbWinApi.dll").exists() && File("\\SDK-Tools\\AdbWinUsbApi.dll").exists()){
+                    return
+                } else if (File("$JarDir\\SDK-Tools\\adb.exe").exists() && File("$JarDir\\SDK-Tools\\fastboot.exe").exists() && File("$JarDir\\SDK-Tools\\AdbWinApi.dll").exists() && File("$JarDir\\SDK-Tools\\AdbWinUsbApi.dll").exists()) {
                     SdkDir = "$JarDir\\SDK-Tools\\"
-                    return true
+                    return
                 }
             }
             Linux -> {
                 if (File("adb").exists() && File("fastboot").exists()) {
                     SdkDir = "$JarDir/"
-                    return true
-                }
-                else if (File("/SDK-Tools/adb").exists() && File("/SDK-Tools/fastboot").exists()) {
+                    return
+                } else if (File("$JarDir/SDK-Tools/adb").exists() && File("$JarDir/SDK-Tools/fastboot").exists()) {
                     SdkDir = "$JarDir/SDK-Tools/"
-                    return true
+                    return
                 }
             }
             MacOS -> {
-                if (File("adb").exists() && File("fastboot").exists()){
+                if (File("adb").exists() && File("fastboot").exists()) {
                     SdkDir = "$JarDir/"
-                    return true
-                }
-                else if (File("/SDK-Tools/adb").exists() && File("/SDK-Tools/fastboot").exists()){
+                    return
+                } else if (File("$JarDir/SDK-Tools/adb").exists() && File("$JarDir/SDK-Tools/fastboot").exists()) {
                     SdkDir = "$JarDir/SDK-Tools/"
-                    return true
+                    return
+                }
+            }
+        }
+        when{
+            Windows -> {
+                if (File("$userFolder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$userFolder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
+                    SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+                    return
+                }
+            }
+            Linux -> {
+                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
+                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                    return
+                }
+            }
+            MacOS -> {
+                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
+                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                    return
                 }
             }
         }
         dialogSdkDownload.isVisible = true
-        return false
+        return
     }
+
     fun downloadFile(urlStr: String, file: String) {
         val url = URL(urlStr)
         val bis = BufferedInputStream(url.openStream())
@@ -62,28 +101,29 @@ open class Command : AndroidToolUI() {
         fis.close()
         bis.close()
     }
-    fun hideFolder(urlStr: String){
-        when{
+
+    fun hideFolder(urlStr: String) {
+        when {
             Windows -> Runtime.getRuntime().exec("attrib +H $urlStr")
-            MacOS -> Runtime.getRuntime().exec("chflags hidden $urlStr")
         }
     }
-    fun unZipFile(urlStr: String){
+
+    fun unZipFile(urlStr: String) {
         ZipFile(File(urlStr)).use { zip ->
-                zip.stream().forEach { entry ->
-                    if (entry.isDirectory)
-                        File(ProgramDir, entry.name).mkdirs()
-                    else zip.getInputStream(entry).use { input ->
-                        File(ProgramDir, entry.name).apply {
-                            outputStream().use { output ->
-                                input.copyTo(output)
-                            }
-                            setExecutable(true, false)
+            zip.stream().forEach { entry ->
+                if (entry.isDirectory)
+                    File(ProgramDir, entry.name).mkdirs()
+                else zip.getInputStream(entry).use { input ->
+                    File(ProgramDir, entry.name).apply {
+                        outputStream().use { output ->
+                            input.copyTo(output)
                         }
+                        setExecutable(true, false)
                     }
                 }
             }
-        File(ProgramDir + if (Windows) "windows.zip" else if (Linux) "linux.zip" else "macos.zip").delete()
+        }
+        File(ProgramDir + if (Windows) "\\SDK-Tools\\windows.zip" else if (Linux) "/SDK-Tools/linux.zip" else "/SDK-Tools/macos.zip").delete()
     }
 
     fun connectionCheck() {
@@ -327,91 +367,91 @@ open class Command : AndroidToolUI() {
     private fun getProp() {
         val deviceProps = exec("adb", "shell getprop", output = true)
         val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (!lineValue1.isBlank()) {
+        Manufacturer = if (lineValue1.isNotBlank()) {
             lineValue1
         } else {
             "-"
         }
         val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (!lineValue2.isBlank()) {
+        Brand = if (lineValue2.isNotBlank()) {
             lineValue2
         } else {
             "-"
         }
         val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (!lineValue3.isBlank()) {
+        Model = if (lineValue3.isNotBlank()) {
             lineValue3
         } else {
             "-"
         }
         val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (!lineValue4.isBlank()) {
+        Codename = if (lineValue4.isNotBlank()) {
             lineValue4
         } else {
             "-"
         }
         val lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
-        CPU = if (!lineValue5.isBlank()) {
+        CPU = if (lineValue5.isNotBlank()) {
             lineValue5
         } else {
             "-"
         }
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (!lineValue6.isBlank()) {
+        CPUArch = if (lineValue6.isNotBlank()) {
             lineValue6
         } else {
             "-"
         }
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (!lineValue7.isBlank()) {
+        SN = if (lineValue7.isNotBlank()) {
             lineValue7
         } else {
             "-"
         }
         val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
-        GsmOperator = if (!lineValue8.isBlank() && lineValue8 != ",") {
+        GsmOperator = if (lineValue8.isNotBlank() && lineValue8 != ",") {
             lineValue8
         } else {
             "-"
         }
         val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (!lineValue9.isBlank()) {
+        Fingerprint = if (lineValue9.isNotBlank()) {
             lineValue9
         } else {
             "-"
         }
         val lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
-        VersionRelease = if (!lineValue10.isBlank()) {
+        VersionRelease = if (lineValue10.isNotBlank()) {
             lineValue10
         } else {
             "-"
         }
         val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (!lineValue11.isBlank()) {
+        SDK = if (lineValue11.isNotBlank()) {
             lineValue11
         } else {
             "-"
         }
         val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (!lineValue12.isBlank()) {
+        SecurityPatch = if (lineValue12.isNotBlank()) {
             lineValue12
         } else {
             "-"
         }
         val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (!lineValue13.isBlank()) {
+        Language = if (lineValue13.isNotBlank()) {
             lineValue13
         } else {
             "-"
         }
         val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) {
+        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) {
             lineValue14
         } else {
             "-"
         }
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (!lineValue15.isBlank()) {
+        Treble = if (lineValue15.isNotBlank()) {
             lineValue15
         } else {
             "-"
@@ -436,102 +476,102 @@ open class Command : AndroidToolUI() {
     private fun getPropRecovery() {
         val deviceProps = exec("adb", "shell getprop", output = true)
         val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (!lineValue1.isBlank()) {
+        Manufacturer = if (lineValue1.isNotBlank()) {
             lineValue1
         } else {
             "Unknown"
         }
         val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (!lineValue2.isBlank()) {
+        Brand = if (lineValue2.isNotBlank()) {
             lineValue2
         } else {
             "-"
         }
         val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (!lineValue3.isBlank()) {
+        Model = if (lineValue3.isNotBlank()) {
             lineValue3
         } else {
             "-"
         }
         val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (!lineValue4.isBlank()) {
+        Codename = if (lineValue4.isNotBlank()) {
             lineValue4
         } else {
             "-"
         }
         val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [").substringBefore(']')
-        CPU = if (!lineValue5.isBlank()) {
+        CPU = if (lineValue5.isNotBlank()) {
             lineValue5
         } else {
             "-"
         }
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (!lineValue6.isBlank()) {
+        CPUArch = if (lineValue6.isNotBlank()) {
             lineValue6
         } else {
             "-"
         }
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (!lineValue7.isBlank()) {
+        SN = if (lineValue7.isNotBlank()) {
             lineValue7
         } else {
             "-"
         }
         val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [").substringBefore(']')
-        GsmOperator = if (!lineValue8.isBlank()) {
+        GsmOperator = if (lineValue8.isNotBlank()) {
             lineValue8
         } else {
             "-"
         }
         val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (!lineValue9.isBlank()) {
+        Fingerprint = if (lineValue9.isNotBlank()) {
             lineValue9
         } else {
             "-"
         }
         var lineValue10 = deviceProps.substringAfter("ro.orangefox.version]: [").substringBefore(']')
-        if (!lineValue10.isBlank()) {
+        if (lineValue10.isNotBlank()) {
             VersionRelease = lineValue10
         } else {
             lineValue10 = deviceProps.substringAfter("ro.twrp.version]: [").substringBefore(']')
-            VersionRelease = if (!lineValue10.isBlank()) {
+            VersionRelease = if (lineValue10.isNotBlank()) {
                 lineValue10
             } else {
                 "-"
             }
         }
         val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (!lineValue11.isBlank()) {
+        SDK = if (lineValue11.isNotBlank()) {
             lineValue11
         } else {
             "-"
         }
         val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (!lineValue12.isBlank()) {
+        SecurityPatch = if (lineValue12.isNotBlank()) {
             lineValue12
         } else {
             "-"
         }
         val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (!lineValue13.isBlank()) {
+        Language = if (lineValue13.isNotBlank()) {
             lineValue13
         } else {
             "-"
         }
         val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (!lineValue14.isBlank() && "DEVICE" !in lineValue14) {
+        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) {
             lineValue14
         } else {
             "-"
         }
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (!lineValue15.isBlank()) {
+        Treble = if (lineValue15.isNotBlank()) {
             lineValue15
         } else {
             "-"
         }
         val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [").substringBefore(']')
-        SecureBoot = if (!lineValue17.isBlank()) {
+        SecureBoot = if (lineValue17.isNotBlank()) {
             if (lineValue17 == "1") {
                 "true"
             } else {
@@ -541,13 +581,13 @@ open class Command : AndroidToolUI() {
             "-"
         }
         val lineValue18 = deviceProps.substringAfter("ro.build.host]: [").substringBefore(']')
-        DeviceHost = if (!lineValue18.isBlank() && "DEVICE" !in lineValue14) {
+        DeviceHost = if (lineValue18.isNotBlank() && "DEVICE" !in lineValue14) {
             lineValue18
         } else {
             "-"
         }
         val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [").substringBefore(']')
-        MockLocation = if (!lineValue16.isBlank()) {
+        MockLocation = if (lineValue16.isNotBlank()) {
             if (lineValue16 == "1") {
                 "true"
             } else {
@@ -557,7 +597,7 @@ open class Command : AndroidToolUI() {
             "-"
         }
         val lineValue19 = deviceProps.substringAfter("ro.build.id]: [").substringBefore(']')
-        Language = if (!lineValue19.isBlank()) {
+        Language = if (lineValue19.isNotBlank()) {
             lineValue19
         } else {
             "-"
