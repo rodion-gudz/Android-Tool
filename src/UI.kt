@@ -154,7 +154,7 @@ open class AndroidToolUI {
     val labelSample = JLabel("Sample:")
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
     val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
-    val dialogSdkDownload = JDialog(frame, "No SDK found!")
+    val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
     val labelSdkDownload = JLabel("<html><font size='4'>No SDK found in system, please click button to install</font></html>")
     val textAreaInput = JTextField("You can enter app package here")

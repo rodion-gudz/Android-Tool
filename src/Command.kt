@@ -65,7 +65,7 @@ open class Command : AndroidToolUI() {
                 }
             }
         }
-        when{
+        when {
             Windows -> {
                 if (File("$userFolder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$userFolder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
                     SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
