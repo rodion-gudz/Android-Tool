@@ -112,9 +112,9 @@ open class Command : AndroidToolUI() {
         ZipFile(File(urlStr)).use { zip ->
             zip.stream().forEach { entry ->
                 if (entry.isDirectory)
-                    File(ProgramDir, entry.name).mkdirs()
+                    File(SdkDir, entry.name).mkdirs()
                 else zip.getInputStream(entry).use { input ->
-                    File(ProgramDir, entry.name).apply {
+                    File(SdkDir, entry.name).apply {
                         outputStream().use { output ->
                             input.copyTo(output)
                         }
@@ -123,7 +123,7 @@ open class Command : AndroidToolUI() {
                 }
             }
         }
-        File(ProgramDir + if (Windows) "\\SDK-Tools\\windows.zip" else if (Linux) "/SDK-Tools/linux.zip" else "/SDK-Tools/macos.zip").delete()
+        File(ProgramDir + if (Windows) "\\SDK-Tools\\Windows.zip" else if (Linux) "/SDK-Tools/Linux.zip" else "/SDK-Tools/MacOS.zip").delete()
     }
 
     fun connectionCheck() {

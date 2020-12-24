@@ -99,14 +99,14 @@ open class AndroidTool : Command() {
                         buttonSdkDownload.isEnabled = false
                         createFolder()
                         when{
-                            Windows -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/windows.zip", "$SdkDir\\windows.zip")
-                            Linux -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/linux.zip", "$SdkDir/linux.zip")
-                            MacOS -> downloadFile("https://github.com/fast-geek/Android-Tool/raw/master/sdk-tools/macos.zip", "$SdkDir/macos.zip")
+                            Windows -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip", "$SdkDir\\Windows.zip")
+                            Linux -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip", "$SdkDir/Linux.zip")
+                            MacOS -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/MacOS.zip", "$SdkDir/MacOS.zip")
                         }
                         when{
-                            Windows -> unZipFile("$SdkDir\\windows.zip")
-                            Linux -> unZipFile("$SdkDir/linux.zip")
-                            MacOS -> unZipFile("$SdkDir/macos.zip")
+                            Windows -> unZipFile("$SdkDir\\Windows.zip")
+                            Linux -> unZipFile("$SdkDir/Linux.zip")
+                            MacOS -> unZipFile("$SdkDir/MacOS.zip")
                         }
                         hideFolder(userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"})
                         when{
