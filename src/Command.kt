@@ -102,12 +102,6 @@ open class Command : AndroidToolUI() {
         bis.close()
     }
 
-    fun hideFolder(urlStr: String) {
-        when {
-            Windows -> Runtime.getRuntime().exec("attrib +H $urlStr")
-        }
-    }
-
     fun unZipFile(urlStr: String) {
         ZipFile(File(urlStr)).use { zip ->
             zip.stream().forEach { entry ->
