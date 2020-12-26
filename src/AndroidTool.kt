@@ -108,7 +108,7 @@ open class AndroidTool : Command() {
                             Linux -> unZipFile("$SdkDir/Linux.zip")
                             MacOS -> unZipFile("$SdkDir/MacOS.zip")
                         }
-                        if (Windows) Runtime.getRuntime().exec("attrib +s +h $ProgramDir")
+                        if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
                         when{
                             Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
                             Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
