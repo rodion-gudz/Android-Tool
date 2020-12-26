@@ -8,6 +8,7 @@ import java.net.URL
 import java.net.URLConnection
 import java.util.zip.ZipFile
 import javax.crypto.Mac
+import org.apache.maven.artifact.versioning.ComparableVersion
 
 open class Command : AndroidToolUI() {
     fun createFolder() {

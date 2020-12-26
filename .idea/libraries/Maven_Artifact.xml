@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Maven-Artifact" type="repository">
+    <properties maven-id="org.apache.maven:maven-artifact:LATEST" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/maven-artifact-3.6.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/plexus-utils-3.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-lang3-3.8.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
