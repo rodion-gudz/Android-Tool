@@ -9,6 +9,12 @@ import java.net.URLConnection
 import java.util.zip.ZipFile
 import javax.crypto.Mac
 import org.apache.maven.artifact.versioning.ComparableVersion
+import java.util.zip.ZipEntry
+import java.util.jar.JarFile
+import java.net.URISyntaxException
+import java.util.*
+
+
 
 open class Command : AndroidToolUI() {
     fun createFolder() {
@@ -814,4 +820,39 @@ open class Command : AndroidToolUI() {
         labelUSBConnection.text = "Not connected"
         labelUSBConnection.icon = iconNo
     }
+}
+
+fun getProgramBuildTime(): String {
+    var d: Date? = null
+    val currentClass = object : Any() {}.javaClass.enclosingClass
+    val resource = currentClass.getResource(currentClass.simpleName + ".class")
+    if (resource != null) {
+        when (resource.protocol) {
+            "file" -> {
+                try {
+                    d = Date(File(resource.toURI()).lastModified())
+                } catch (ignored: URISyntaxException) {
+                }
+            }
+            "jar" -> {
+                val path = resource.path
+                d = Date(File(path.substring(5, path.indexOf("!"))).lastModified())
+            }
+            "zip" -> {
+                val path = resource.path
+                val jarFileOnDisk = File(path.substring(0, path.indexOf("!")))
+                try {
+                    JarFile(jarFileOnDisk).use { jf ->
+                        val ze = jf.getEntry(path.substring(path.indexOf("!") + 2))
+                        val zeTimeLong = ze.time
+                        val zeTimeDate = Date(zeTimeLong)
+                        d = zeTimeDate
+                    }
+                } catch (ignored: IOException) {
+                } catch (ignored: RuntimeException) {
+                }
+            }
+        }
+    }
+    return d.toString()
 }

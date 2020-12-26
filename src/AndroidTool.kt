@@ -82,6 +82,9 @@ val JarDir = System.getProperty("user.dir")
 val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
+val programBuildDate = getProgramBuildTime()
+val programVersion = "1.0.0-beta"
+val programVersionStatus = "beta"
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
