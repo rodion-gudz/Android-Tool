@@ -26,11 +26,13 @@ open class Command : AndroidToolUI() {
     }
 
     fun versionCheck() {
-        //TODO Version update check function
-//        val properties = Properties()
-//        val inputStream = URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
-//        properties.load(inputStream)
-//        print(properties.getProperty("latestVersion"))
+        val properties = Properties()
+        val inputStream = URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
+        properties.load(inputStream)
+        if (ComparableVersion(properties.getProperty("stableVersion")) > ComparableVersion(programVersion)){
+            programVersionLatest = properties.getProperty("stableVersion")
+            dialogUpdate.isVisible = true
+        }
     }
 
     fun internetConnection(): Boolean {

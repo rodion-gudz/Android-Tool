@@ -12,7 +12,7 @@ import javax.swing.border.TitledBorder
 
 
 open class AndroidToolUI {
-    private fun runUrl(url: String) {
+    fun runUrl(url: String) {
         val urlString = URI(url)
         Desktop.getDesktop().browse(urlString)
     }
@@ -155,8 +155,11 @@ open class AndroidToolUI {
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
     val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
+    val dialogUpdate = JDialog(frame, "$programVersionLatest version available!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
-    val labelSdkDownload = JLabel("<html><font size='4'>No SDK found in system, please click button to install</font></html>")
+    val labelSdkDownload = JLabel("<html><font size='4'>Android, please click button to install</font></html>")
+    val labelUpdate = JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
+    val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion  <b>Latest:</b> $programVersionLatest</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
@@ -307,6 +310,7 @@ open class AndroidToolUI {
     val buttonBootToRecovery = JButton("Boot")
     val buttonChooseZip = JButton("Select Zip")
     val buttonSdkDownload = JButton("Install")
+    val buttonUpdate = JButton("Download")
     val labelInstallZip = JLabel("Install zip")
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
@@ -1010,6 +1014,22 @@ open class AndroidToolUI {
 
         buttonSdkDownload.bounds = Rectangle(260, 40, 100, 25)
         dialogSdkDownload.add(buttonSdkDownload)
+
+
+        dialogUpdate.setSize(440, 100)
+        dialogUpdate.isResizable = false
+        dialogUpdate.layout = null
+        dialogUpdate.setLocationRelativeTo(null)
+        dialogUpdate.rootPane.border = BorderFactory.createLineBorder(Color.decode("#585858"))
+
+        labelUpdate.bounds = Rectangle(20, 5, 400, 35)
+        dialogUpdate.add(labelUpdate)
+
+        labelUpdateVersion.bounds = Rectangle(20, 35, 400, 35)
+        dialogUpdate.add(labelUpdateVersion)
+
+        buttonUpdate.bounds = Rectangle(323, 40, 100, 25)
+        dialogUpdate.add(buttonUpdate)
 
 
         buttonStop.bounds = Rectangle(5, 468, 150, 35)

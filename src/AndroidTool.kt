@@ -13,6 +13,7 @@ import javax.swing.SwingWorker
 import javax.swing.filechooser.FileNameExtensionFilter
 import org.apache.maven.artifact.versioning.ComparableVersion
 import java.io.InputStream
+import kotlin.system.exitProcess
 
 var arrayList = emptyArray<String>()
 var selectedDirectoryPath = ""
@@ -83,8 +84,8 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-val programVersion = "1.0.0-beta"
-val programVersionStatus = "beta"
+val programVersion = "1.0.0"
+var programVersionLatest = programVersion
 open class AndroidTool : Command() {
     init {
         AndroidToolUI()
@@ -122,6 +123,20 @@ open class AndroidTool : Command() {
                 Worker().execute()
             }
             sdkCheck()
+            buttonUpdate.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonUpdate.isEnabled = false
+                        runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
+                    }
+                    override fun done() {
+                        Runtime.getRuntime().exec("${SdkDir}adb kill-server")
+                        exitProcess(0)
+                    }
+                }
+                Worker().execute()
+            }
+            if (internetConnection()) versionCheck()
             buttonIpConnect.addActionListener {
                 labelConnect.text = ""
                 class Worker : SwingWorker<Unit, Int>() {
