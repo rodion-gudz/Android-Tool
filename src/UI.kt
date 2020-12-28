@@ -323,6 +323,7 @@ open class AndroidToolUI {
     val labelInstallZip = JLabel("Install zip")
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
+    val buttonGetLogs = JButton("Save logs")
 
     //    val menuBar = JMenuBar()
 //    val fileMenu = JMenu("Program")
@@ -357,6 +358,9 @@ open class AndroidToolUI {
         buttonInstallZip.bounds = Rectangle(5, 25, 285, 50)
         buttonInstallZip.isFocusable = false
         recoveryPanel.add(buttonInstallZip)
+        buttonGetLogs.bounds = Rectangle(295, 25, 120, 25)
+        buttonGetLogs.isFocusable = false
+        recoveryPanel.add(buttonGetLogs)
         recoveryPanel.layout = null
 
         labelInstallZip.bounds = Rectangle(7, 5, 250, 20)
@@ -972,9 +976,8 @@ open class AndroidToolUI {
         adbPanel.add(textAreaInput)
         textAreaInput.addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
-                if (textAreaInput.isEnabled) {
-                }
-                textAreaInput.text = ""
+                if (textAreaInput.isEnabled)
+                    textAreaInput.text = ""
             }
         })
         textAreaInput.addFocusListener(object : FocusAdapter() {
