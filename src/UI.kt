@@ -4,23 +4,34 @@ import java.awt.Component
 import java.awt.Desktop
 import java.awt.Rectangle
 import java.awt.event.*
+import java.io.IOException
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.URI
 import javax.swing.*
 import javax.swing.border.TitledBorder
+import javax.swing.UIManager
+
+import java.awt.Insets
 
 
-open class AndroidToolUI{
-    private fun runUrl(url: String){
+
+
+
+open class AndroidToolUI {
+    fun runUrl(url: String) {
         val urlString = URI(url)
         Desktop.getDesktop().browse(urlString)
     }
-    init{
+
+    init {
         FlatDarculaLaf.install()
         JFrame.setDefaultLookAndFeelDecorated(true)
         JDialog.setDefaultLookAndFeelDecorated(true)
+        UIManager.put("ScrollBar.thumbArc", 999)
+        UIManager.put("ScrollBar.thumbInsets", Insets(2, 2, 2, 2))
     }
+
     val frame = JFrame("Android Tool")
     private var sdf = ""
     var labelManufacturerValue = JLabel("-")
@@ -147,12 +158,17 @@ open class AndroidToolUI{
     val radioButtonVerbose = JRadioButton("Verbose", false)
     val buttonSave = JButton("Save")
     val buttonStop = JButton("Stop")
-    val dialogUnauthorizedDevice = JDialog(frame, "Unauthorized device found")
+    val dialogUnauthorizedDevice = JDialog(frame, "Unauthorized device found", true)
     val labelUnauthorized = JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
     val labelSample = JLabel("Sample:")
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
-    val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
+    val dialogMultipleDevice = JDialog(frame, "Multiple devices connected", true)
+    val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
+    val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
+    val labelSdkDownload = JLabel("<html><font size='4'>Android, please click button to install</font></html>")
+    val labelUpdate = JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
+    val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
@@ -302,17 +318,19 @@ open class AndroidToolUI{
     val buttonInstallRecovery = JButton("Install")
     val buttonBootToRecovery = JButton("Boot")
     val buttonChooseZip = JButton("Select Zip")
+    val buttonSdkDownload = JButton("Install")
+    val buttonUpdate = JButton("Download")
     val labelInstallZip = JLabel("Install zip")
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
     val buttonGetLogs = JButton("Save logs")
 
-//    val menuBar = JMenuBar()
+    //    val menuBar = JMenuBar()
 //    val fileMenu = JMenu("Program")
 //    val settingsMenu = JMenuItem("Settings")
 //    val aboutItem = JMenuItem("About")
 //    val exitItem = JMenuItem("Exit")
-    init{
+    init {
 //        settingsMenu.addActionListener {
 //
 //        }
@@ -929,7 +947,6 @@ open class AndroidToolUI{
         ////Button////
 
 
-
         buttonInstallAll.bounds = Rectangle(5, 25, 285, 50)
         buttonInstallAll.isFocusable = false
         adbPanel.add(buttonInstallAll)
@@ -997,6 +1014,36 @@ open class AndroidToolUI{
 
         labelMultipleDevice.bounds = Rectangle(20, 5, 400, 35)
         dialogMultipleDevice.add(labelMultipleDevice)
+
+        dialogSdkDownload.setSize(380, 100)
+        dialogSdkDownload.isResizable = false
+        dialogSdkDownload.layout = null
+        dialogSdkDownload.setLocationRelativeTo(null)
+        dialogSdkDownload.rootPane.border = BorderFactory.createLineBorder(Color.decode("#585858"))
+
+        labelSdkDownload.bounds = Rectangle(20, 5, 400, 35)
+        dialogSdkDownload.add(labelSdkDownload)
+
+        buttonSdkDownload.bounds = Rectangle(260, 40, 100, 25)
+        dialogSdkDownload.add(buttonSdkDownload)
+
+
+        dialogUpdate.setSize(423, 110)
+        dialogUpdate.isResizable = false
+        dialogUpdate.layout = null
+        dialogUpdate.setLocationRelativeTo(null)
+        dialogUpdate.rootPane.border = BorderFactory.createLineBorder(Color.decode("#585858"))
+
+        labelUpdate.bounds = Rectangle(20, 5, 400, 35)
+        dialogUpdate.add(labelUpdate)
+
+        labelUpdateVersion.bounds = Rectangle(20, 35, 400, 35)
+        dialogUpdate.add(labelUpdateVersion)
+
+        buttonUpdate.bounds = Rectangle(310, 45, 100, 25)
+        dialogUpdate.add(buttonUpdate)
+
+
         buttonStop.bounds = Rectangle(5, 468, 150, 35)
         buttonStop.isFocusable = false
         buttonStop.isEnabled = false
@@ -1568,7 +1615,6 @@ open class AndroidToolUI{
 
         scroll23.setBounds(6, 445, 305, 65)
         adbPanel.add(scroll23)
-
 
         textAreaCommandOutput.bounds = Rectangle(315, 443, 560, 98)
 
