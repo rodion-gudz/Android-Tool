@@ -13,7 +13,7 @@ import java.util.zip.ZipEntry
 import java.util.jar.JarFile
 import java.net.URISyntaxException
 import java.util.*
-
+import javax.swing.DefaultListModel
 
 
 open class Command : AndroidToolUI() {
@@ -26,27 +26,57 @@ open class Command : AndroidToolUI() {
     }
 
     fun versionCheck() {
-        val properties = Properties()
-        val inputStream = URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
-        properties.load(inputStream)
-        if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)){
-            programVersionLatest = properties.getProperty("latestVersion")
-            labelUpdateVersion.text="<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>"
-            dialogUpdate.title="Version $programVersionLatest available!"
-            dialogUpdate.isVisible = true
-        }
+        try {
+            val properties = Properties()
+            val inputStream =
+                URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
+            properties.load(inputStream)
+            if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)) {
+                programVersionLatest = properties.getProperty("latestVersion")
+                labelUpdateVersion.text =
+                    "<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>"
+                dialogUpdate.title = "Version $programVersionLatest available!"
+                dialogUpdate.isVisible = true
+            }
+        } catch (e: Exception){}
     }
 
-    fun internetConnection(): Boolean {
-        return try {
-            URL("https://google.com").openConnection().connect()
-            true
-        } catch (e: Exception) {
-            false
+    fun searchFilter(searchTerm: String) {
+        val filteredItems: DefaultListModel<Any?> = DefaultListModel()
+        val apps = apps
+        apps.stream().forEach { app: Any ->
+            val starName = app.toString().toLowerCase()
+            if (starName.contains(searchTerm.toLowerCase())) {
+                if (!filteredItems.contains(app)) {
+                    filteredItems.addElement(app)
+                }
+            }
         }
+        listModel = filteredItems
+        list.model = listModel
     }
 
     fun sdkCheck() {
+        when {
+            Windows -> {
+                if (File("$userFolder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$userFolder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
+                    SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+                    return
+                }
+            }
+            Linux -> {
+                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
+                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                    return
+                }
+            }
+            MacOS -> {
+                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
+                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                    return
+                }
+            }
+        }
         when {
             Windows -> {
                 if (File("adb.exe").exists() && File("fastboot.exe").exists() && File("AdbWinApi.dll").exists() && File("AdbWinUsbApi.dll").exists()) {
@@ -72,26 +102,6 @@ open class Command : AndroidToolUI() {
                     return
                 } else if (File("$JarDir/SDK-Tools/adb").exists() && File("$JarDir/SDK-Tools/fastboot").exists()) {
                     SdkDir = "$JarDir/SDK-Tools/"
-                    return
-                }
-            }
-        }
-        when {
-            Windows -> {
-                if (File("$userFolder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$userFolder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
-                    SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
-                    return
-                }
-            }
-            Linux -> {
-                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
-                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-                    return
-                }
-            }
-            MacOS -> {
-                if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
-                    SdkDir = "$userFolder/.android_tool/SDK-Tools/"
                     return
                 }
             }
@@ -130,7 +140,6 @@ open class Command : AndroidToolUI() {
         }
         File(ProgramDir + if (Windows) "\\SDK-Tools\\Windows.zip" else if (Linux) "/SDK-Tools/Linux.zip" else "/SDK-Tools/MacOS.zip").delete()
     }
-
     fun connectionCheck() {
         if (!CommandRunning) {
             GetStateOutput = exec("adb", "get-state", output = true)
@@ -191,10 +200,8 @@ open class Command : AndroidToolUI() {
                 dialogMultipleDevice.isVisible = true
             }
         } else if (UnauthorizedDevice) {
-            if (!dialogUnauthorizedDevice.isVisible) {
-                frame.isEnabled = false
+            if (!dialogUnauthorizedDevice.isVisible)
                 dialogUnauthorizedDevice.isVisible = true
-            }
         }
 
         when {
@@ -210,7 +217,6 @@ open class Command : AndroidToolUI() {
                     tabbedpane.selectedIndex = 0
                     FirstAdbConnection = false
                 }
-                frame.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
                     val components: Array<Component> = fastbootPanel.components

@@ -4,6 +4,7 @@ import java.awt.Component
 import java.awt.Desktop
 import java.awt.Rectangle
 import java.awt.event.*
+import java.io.IOException
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.URI
@@ -149,11 +150,11 @@ open class AndroidToolUI {
     val radioButtonVerbose = JRadioButton("Verbose", false)
     val buttonSave = JButton("Save")
     val buttonStop = JButton("Stop")
-    val dialogUnauthorizedDevice = JDialog(frame, "Unauthorized device found")
+    val dialogUnauthorizedDevice = JDialog(frame, "Unauthorized device found", true)
     val labelUnauthorized = JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
     val labelSample = JLabel("Sample:")
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
-    val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
+    val dialogMultipleDevice = JDialog(frame, "Multiple devices connected", true)
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
     val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
@@ -1603,7 +1604,6 @@ open class AndroidToolUI {
 
         scroll23.setBounds(6, 445, 305, 65)
         adbPanel.add(scroll23)
-
 
         textAreaCommandOutput.bounds = Rectangle(315, 443, 560, 98)
 

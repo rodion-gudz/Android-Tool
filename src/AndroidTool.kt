@@ -74,6 +74,9 @@ var ConnectedAdbWifi = false
 var FirstFastbootConnection = true
 var FirstRecoveryConnection = true
 var FirstAdbConnection = true
+var functionButtonStart = true
+var ifStopSelected = false
+var logsWorking: Boolean = false
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
@@ -86,7 +89,7 @@ val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux
 val programBuildDate = getProgramBuildTime()
 val programVersion = "1.0.0-beta3"
 var programVersionLatest = programVersion
-open class AndroidTool : Command() {
+open class AndroidTool : Command(){
     init {
         AndroidToolUI()
         Command()
@@ -94,96 +97,12 @@ open class AndroidTool : Command() {
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
-            buttonSdkDownload.addActionListener {
-                class Worker : SwingWorker<Unit, Int>() {
-                    override fun doInBackground() {
-                        buttonSdkDownload.isEnabled = false
-                        createFolder()
-                        when{
-                            Windows -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip", "$SdkDir\\Windows.zip")
-                            Linux -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip", "$SdkDir/Linux.zip")
-                            MacOS -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/MacOS.zip", "$SdkDir/MacOS.zip")
-                        }
-                        when{
-                            Windows -> unZipFile("$SdkDir\\Windows.zip")
-                            Linux -> unZipFile("$SdkDir/Linux.zip")
-                            MacOS -> unZipFile("$SdkDir/MacOS.zip")
-                        }
-                        if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
-                        when{
-                            Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
-                            Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-                            MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-                        }
-                    }
-                    override fun done() {
-                        dialogSdkDownload.dispose()
-                    }
-                }
-                Worker().execute()
-            }
-            sdkCheck()
-            buttonUpdate.addActionListener {
-                class Worker : SwingWorker<Unit, Int>() {
-                    override fun doInBackground() {
-                        buttonUpdate.isEnabled = false
-                        runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
-                    }
-                    override fun done() {
-                        Runtime.getRuntime().exec("${SdkDir}adb kill-server")
-                        exitProcess(0)
-                    }
-                }
-                Worker().execute()
-            }
-            if (internetConnection()) versionCheck()
-            buttonIpConnect.addActionListener {
-                labelConnect.text = ""
-                class Worker : SwingWorker<Unit, Int>() {
-                    override fun doInBackground() {
-                        buttonIpConnect.isEnabled = false
-                        exec("adb", "kill-server")
-                        val output = exec("adb", "connect ${textFieldIP.text}", output = true)
-                        if ("connected to" in output) {
-                            labelTCPConnection.text = "Connected to ${textFieldIP.text}"
-                            labelTCPConnection.icon = iconYes
-                        } else {
-                            labelConnect.text = "Failed"
-                        }
-                    }
-                    override fun done() {
-                        buttonIpConnect.isEnabled = true
-                    }
-                }
-                Worker().execute()
-            }
-
-
-
-            fun searchFilter(searchTerm: String) {
-                val filteredItems: DefaultListModel<Any?> = DefaultListModel()
-                val apps = apps
-                apps.stream().forEach { app: Any ->
-                    val starName = app.toString().toLowerCase()
-                    if (starName.contains(searchTerm.toLowerCase())) {
-                        if (!filteredItems.contains(app)) {
-                            filteredItems.addElement(app)
-                        }
-                    }
-                }
-                listModel = filteredItems
-                list.model = listModel
-            }
 
             textFieldIPa.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(evt: KeyEvent) {
                     searchFilter(textFieldIPa.text)
                 }
             })
-
-
-
-
             buttonSave.addActionListener {
                 class MyWorker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -217,9 +136,67 @@ open class AndroidTool : Command() {
                 val worker = MyWorker()
                 worker.execute()
             }
-            var functionButtonStart = true
-            var ifStopSelected = false
-            var logsWorking: Boolean
+            buttonSdkDownload.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonSdkDownload.isEnabled = false
+                        createFolder()
+                        when{
+                            Windows -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip", "$SdkDir\\Windows.zip")
+                            Linux -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip", "$SdkDir/Linux.zip")
+                            MacOS -> downloadFile("https://github.com/fast-geek/SDK-Platform-Tools/raw/main/MacOS.zip", "$SdkDir/MacOS.zip")
+                        }
+                        when{
+                            Windows -> unZipFile("$SdkDir\\Windows.zip")
+                            Linux -> unZipFile("$SdkDir/Linux.zip")
+                            MacOS -> unZipFile("$SdkDir/MacOS.zip")
+                        }
+                        if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
+                        when{
+                            Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+                            Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                            MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+                        }
+                    }
+                    override fun done() {
+                        dialogSdkDownload.dispose()
+                    }
+                }
+                Worker().execute()
+            }
+            buttonUpdate.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonUpdate.isEnabled = false
+                        runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
+                    }
+                    override fun done() {
+                        Runtime.getRuntime().exec("${SdkDir}adb kill-server")
+                        exitProcess(0)
+                    }
+                }
+                Worker().execute()
+            }
+            buttonIpConnect.addActionListener {
+                labelConnect.text = ""
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonIpConnect.isEnabled = false
+                        exec("adb", "kill-server")
+                        val output = exec("adb", "connect ${textFieldIP.text}", output = true)
+                        if ("connected to" in output) {
+                            labelTCPConnection.text = "Connected to ${textFieldIP.text}"
+                            labelTCPConnection.icon = iconYes
+                        } else {
+                            labelConnect.text = "Failed"
+                        }
+                    }
+                    override fun done() {
+                        buttonIpConnect.isEnabled = true
+                    }
+                }
+                Worker().execute()
+            }
             buttonStart.addActionListener {
                 buttonStop.isEnabled =true
                 buttonSave.isEnabled = false
@@ -274,7 +251,6 @@ open class AndroidTool : Command() {
                     }
                 }
             }
-
             buttonStop.addActionListener {
                 buttonStop.isEnabled = false
                 buttonStart.text = "Start"
@@ -283,9 +259,6 @@ open class AndroidTool : Command() {
                 buttonSave.isEnabled = true
                 functionButtonStart = true
             }
-
-
-
             buttonReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -302,8 +275,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonRecoveryReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -321,8 +292,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonFastbootReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -337,8 +306,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonPowerOff.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -352,45 +319,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-            dialogUnauthorizedDevice.addWindowListener(object : WindowAdapter() {
-                override fun windowClosing(e: WindowEvent) {
-                    frame.isEnabled = true
-                }
-            })
-
-//            dialogSdkDownload.addWindowListener(object : WindowAdapter() {
-//                override fun windowClosing(e: WindowEvent) {
-//                    when{
-//                        Windows -> {
-//                            if (File("$ProgramDir\\SDK-Tools").exists())
-//                                SdkDir = "$ProgramDir\\SDK-Tools"
-//                        }
-//                        Linux -> {
-//                            if (File("$ProgramDir/SDK-Tools").exists())
-//                                SdkDir = "$ProgramDir/SDK-Tools"
-//                        }
-//                        MacOS -> {
-//                            if (File("$ProgramDir/SDK-Tools").exists())
-//                                SdkDir = "$ProgramDir/SDK-Tools"
-//                        }
-//                    }
-//
-//                }
-//            })
-
-            val run = Thread {
-                while (true) {
-                    try {
-                        connectionCheck()
-                        Thread.sleep(1000)
-                    } catch (ex: InterruptedException) {
-                    }
-                }
-            }
-            run.start()
-
-
             tabbedpane.addChangeListener {
                 try {
                     textFieldIP.text = AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
@@ -602,7 +530,6 @@ open class AndroidTool : Command() {
                     buttonPowerOff.isEnabled = false
                 }
             }
-
             buttonInstallAll.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -632,8 +559,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonInstallOne.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -648,8 +573,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonDisable.addActionListener {
                 val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
                     textAreaInput.text
@@ -668,8 +591,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonUninstall.addActionListener {
                 val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
                     textAreaInput.text
@@ -689,8 +610,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonEnable.addActionListener {
                 val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
                     textAreaInput.text
@@ -709,8 +628,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonCheck.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -745,7 +662,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
             buttonChooseOne.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -766,8 +682,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonChoseAll.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -786,8 +700,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonRunCommand.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -800,9 +712,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
-
             buttonRunCommandFastboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -816,8 +725,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonErase.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -845,9 +752,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
-
             buttonChoseRecovery.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -866,8 +770,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonInstallRecovery.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -882,8 +784,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
-
             buttonBootToRecovery.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -898,7 +798,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
             buttonChooseZip.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -915,7 +814,6 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
-
             buttonInstallZip.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
@@ -932,6 +830,7 @@ open class AndroidTool : Command() {
                 }
                 Worker().execute()
             }
+
             boardInfoPanel.isVisible = true
             softInfoPanel.isVisible = true
             BootloaderFastbootInfoPanel.isVisible = false
@@ -946,7 +845,19 @@ open class AndroidTool : Command() {
             textFieldIP.isVisible = true
             labelConnect.isVisible = true
             labelIP.isVisible = true
+
+            Thread {
+                while (true) {
+                    try {
+                        connectionCheck()
+                        Thread.sleep(1000)
+                    } catch (ex: InterruptedException) { }
+                }
+            }.start()
             frame.isVisible = true
+
+            sdkCheck()
+            versionCheck()
         }
     }
 }
