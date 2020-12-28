@@ -10,6 +10,12 @@ import java.net.InetAddress
 import java.net.URI
 import javax.swing.*
 import javax.swing.border.TitledBorder
+import javax.swing.UIManager
+
+import java.awt.Insets
+
+
+
 
 
 open class AndroidToolUI {
@@ -22,6 +28,8 @@ open class AndroidToolUI {
         FlatDarculaLaf.install()
         JFrame.setDefaultLookAndFeelDecorated(true)
         JDialog.setDefaultLookAndFeelDecorated(true)
+        UIManager.put("ScrollBar.thumbArc", 999)
+        UIManager.put("ScrollBar.thumbInsets", Insets(2, 2, 2, 2))
     }
 
     val frame = JFrame("Android Tool")
