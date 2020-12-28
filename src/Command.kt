@@ -29,8 +29,8 @@ open class Command : AndroidToolUI() {
         val properties = Properties()
         val inputStream = URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/sdk-downloader/values.properties").openStream()
         properties.load(inputStream)
-        if (ComparableVersion(properties.getProperty("stableVersion")) > ComparableVersion(programVersion)){
-            programVersionLatest = properties.getProperty("stableVersion")
+        if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)){
+            programVersionLatest = properties.getProperty("latestVersion")
             dialogUpdate.isVisible = true
         }
     }
