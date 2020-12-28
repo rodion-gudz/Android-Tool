@@ -155,11 +155,11 @@ open class AndroidToolUI {
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
     val dialogMultipleDevice = JDialog(frame, "Multiple devices connected")
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
-    val dialogUpdate = JDialog(frame, "$programVersionLatest version available!", true)
+    val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
     val labelSdkDownload = JLabel("<html><font size='4'>Android, please click button to install</font></html>")
     val labelUpdate = JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
-    val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion  <b>Latest:</b> $programVersionLatest</font></html>")
+    val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
@@ -1016,7 +1016,7 @@ open class AndroidToolUI {
         dialogSdkDownload.add(buttonSdkDownload)
 
 
-        dialogUpdate.setSize(440, 100)
+        dialogUpdate.setSize(423, 110)
         dialogUpdate.isResizable = false
         dialogUpdate.layout = null
         dialogUpdate.setLocationRelativeTo(null)
@@ -1028,7 +1028,7 @@ open class AndroidToolUI {
         labelUpdateVersion.bounds = Rectangle(20, 35, 400, 35)
         dialogUpdate.add(labelUpdateVersion)
 
-        buttonUpdate.bounds = Rectangle(323, 40, 100, 25)
+        buttonUpdate.bounds = Rectangle(310, 45, 100, 25)
         dialogUpdate.add(buttonUpdate)
 
 

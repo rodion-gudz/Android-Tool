@@ -31,6 +31,8 @@ open class Command : AndroidToolUI() {
         properties.load(inputStream)
         if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)){
             programVersionLatest = properties.getProperty("latestVersion")
+            labelUpdateVersion.text="<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>"
+            dialogUpdate.title="Version $programVersionLatest available!"
             dialogUpdate.isVisible = true
         }
     }
