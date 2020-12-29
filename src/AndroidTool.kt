@@ -87,7 +87,7 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-val programVersion = "1.0.0-beta4"
+val programVersion = "1.0.0-beta5"
 var programVersionLatest = programVersion
 open class AndroidTool : Command(){
     init {
@@ -184,7 +184,7 @@ open class AndroidTool : Command(){
                         buttonIpConnect.isEnabled = false
                         exec("adb", "kill-server")
                         val output = exec("adb", "connect ${textFieldIP.text}", output = true)
-                        if ("connected to" in output) {
+                        if ("connected to" in output || "failed to authenticate to" in output) {
                             labelTCPConnection.text = "Connected to ${textFieldIP.text}"
                             labelTCPConnection.icon = iconYes
                         } else {
@@ -368,11 +368,11 @@ open class AndroidTool : Command(){
                         labelTrebleValue.text = Treble
                     }
                     labelGsmOperator.text = "Cellular provider:"
-                    labelGsmOperator.bounds = Rectangle(15, 156, 110, 20)
-                    labelGsmOperatorValue.bounds = Rectangle(125, 156, 155, 20)
+                    labelGsmOperator.bounds = Rectangle(15, 156, 115, 20)
+                    labelGsmOperatorValue.bounds = Rectangle(130, 156, 155, 20)
                     labelCPU.text = "CPU:"
-                    labelCPU.bounds = Rectangle(15, 96, 30, 20)
-                    labelCPUValue.bounds = Rectangle(50, 96, 230, 20)
+                    labelCPU.bounds = Rectangle(15, 96, 35, 20)
+                    labelCPUValue.bounds = Rectangle(55, 96, 230, 20)
                     labelVersionRelease.text = "Android version:"
                     labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
                     labelLanguage.text = "Language:"
@@ -477,13 +477,13 @@ open class AndroidTool : Command(){
                         labelLocationsValue.text = MockLocation
                     }
                     labelGsmOperator.text = "USB mode:"
-                    labelGsmOperator.bounds = Rectangle(15, 156, 70, 20)
-                    labelGsmOperatorValue.bounds = Rectangle(90, 156, 175, 20)
+                    labelGsmOperator.bounds = Rectangle(15, 156, 75, 20)
+                    labelGsmOperatorValue.bounds = Rectangle(95, 156, 175, 20)
                     labelCPU.text = "CPU vendor:"
-                    labelCPU.bounds = Rectangle(15, 96, 80, 20)
+                    labelCPU.bounds = Rectangle(15, 96, 85, 20)
                     labelVersionRelease.text = "Recovery version:"
-                    labelVersionReleaseValue.bounds = Rectangle(125, 34, 160, 20)
-                    labelCPUValue.bounds = Rectangle(100, 96, 280, 20)
+                    labelVersionReleaseValue.bounds = Rectangle(125, 34, 165, 20)
+                    labelCPUValue.bounds = Rectangle(105, 96, 280, 20)
                     labelLanguage.text = "Build ID:"
                     labelLanguageValue.setBounds(73, 93, 195, 20)
                     labelSecureBoot.isVisible = true
@@ -856,6 +856,9 @@ open class AndroidTool : Command(){
             labelConnect.isVisible = true
             labelIP.isVisible = true
 
+            frame.isVisible = true
+
+            sdkCheck()
             Thread {
                 while (true) {
                     try {
@@ -864,9 +867,6 @@ open class AndroidTool : Command(){
                     } catch (ex: InterruptedException) { }
                 }
             }.start()
-            frame.isVisible = true
-
-            sdkCheck()
             versionCheck()
         }
     }

@@ -166,7 +166,7 @@ open class AndroidToolUI {
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
     val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
     val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
-    val labelSdkDownload = JLabel("<html><font size='4'>Android, please click button to install</font></html>")
+    val labelSdkDownload = JLabel("<html><font size='4'>No SDK found, please click button to install</font></html>")
     val labelUpdate = JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
     val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
@@ -1112,12 +1112,12 @@ open class AndroidToolUI {
         deviceInfoPanel.add(BootloaderFastbootInfoPanel)
 
 
-        labelUnlock.bounds = Rectangle(15, 16, 60, 20)
+        labelUnlock.bounds = Rectangle(15, 16, 65, 20)
         labelUnlock.font = labelUnlock.font.deriveFont(14.0f)
         BootloaderFastbootInfoPanel.add(labelUnlock)
 
 
-        labelUnlockValue.bounds = Rectangle(80, 16, 205, 20)
+        labelUnlockValue.bounds = Rectangle(85, 16, 205, 20)
         labelUnlockValue.font = labelUnlockValue.font.deriveFont(12.0f)
         BootloaderFastbootInfoPanel.add(labelUnlockValue)
 
@@ -1131,22 +1131,22 @@ open class AndroidToolUI {
         deviceInfoPanel.add(softFastbootInfoPanel)
 
 
-        labelFastbootCodename.bounds = Rectangle(15, 16, 70, 20)
+        labelFastbootCodename.bounds = Rectangle(15, 16, 75, 20)
         labelFastbootCodename.font = labelFastbootCodename.font.deriveFont(14.0f)
         softFastbootInfoPanel.add(labelFastbootCodename)
 
 
-        labelFastbootCodenameValue.bounds = Rectangle(90, 16, 190, 20)
+        labelFastbootCodenameValue.bounds = Rectangle(95, 16, 190, 20)
         labelFastbootCodenameValue.font = labelFastbootCodenameValue.font.deriveFont(12.0f)
         softFastbootInfoPanel.add(labelFastbootCodenameValue)
 
 
-        labelFastbootSN.bounds = Rectangle(15, 36, 90, 20)
+        labelFastbootSN.bounds = Rectangle(15, 36, 95, 20)
         labelFastbootSN.font = labelFastbootSN.font.deriveFont(14.0f)
         softFastbootInfoPanel.add(labelFastbootSN)
 
 
-        labelFastbootSNValue.bounds = Rectangle(110, 36, 180, 20)
+        labelFastbootSNValue.bounds = Rectangle(115, 36, 180, 20)
         labelFastbootSNValue.font = labelFastbootSNValue.font.deriveFont(12.0f)
         softFastbootInfoPanel.add(labelFastbootSNValue)
 
@@ -1159,138 +1159,138 @@ open class AndroidToolUI {
         deviceInfoPanel.add(StorageFastbootInfoPanel)
 
 
-        labelSystemFS.bounds = Rectangle(15, 16, 130, 20)
+        labelSystemFS.bounds = Rectangle(15, 16, 135, 20)
         labelSystemFS.font = labelSystemFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelSystemFS)
 
 
-        labelSystemFSValue.bounds = Rectangle(145, 16, 140, 20)
+        labelSystemFSValue.bounds = Rectangle(150, 16, 140, 20)
         labelSystemFSValue.font = labelSystemFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelSystemFSValue)
 
 
 
-        labelSystemCapacity.bounds = Rectangle(15, 36, 150, 20)
+        labelSystemCapacity.bounds = Rectangle(15, 36, 155, 20)
         labelSystemCapacity.font = labelSystemCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelSystemCapacity)
 
 
-        labelSystemCapacityValue.bounds = Rectangle(165, 36, 120, 20)
+        labelSystemCapacityValue.bounds = Rectangle(170, 36, 120, 20)
         labelSystemCapacityValue.font = labelSystemCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelSystemCapacityValue)
 
 
-        labelDataFS.bounds = Rectangle(15, 56, 115, 20)
+        labelDataFS.bounds = Rectangle(15, 56, 120, 20)
         labelDataFS.font = labelDataFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelDataFS)
 
 
-        labelDataFSValue.bounds = Rectangle(130, 56, 150, 20)
+        labelDataFSValue.bounds = Rectangle(135, 56, 150, 20)
         labelDataFSValue.font = labelDataFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelDataFSValue)
 
 
 
-        labelDataCapacity.bounds = Rectangle(15, 76, 125, 20)
+        labelDataCapacity.bounds = Rectangle(15, 76, 135, 20)
         labelDataCapacity.font = labelDataCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelDataCapacity)
 
 
-        labelDataCapacityValue.bounds = Rectangle(145, 76, 140, 20)
+        labelDataCapacityValue.bounds = Rectangle(155, 76, 140, 20)
         labelDataCapacityValue.font = labelDataCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelDataCapacityValue)
 
 
-        labelBootFS.bounds = Rectangle(15, 96, 118, 20)
+        labelBootFS.bounds = Rectangle(15, 96, 120, 20)
         labelBootFS.font = labelBootFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelBootFS)
 
 
-        labelBootFSValue.bounds = Rectangle(133, 96, 145, 20)
+        labelBootFSValue.bounds = Rectangle(135, 96, 145, 20)
         labelBootFSValue.font = labelBootFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelBootFSValue)
 
 
 
-        labelBootCapacity.bounds = Rectangle(15, 116, 135, 20)
+        labelBootCapacity.bounds = Rectangle(15, 116, 140, 20)
         labelBootCapacity.font = labelBootCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelBootCapacity)
 
 
-        labelBootCapacityValue.bounds = Rectangle(150, 116, 135, 20)
+        labelBootCapacityValue.bounds = Rectangle(155, 116, 135, 20)
         labelBootCapacityValue.font = labelBootCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelBootCapacityValue)
 
 
-        labelRecoveryFS.bounds = Rectangle(15, 136, 140, 20)
+        labelRecoveryFS.bounds = Rectangle(15, 136, 145, 20)
         labelRecoveryFS.font = labelRecoveryFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelRecoveryFS)
 
 
-        labelRecoveryFSValue.bounds = Rectangle(155, 136, 130, 20)
+        labelRecoveryFSValue.bounds = Rectangle(160, 136, 130, 20)
         labelRecoveryFSValue.font = labelRecoveryFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelRecoveryFSValue)
 
 
 
-        labelRecoveryCapacity.bounds = Rectangle(15, 156, 150, 20)
+        labelRecoveryCapacity.bounds = Rectangle(15, 156, 160, 20)
         labelRecoveryCapacity.font = labelRecoveryCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelRecoveryCapacity)
 
 
-        labelRecoveryCapacityValue.bounds = Rectangle(170, 156, 115, 20)
+        labelRecoveryCapacityValue.bounds = Rectangle(180, 156, 115, 20)
         labelRecoveryCapacityValue.font = labelRecoveryCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelRecoveryCapacityValue)
 
 
-        labelCacheFS.bounds = Rectangle(15, 176, 120, 20)
+        labelCacheFS.bounds = Rectangle(15, 176, 125, 20)
         labelCacheFS.font = labelCacheFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelCacheFS)
 
 
-        labelCacheFSValue.bounds = Rectangle(135, 176, 145, 20)
+        labelCacheFSValue.bounds = Rectangle(145, 176, 145, 20)
         labelCacheFSValue.font = labelCacheFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelCacheFSValue)
 
 
 
-        labelCacheCapacity.bounds = Rectangle(15, 196, 140, 20)
+        labelCacheCapacity.bounds = Rectangle(15, 196, 145, 20)
         labelCacheCapacity.font = labelCacheCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelCacheCapacity)
 
 
-        labelCacheCapacityValue.bounds = Rectangle(155, 196, 130, 20)
+        labelCacheCapacityValue.bounds = Rectangle(165, 196, 130, 20)
         labelCacheCapacityValue.font = labelCacheCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelCacheCapacityValue)
 
 
-        labelVendorFS.bounds = Rectangle(15, 216, 130, 20)
+        labelVendorFS.bounds = Rectangle(15, 216, 135, 20)
         labelVendorFS.font = labelVendorFS.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelVendorFS)
 
 
-        labelVendorFSValue.bounds = Rectangle(145, 216, 130, 20)
+        labelVendorFSValue.bounds = Rectangle(150, 216, 130, 20)
         labelVendorFSValue.font = labelVendorFSValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelVendorFSValue)
 
 
 
-        labelVendorCapacity.bounds = Rectangle(15, 236, 140, 20)
+        labelVendorCapacity.bounds = Rectangle(15, 236, 150, 20)
         labelVendorCapacity.font = labelVendorCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelVendorCapacity)
 
 
-        labelVendorCapacityValue.bounds = Rectangle(160, 236, 125, 20)
+        labelVendorCapacityValue.bounds = Rectangle(170, 236, 125, 20)
         labelVendorCapacityValue.font = labelVendorCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelVendorCapacityValue)
 
 
-        labelAllCapacity.bounds = Rectangle(15, 256, 115, 20)
+        labelAllCapacity.bounds = Rectangle(15, 256, 120, 20)
         labelAllCapacity.font = labelAllCapacity.font.deriveFont(14.0f)
         StorageFastbootInfoPanel.add(labelAllCapacity)
 
 
-        labelAllCapacityValue.bounds = Rectangle(130, 256, 145, 20)
+        labelAllCapacityValue.bounds = Rectangle(135, 256, 145, 20)
         labelAllCapacityValue.font = labelAllCapacityValue.font.deriveFont(12.0f)
         StorageFastbootInfoPanel.add(labelAllCapacityValue)
 
@@ -1336,11 +1336,11 @@ open class AndroidToolUI {
         boardInfoPanel.border = title5
         deviceInfoPanel.add(boardInfoPanel)
 
-        labelManufacturerValue.bounds = Rectangle(110, 16, 170, 20)
+        labelManufacturerValue.bounds = Rectangle(115, 16, 170, 20)
         labelManufacturerValue.font = labelManufacturerValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelManufacturerValue)
 
-        labelBrandValue.bounds = Rectangle(60, 36, 225, 20)
+        labelBrandValue.bounds = Rectangle(65, 36, 225, 20)
         labelBrandValue.font = labelBrandValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelBrandValue)
 
@@ -1348,56 +1348,56 @@ open class AndroidToolUI {
         labelModelValue.font = labelModelValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelModelValue)
 
-        labelCodenameValue.bounds = Rectangle(90, 76, 195, 20)
+        labelCodenameValue.bounds = Rectangle(95, 76, 195, 20)
         labelCodenameValue.font = labelCodenameValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelCodenameValue)
 
-        labelCPUValue.bounds = Rectangle(50, 96, 230, 20)
+        labelCPUValue.bounds = Rectangle(55, 96, 230, 20)
         labelCPUValue.font = labelCPUValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelCPUValue)
 
-        labelCPUAValue.bounds = Rectangle(130, 116, 150, 20)
+        labelCPUAValue.bounds = Rectangle(135, 116, 150, 20)
         labelCPUAValue.font = labelCPUAValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelCPUAValue)
 
-        labelSNValue.bounds = Rectangle(110, 136, 170, 20)
+        labelSNValue.bounds = Rectangle(115, 136, 170, 20)
         labelSNValue.font = labelSNValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelSNValue)
 
-        labelGsmOperatorValue.bounds = Rectangle(125, 156, 155, 20)
+        labelGsmOperatorValue.bounds = Rectangle(130, 156, 155, 20)
         labelGsmOperatorValue.font = labelGsmOperatorValue.font.deriveFont(12.0f)
         boardInfoPanel.add(labelGsmOperatorValue)
 
 
-        labelManufacturer.bounds = Rectangle(15, 16, 90, 20)
+        labelManufacturer.bounds = Rectangle(15, 16, 95, 20)
         labelManufacturer.font = labelManufacturer.font.deriveFont(14.0f)
         boardInfoPanel.add(labelManufacturer)
 
-        labelBrand.bounds = Rectangle(15, 36, 40, 20)
+        labelBrand.bounds = Rectangle(15, 36, 45, 20)
         labelBrand.font = labelBrand.font.deriveFont(14.0f)
         boardInfoPanel.add(labelBrand)
 
-        labelModel.bounds = Rectangle(15, 56, 45, 20)
+        labelModel.bounds = Rectangle(15, 56, 50, 20)
         labelModel.font = labelModel.font.deriveFont(14.0f)
         boardInfoPanel.add(labelModel)
 
-        labelCodename.bounds = Rectangle(15, 76, 70, 20)
+        labelCodename.bounds = Rectangle(15, 76, 75, 20)
         labelCodename.font = labelCodename.font.deriveFont(14.0f)
         boardInfoPanel.add(labelCodename)
 
-        labelCPU.bounds = Rectangle(15, 96, 30, 20)
+        labelCPU.bounds = Rectangle(15, 96, 35, 20)
         labelCPU.font = labelCPU.font.deriveFont(14.0f)
         boardInfoPanel.add(labelCPU)
 
-        labelCPUA.bounds = Rectangle(15, 116, 110, 20)
+        labelCPUA.bounds = Rectangle(15, 116, 115, 20)
         labelCPUA.font = labelCPUA.font.deriveFont(14.0f)
         boardInfoPanel.add(labelCPUA)
 
-        labelSN.bounds = Rectangle(15, 136, 90, 20)
+        labelSN.bounds = Rectangle(15, 136, 95, 20)
         labelSN.font = labelSN.font.deriveFont(14.0f)
         boardInfoPanel.add(labelSN)
 
-        labelGsmOperator.bounds = Rectangle(15, 156, 110, 20)
+        labelGsmOperator.bounds = Rectangle(15, 156, 115, 20)
         labelGsmOperator.font = labelGsmOperator.font.deriveFont(14.0f)
         boardInfoPanel.add(labelGsmOperator)
 
@@ -1410,105 +1410,105 @@ open class AndroidToolUI {
         deviceInfoPanel.add(softInfoPanel)
 
 
-        labelFingerprint.bounds = Rectangle(15, 15, 90, 20)
+        labelFingerprint.bounds = Rectangle(15, 15, 95, 20)
         labelFingerprint.font = labelFingerprint.font.deriveFont(14.0f)
         softInfoPanel.add(labelFingerprint)
 
 
-        labelFingerprintValue.bounds = Rectangle(90, 15, 195, 20)
+        labelFingerprintValue.bounds = Rectangle(95, 15, 195, 20)
         labelFingerprintValue.font = labelFingerprintValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelFingerprintValue)
 
 
-        labelVersionRelease.bounds = Rectangle(15, 34, 110, 20)
+        labelVersionRelease.bounds = Rectangle(15, 34, 115, 20)
         labelVersionRelease.font = labelVersionRelease.font.deriveFont(14.0f)
         softInfoPanel.add(labelVersionRelease)
 
 
-        labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
+        labelVersionReleaseValue.bounds = Rectangle(125, 34, 160, 20)
         labelVersionReleaseValue.font = labelVersionReleaseValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelVersionReleaseValue)
 
 
-        labelSDK.bounds = Rectangle(15, 54, 95, 20)
+        labelSDK.bounds = Rectangle(15, 54, 100, 20)
         labelSDK.font = labelSDK.font.deriveFont(14.0f)
         softInfoPanel.add(labelSDK)
 
 
-        labelSDKValue.bounds = Rectangle(100, 54, 180, 20)
+        labelSDKValue.bounds = Rectangle(105, 54, 180, 20)
         labelSDKValue.font = labelSDKValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSDKValue)
 
 
-        labelSecurityPatch.bounds = Rectangle(15, 73, 90, 20)
+        labelSecurityPatch.bounds = Rectangle(15, 73, 100, 20)
         labelSecurityPatch.font = labelSecurityPatch.font.deriveFont(14.0f)
         softInfoPanel.add(labelSecurityPatch)
 
 
-        labelSecurityPatchValue.bounds = Rectangle(110, 73, 170, 20)
+        labelSecurityPatchValue.bounds = Rectangle(120, 73, 170, 20)
         labelSecurityPatchValue.font = labelSecurityPatchValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSecurityPatchValue)
 
 
-        labelLanguage.bounds = Rectangle(15, 93, 70, 20)
+        labelLanguage.bounds = Rectangle(15, 93, 75, 20)
         labelLanguage.font = labelLanguage.font.deriveFont(14.0f)
         softInfoPanel.add(labelLanguage)
 
 
-        labelLanguageValue.bounds = Rectangle(85, 93, 195, 20)
+        labelLanguageValue.bounds = Rectangle(90, 93, 195, 20)
         labelLanguageValue.font = labelLanguageValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelLanguageValue)
 
 
-        labelSelinux.bounds = Rectangle(15, 113, 50, 18)
+        labelSelinux.bounds = Rectangle(15, 113, 55, 18)
         labelSelinux.font = labelSelinux.font.deriveFont(14.0f)
         softInfoPanel.add(labelSelinux)
 
 
-        labelSelinuxValue.bounds = Rectangle(65, 113, 210, 18)
+        labelSelinuxValue.bounds = Rectangle(70, 113, 210, 18)
         labelSelinuxValue.font = labelSelinuxValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSelinuxValue)
 
 
 
-        labelTreble.bounds = Rectangle(15, 131, 140, 20)
+        labelTreble.bounds = Rectangle(15, 131, 145, 20)
         labelTreble.font = labelTreble.font.deriveFont(14.0f)
         softInfoPanel.add(labelTreble)
 
 
-        labelTrebleValue.bounds = Rectangle(158, 131, 125, 20)
+        labelTrebleValue.bounds = Rectangle(165, 131, 125, 20)
         labelTrebleValue.font = labelTrebleValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelTrebleValue)
 
-        labelSecureBoot.bounds = Rectangle(15, 150, 140, 20)
+        labelSecureBoot.bounds = Rectangle(15, 150, 145, 20)
         labelSecureBoot.font = labelSecureBoot.font.deriveFont(14.0f)
         softInfoPanel.add(labelSecureBoot)
         labelSecureBoot.isVisible = false
 
 
-        labelSecureBootValue.bounds = Rectangle(98, 150, 125, 20)
+        labelSecureBootValue.bounds = Rectangle(105, 150, 125, 20)
         labelSecureBootValue.font = labelSecureBootValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelSecureBootValue)
         labelSecureBootValue.isVisible = false
 
-        labelDeviceHostname.bounds = Rectangle(15, 170, 140, 20)
+        labelDeviceHostname.bounds = Rectangle(15, 170, 145, 20)
         labelDeviceHostname.font = labelDeviceHostname.font.deriveFont(14.0f)
         softInfoPanel.add(labelDeviceHostname)
         labelSecureBoot.isVisible = false
 
 
-        labelDeviceHostnameValue.bounds = Rectangle(120, 170, 120, 20)
+        labelDeviceHostnameValue.bounds = Rectangle(125, 170, 120, 20)
         labelDeviceHostnameValue.font = labelDeviceHostnameValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelDeviceHostnameValue)
         labelSecureBootValue.isVisible = false
 
-        labelLocations.bounds = Rectangle(15, 190, 140, 20)
+        labelLocations.bounds = Rectangle(15, 190, 150, 20)
         labelLocations.font = labelLocations.font.deriveFont(14.0f)
         softInfoPanel.add(labelLocations)
         labelSecureBoot.isVisible = false
 
 
-        labelLocationsValue.bounds = Rectangle(158, 190, 125, 20)
+        labelLocationsValue.bounds = Rectangle(170, 190, 125, 20)
         labelLocationsValue.font = labelLocationsValue.font.deriveFont(12.0f)
         softInfoPanel.add(labelLocationsValue)
         labelSecureBootValue.isVisible = false
@@ -1534,12 +1534,12 @@ open class AndroidToolUI {
         textFieldIPa.isFocusable = false
         adbPanel.add(textFieldIPa)
 
-        labelUSBConnection.bounds = Rectangle(47, 17, 200, 21)
+        labelUSBConnection.bounds = Rectangle(55, 17, 200, 21)
         labelUSBConnection.font = labelUSB.font.deriveFont(12.0f)
         labelUSBConnection.icon = iconNo
 
 
-        labelTCPConnection.bounds = Rectangle(64, 36, 200, 21)
+        labelTCPConnection.bounds = Rectangle(70, 36, 200, 21)
         labelTCPConnection.font = labelTCP.font.deriveFont(12.0f)
         labelTCPConnection.icon = iconNo
         deviceConnection.add(labelTCPConnection)
