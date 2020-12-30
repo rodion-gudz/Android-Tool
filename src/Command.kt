@@ -375,95 +375,35 @@ open class Command : AndroidToolUI() {
     private fun getProp() {
         val deviceProps = exec("adb", "shell getprop", output = true)
         val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (lineValue1.isNotBlank()) {
-            lineValue1
-        } else {
-            "-"
-        }
+        Manufacturer = if (lineValue1.isNotBlank()) lineValue1 else "-"
         val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (lineValue2.isNotBlank()) {
-            lineValue2
-        } else {
-            "-"
-        }
+        Brand = if (lineValue2.isNotBlank()) lineValue2 else "-"
         val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (lineValue3.isNotBlank()) {
-            lineValue3
-        } else {
-            "-"
-        }
+        Model = if (lineValue3.isNotBlank()) lineValue3 else "-"
         val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (lineValue4.isNotBlank()) {
-            lineValue4
-        } else {
-            "-"
-        }
+        Codename = if (lineValue4.isNotBlank()) lineValue4 else "-"
         val lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
-        CPU = if (lineValue5.isNotBlank()) {
-            lineValue5
-        } else {
-            "-"
-        }
+        CPU = if (lineValue5.isNotBlank()) lineValue5 else "-"
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (lineValue6.isNotBlank()) {
-            lineValue6
-        } else {
-            "-"
-        }
+        CPUArch = if (lineValue6.isNotBlank()) lineValue6 else "-"
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (lineValue7.isNotBlank()) {
-            lineValue7
-        } else {
-            "-"
-        }
+        SN = if (lineValue7.isNotBlank()) lineValue7 else "-"
         val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
-        GsmOperator = if (lineValue8.isNotBlank() && lineValue8 != ",") {
-            lineValue8
-        } else {
-            "-"
-        }
+        GsmOperator = if (lineValue8.isNotBlank() && lineValue8 != ",") lineValue8 else "-"
         val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (lineValue9.isNotBlank()) {
-            lineValue9
-        } else {
-            "-"
-        }
+        Fingerprint = if (lineValue9.isNotBlank()) lineValue9 else "-"
         val lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
-        VersionRelease = if (lineValue10.isNotBlank()) {
-            lineValue10
-        } else {
-            "-"
-        }
+        VersionRelease = if (lineValue10.isNotBlank()) lineValue10 else "-"
         val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (lineValue11.isNotBlank()) {
-            lineValue11
-        } else {
-            "-"
-        }
+        SDK = if (lineValue11.isNotBlank()) lineValue11 else "-"
         val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (lineValue12.isNotBlank()) {
-            lineValue12
-        } else {
-            "-"
-        }
+        SecurityPatch = if (lineValue12.isNotBlank()) lineValue12 else "-"
         val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (lineValue13.isNotBlank()) {
-            lineValue13
-        } else {
-            "-"
-        }
+        Language = if (lineValue13.isNotBlank()) lineValue13 else "-"
         val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) {
-            lineValue14
-        } else {
-            "-"
-        }
+        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) lineValue14 else "-"
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (lineValue15.isNotBlank()) {
-            lineValue15
-        } else {
-            "-"
-        }
+        Treble = if (lineValue15.isNotBlank()) lineValue15 else "-"
         labelManufacturerValue.text = Manufacturer
         labelBrandValue.text = Brand
         labelModelValue.text = Model
@@ -484,132 +424,47 @@ open class Command : AndroidToolUI() {
     private fun getPropRecovery() {
         val deviceProps = exec("adb", "shell getprop", output = true)
         val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (lineValue1.isNotBlank()) {
-            lineValue1
-        } else {
-            "Unknown"
-        }
+        Manufacturer = if (lineValue1.isNotBlank()) lineValue1 else "Unknown"
+
         val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (lineValue2.isNotBlank()) {
-            lineValue2
-        } else {
-            "-"
-        }
+        Brand = if (lineValue2.isNotBlank())  lineValue2 else "-"
         val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (lineValue3.isNotBlank()) {
-            lineValue3
-        } else {
-            "-"
-        }
+        Model = if (lineValue3.isNotBlank()) lineValue3 else "-"
         val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (lineValue4.isNotBlank()) {
-            lineValue4
-        } else {
-            "-"
-        }
+        Codename = if (lineValue4.isNotBlank()) lineValue4 else "-"
         val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [").substringBefore(']')
-        CPU = if (lineValue5.isNotBlank()) {
-            lineValue5
-        } else {
-            "-"
-        }
+        CPU = if (lineValue5.isNotBlank()) lineValue5 else "-"
         val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (lineValue6.isNotBlank()) {
-            lineValue6
-        } else {
-            "-"
-        }
+        CPUArch = if (lineValue6.isNotBlank()) lineValue6 else "-"
         val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (lineValue7.isNotBlank()) {
-            lineValue7
-        } else {
-            "-"
-        }
+        SN = if (lineValue7.isNotBlank()) lineValue7 else "-"
         val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [").substringBefore(']')
-        GsmOperator = if (lineValue8.isNotBlank()) {
-            lineValue8
-        } else {
-            "-"
-        }
+        GsmOperator = if (lineValue8.isNotBlank()) lineValue8 else "-"
         val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (lineValue9.isNotBlank()) {
-            lineValue9
-        } else {
-            "-"
-        }
+        Fingerprint = if (lineValue9.isNotBlank()) lineValue9 else "-"
         var lineValue10 = deviceProps.substringAfter("ro.orangefox.version]: [").substringBefore(']')
-        if (lineValue10.isNotBlank()) {
-            VersionRelease = lineValue10
-        } else {
+        if (lineValue10.isNotBlank()) VersionRelease = lineValue10 else {
             lineValue10 = deviceProps.substringAfter("ro.twrp.version]: [").substringBefore(']')
-            VersionRelease = if (lineValue10.isNotBlank()) {
-                lineValue10
-            } else {
-                "-"
-            }
+            VersionRelease = if (lineValue10.isNotBlank()) lineValue10 else "-"
         }
         val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (lineValue11.isNotBlank()) {
-            lineValue11
-        } else {
-            "-"
-        }
+        SDK = if (lineValue11.isNotBlank()) lineValue11 else "-"
         val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (lineValue12.isNotBlank()) {
-            lineValue12
-        } else {
-            "-"
-        }
+        SecurityPatch = if (lineValue12.isNotBlank()) lineValue12 else "-"
         val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (lineValue13.isNotBlank()) {
-            lineValue13
-        } else {
-            "-"
-        }
+        Language = if (lineValue13.isNotBlank()) lineValue13 else "-"
         val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) {
-            lineValue14
-        } else {
-            "-"
-        }
+        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) lineValue14 else "-"
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (lineValue15.isNotBlank()) {
-            lineValue15
-        } else {
-            "-"
-        }
+        Treble = if (lineValue15.isNotBlank()) lineValue15 else "-"
         val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [").substringBefore(']')
-        SecureBoot = if (lineValue17.isNotBlank()) {
-            if (lineValue17 == "1") {
-                "true"
-            } else {
-                "false"
-            }
-        } else {
-            "-"
-        }
+        SecureBoot = if (lineValue17.isNotBlank()) { if (lineValue17 == "1") "true" else "false" } else "-"
         val lineValue18 = deviceProps.substringAfter("ro.build.host]: [").substringBefore(']')
-        DeviceHost = if (lineValue18.isNotBlank() && "DEVICE" !in lineValue14) {
-            lineValue18
-        } else {
-            "-"
-        }
+        DeviceHost = if (lineValue18.isNotBlank() && "DEVICE" !in lineValue14) lineValue18 else "-"
         val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [").substringBefore(']')
-        MockLocation = if (lineValue16.isNotBlank()) {
-            if (lineValue16 == "1") {
-                "true"
-            } else {
-                "false"
-            }
-        } else {
-            "-"
-        }
+        MockLocation = if (lineValue16.isNotBlank()) { if (lineValue16 == "1") "true" else "false" } else "-"
         val lineValue19 = deviceProps.substringAfter("ro.build.id]: [").substringBefore(']')
-        Language = if (lineValue19.isNotBlank()) {
-            lineValue19
-        } else {
-            "-"
-        }
+        Language = if (lineValue19.isNotBlank()) lineValue19 else "-"
         labelManufacturerValue.text = Manufacturer
         labelBrandValue.text = Brand
         labelModelValue.text = Model
@@ -654,86 +509,22 @@ open class Command : AndroidToolUI() {
         val vendorDec = fastbootProps.substringAfter("(bootloader) partition-size:vendor: 0x").substringBefore("(bootloader) ").trimMargin()
         VendorCapacity = (java.lang.Long.parseLong(vendorDec, 16) / 1048576).toString()
         AllCapacity = (SystemCapacity.toInt() + DataCapacity.toInt() + BootCapacity.toInt() + RecoveryCapacity.toInt() + CacheCapacity.toInt() + VendorCapacity.toInt()).toString()
-        labelUnlockValue.text = if (Unlock != "< waiting for any device >") {
-            Unlock
-        } else {
-            "-"
-        }
-        labelFastbootCodenameValue.text = if (FastbootCodename != "< waiting for any device >") {
-            FastbootCodename
-        } else {
-            "-"
-        }
-        labelFastbootSNValue.text = if (FastbootSN != "< waiting for any device >") {
-            FastbootSN
-        } else {
-            "-"
-        }
-        labelSystemFSValue.text = if (SystemFS != "< waiting for any device >") {
-            SystemFS
-        } else {
-            "-"
-        }
-        labelSystemCapacityValue.text = if (SystemCapacity != "< waiting for any device >") {
-            SystemCapacity
-        } else {
-            "-"
-        }
-        labelDataFSValue.text = if (DataFS != "< waiting for any device >") {
-            DataFS
-        } else {
-            "-"
-        }
-        labelDataCapacityValue.text = if (DataCapacity != "< waiting for any device >") {
-            DataCapacity
-        } else {
-            "-"
-        }
-        labelBootFSValue.text = if (BootFS != "< waiting for any device >") {
-            BootFS
-        } else {
-            "-"
-        }
-        labelBootCapacityValue.text = if (BootCapacity != "< waiting for any device >") {
-            BootCapacity
-        } else {
-            "-"
-        }
-        labelRecoveryFSValue.text = if (RecoveryFS != "< waiting for any device >") {
-            RecoveryFS
-        } else {
-            "-"
-        }
-        labelRecoveryCapacityValue.text = if (RecoveryCapacity != "< waiting for any device >") {
-            RecoveryCapacity
-        } else {
-            "-"
-        }
-        labelCacheFSValue.text = if (CacheFS != "< waiting for any device >") {
-            CacheFS
-        } else {
-            "-"
-        }
-        labelCacheCapacityValue.text = if (CacheCapacity != "< waiting for any device >") {
-            CacheCapacity
-        } else {
-            "-"
-        }
-        labelVendorFSValue.text = if (VendorFS != "< waiting for any device >") {
-            VendorFS
-        } else {
-            "-"
-        }
-        labelVendorCapacityValue.text = if (VendorCapacity != "< waiting for any device >") {
-            VendorCapacity
-        } else {
-            "-"
-        }
-        labelAllCapacityValue.text = if (AllCapacity != "< waiting for any device >") {
-            AllCapacity
-        } else {
-            "-"
-        }
+        labelUnlockValue.text = if (Unlock != "< waiting for any device >") Unlock else "-"
+        labelFastbootCodenameValue.text = if (FastbootCodename != "< waiting for any device >") FastbootCodename else "-"
+        labelFastbootSNValue.text = if (FastbootSN != "< waiting for any device >") FastbootSN else "-"
+        labelSystemFSValue.text = if (SystemFS != "< waiting for any device >") SystemFS else "-"
+        labelSystemCapacityValue.text = if (SystemCapacity != "< waiting for any device >") SystemCapacity else "-"
+        labelDataFSValue.text = if (DataFS != "< waiting for any device >") DataFS else "-"
+        labelDataCapacityValue.text = if (DataCapacity != "< waiting for any device >") DataCapacity else "-"
+        labelBootFSValue.text = if (BootFS != "< waiting for any device >") BootFS else "-"
+        labelBootCapacityValue.text = if (BootCapacity != "< waiting for any device >") BootCapacity else "-"
+        labelRecoveryFSValue.text = if (RecoveryFS != "< waiting for any device >") RecoveryFS else "-"
+        labelRecoveryCapacityValue.text = if (RecoveryCapacity != "< waiting for any device >") RecoveryCapacity else "-"
+        labelCacheFSValue.text = if (CacheFS != "< waiting for any device >") CacheFS else "-"
+        labelCacheCapacityValue.text = if (CacheCapacity != "< waiting for any device >") CacheCapacity else "-"
+        labelVendorFSValue.text = if (VendorFS != "< waiting for any device >") VendorFS else "-"
+        labelVendorCapacityValue.text = if (VendorCapacity != "< waiting for any device >") VendorCapacity else "-"
+        labelAllCapacityValue.text = if (AllCapacity != "< waiting for any device >") AllCapacity else "-"
     }
 
     fun exec(app: String, command: String, output: Boolean = false, streamType: String = "Input"): String {
