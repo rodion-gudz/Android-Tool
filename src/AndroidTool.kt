@@ -84,7 +84,7 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-const val programVersion = "1.0.0-beta6"
+const val programVersion = "1.0.0-beta7"
 var programVersionLatest = programVersion
 open class AndroidTool : Command(){
     init {
@@ -527,9 +527,26 @@ open class AndroidTool : Command(){
                     BootloaderFastbootInfoPanel.isVisible = false
                     softFastbootInfoPanel.isVisible = false
                     StorageFastbootInfoPanel.isVisible = false
-                    deviceInfoPanel.setBounds(5, 5, 310, 380)
+                    softInfoPanel.setBounds(10, 205, 290, 160)
+                    deviceInfoPanel.setBounds(5, 5, 310, 376)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
+                    labelGsmOperator.text = "Cellular provider:"
+                    labelGsmOperator.bounds = Rectangle(15, 156, 115, 20)
+                    labelGsmOperatorValue.bounds = Rectangle(130, 156, 155, 20)
+                    labelCPU.text = "CPU:"
+                    labelCPU.bounds = Rectangle(15, 96, 35, 20)
+                    labelCPUValue.bounds = Rectangle(55, 96, 230, 20)
+                    labelVersionRelease.text = "Android version:"
+                    labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
+                    labelLanguage.text = "Language:"
+                    labelLanguageValue.setBounds(85, 93, 195, 20)
+                    labelSecureBoot.isVisible = false
+                    labelDeviceHostname.isVisible = false
+                    labelLocations.isVisible = false
+                    labelSecureBootValue.isVisible = false
+                    labelDeviceHostnameValue.isVisible = false
+                    labelLocationsValue.isVisible = false
                     labelTCP.isVisible = true
                     labelTCPConnection.isVisible = true
                     buttonIpConnect.isVisible = true
