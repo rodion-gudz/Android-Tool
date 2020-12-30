@@ -4,15 +4,12 @@ import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.*
-import java.net.URL
 import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
 import javax.swing.JFileChooser
 import javax.swing.SwingWorker
 import javax.swing.filechooser.FileNameExtensionFilter
-import org.apache.maven.artifact.versioning.ComparableVersion
-import java.io.InputStream
 import kotlin.system.exitProcess
 
 var arrayList = emptyArray<String>()
@@ -82,12 +79,12 @@ var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
-val JarDir = System.getProperty("user.dir")
+val JarDir = System.getProperty("user.dir").toString()
 val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-val programVersion = "1.0.0-beta5"
+const val programVersion = "1.0.0-beta6"
 var programVersionLatest = programVersion
 open class AndroidTool : Command(){
     init {
@@ -101,6 +98,11 @@ open class AndroidTool : Command(){
             textFieldIPa.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(evt: KeyEvent) {
                     searchFilter(textFieldIPa.text)
+                }
+            })
+            frame.addWindowListener(object : WindowAdapter() {
+                override fun windowClosing(e: WindowEvent) {
+                    exec("adb", "kill-server")
                 }
             })
             buttonSave.addActionListener {

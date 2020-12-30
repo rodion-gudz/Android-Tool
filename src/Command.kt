@@ -5,11 +5,8 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
 import java.net.URL
-import java.net.URLConnection
 import java.util.zip.ZipFile
-import javax.crypto.Mac
 import org.apache.maven.artifact.versioning.ComparableVersion
-import java.util.zip.ZipEntry
 import java.util.jar.JarFile
 import java.net.URISyntaxException
 import java.util.*
@@ -639,23 +636,23 @@ open class Command : AndroidToolUI() {
         FastbootCodename = fastbootProps.substringAfter("(bootloader) product:").substringBefore("(bootloader) ").trimMargin()
         FastbootSN = fastbootProps.substringAfter("(bootloader) serialno:").substringBefore("(bootloader) ").trimMargin()
         SystemFS = fastbootProps.substringAfter("(bootloader) partition-type:system:").substringBefore("(bootloader) ").trimMargin()
-        val SystemDec = fastbootProps.substringAfter("(bootloader) partition-size:system: 0x").substringBefore("(bootloader) ").trimMargin()
-        SystemCapacity = (java.lang.Long.parseLong(SystemDec, 16) / 1048576).toString().trimMargin()
+        val systemDec = fastbootProps.substringAfter("(bootloader) partition-size:system: 0x").substringBefore("(bootloader) ").trimMargin()
+        SystemCapacity = (java.lang.Long.parseLong(systemDec, 16) / 1048576).toString().trimMargin()
         DataFS = fastbootProps.substringAfter("(bootloader) partition-type:userdata:").substringBefore("(bootloader) ").trimMargin()
-        val DataDec = fastbootProps.substringAfter("(bootloader) partition-size:userdata: 0x").substringBefore("(bootloader) ").trimMargin()
-        DataCapacity = (java.lang.Long.parseLong(DataDec, 16) / 1048576).toString().trimMargin()
+        val dataDec = fastbootProps.substringAfter("(bootloader) partition-size:userdata: 0x").substringBefore("(bootloader) ").trimMargin()
+        DataCapacity = (java.lang.Long.parseLong(dataDec, 16) / 1048576).toString().trimMargin()
         BootFS = fastbootProps.substringAfter("(bootloader) partition-type:boot:").substringBefore("(bootloader) ").trimMargin()
-        val BootDec = fastbootProps.substringAfter("(bootloader) partition-size:boot: 0x").substringBefore("(bootloader) ").trimMargin()
-        BootCapacity = (java.lang.Long.parseLong(BootDec, 16) / 1048576).toString().trimMargin()
+        val bootDec = fastbootProps.substringAfter("(bootloader) partition-size:boot: 0x").substringBefore("(bootloader) ").trimMargin()
+        BootCapacity = (java.lang.Long.parseLong(bootDec, 16) / 1048576).toString().trimMargin()
         RecoveryFS = fastbootProps.substringAfter("(bootloader) partition-type:recovery:").substringBefore("(bootloader) ").trimMargin()
-        val RecoveryDec = fastbootProps.substringAfter("(bootloader) partition-size:recovery: 0x").substringBefore("(bootloader) ").trimMargin()
-        RecoveryCapacity = (java.lang.Long.parseLong(RecoveryDec, 16) / 1048576).toString().trimMargin()
+        val recoveryDec = fastbootProps.substringAfter("(bootloader) partition-size:recovery: 0x").substringBefore("(bootloader) ").trimMargin()
+        RecoveryCapacity = (java.lang.Long.parseLong(recoveryDec, 16) / 1048576).toString().trimMargin()
         CacheFS = fastbootProps.substringAfter("(bootloader) partition-type:cache:").substringBefore("(bootloader) ").trimMargin()
-        val CacheDec = fastbootProps.substringAfter("(bootloader) partition-size:cache: 0x").substringBefore("(bootloader) ").trimMargin()
-        CacheCapacity = (java.lang.Long.parseLong(CacheDec, 16) / 1048576).toString().trimMargin()
+        val cacheDec = fastbootProps.substringAfter("(bootloader) partition-size:cache: 0x").substringBefore("(bootloader) ").trimMargin()
+        CacheCapacity = (java.lang.Long.parseLong(cacheDec, 16) / 1048576).toString().trimMargin()
         VendorFS = fastbootProps.substringAfter("(bootloader) partition-type:vendor:").substringBefore("(bootloader) ").trimMargin()
-        val VendorDec = fastbootProps.substringAfter("(bootloader) partition-size:vendor: 0x").substringBefore("(bootloader) ").trimMargin()
-        VendorCapacity = (java.lang.Long.parseLong(VendorDec, 16) / 1048576).toString()
+        val vendorDec = fastbootProps.substringAfter("(bootloader) partition-size:vendor: 0x").substringBefore("(bootloader) ").trimMargin()
+        VendorCapacity = (java.lang.Long.parseLong(vendorDec, 16) / 1048576).toString()
         AllCapacity = (SystemCapacity.toInt() + DataCapacity.toInt() + BootCapacity.toInt() + RecoveryCapacity.toInt() + CacheCapacity.toInt() + VendorCapacity.toInt()).toString()
         labelUnlockValue.text = if (Unlock != "< waiting for any device >") {
             Unlock

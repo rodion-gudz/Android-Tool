@@ -1092,11 +1092,6 @@ open class AndroidToolUI {
         frame.isResizable = false
         frame.setLocationRelativeTo(null)
         frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/frameIcon.png")).image
-        frame.addWindowListener(object : WindowAdapter() {
-            override fun windowClosing(e: WindowEvent) {
-                Runtime.getRuntime().exec("${SdkDir}adb kill-server")
-            }
-        })
 
 
         fastbootPanel.layout = null
