@@ -6,7 +6,7 @@
   ## What is it?
 
   #### Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. A dark theme, intuitive interface and other features
-  ### Latest Version: **0.9.9**
+  ### Latest Version: **1.0.0**
   ## Main Features:
   * #### Batch and single app installation (.apk files)
   * #### Disable, enable or uninstall system apps
@@ -32,16 +32,20 @@
   ![Links Screenshot](https://i.imgur.com/LZJc3fi.png)
 
   ## The Latest Version And Updates
-  ##### You can find the latest version on Github Repository
+  ##### You can find the latest version on Github Repository Releases
 
   ## Usage
-  * #### Download program archive to your OS
-  * #### Extract it to the desired location
-  * #### Run executable file "Android Tool.jar"
+  ### First method (Recommended)
+  * #### Download program .jar file
+  * #### Open it and click "Install" button to download SDK Platform Tools
+  * #### Enjoy 😉
+  ### Second method (Portable)
+  * #### Download a portable zip for your system
+  * #### Extract him
+  * #### Open program .jar file and enjoy 😉 
 
   ## Requirements
-  
 
-  * ##### OS (Windows 10, Linux), Mac os support maybe will be later
+  * ##### OS (Windows (10, 8.1, 8), Linux, MacOS)
   * ##### JRE (Java Runtime Environment)
   
