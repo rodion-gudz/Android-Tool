@@ -17,6 +17,7 @@ var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
 var selectedFilePath = ""
 var selectedZipPath = ""
+var selectedZipName = ""
 var listModel = DefaultListModel<Any?>()
 var listModelLogs = DefaultListModel<Any?>()
 var apps: ArrayList<Any> = ArrayList()
@@ -837,6 +838,7 @@ open class AndroidTool : Command(){
                         val chooseDialog = choseFile.showDialog(null, "Select Zip")
                         if (chooseDialog == JFileChooser.APPROVE_OPTION) {
                             selectedZipPath = choseFile.selectedFile.absolutePath
+                            selectedZipName = choseFile.selectedFile.name
                         }
                     }
                     override fun done() { buttonChooseZip.isEnabled = true }
@@ -847,13 +849,13 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallZip.isEnabled = false
-                        exec("adb", "shell twrp sideload")
-                        Thread.sleep(3_000)
                         if (Windows) {
-                            exec("adb", "sideload \"${selectedZipPath}\"")
+                            exec("adb", "push \"${selectedZipPath}\" /sdcard/")
                         } else {
-                            exec("adb", "sideload $selectedZipPath")
+                            exec("adb", "push $selectedZipPath /sdcard/")
                         }
+                        exec("adb", "shell twrp install $selectedZipName")
+                        exec("adb", "shell rm $selectedZipName")
                     }
                     override fun done() { buttonInstallZip.isEnabled = true }
                 }
