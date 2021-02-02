@@ -11,11 +11,7 @@ import java.net.URI
 import javax.swing.*
 import javax.swing.border.TitledBorder
 import javax.swing.UIManager
-
 import java.awt.Insets
-
-
-
 
 
 open class AndroidToolUI {
@@ -159,16 +155,20 @@ open class AndroidToolUI {
     val buttonSave = JButton("Save")
     val buttonStop = JButton("Stop")
     val dialogUnauthorizedDevice = JDialog(frame, "Unauthorized device found", true)
-    val labelUnauthorized = JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
+    val labelUnauthorized =
+        JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
     val labelSample = JLabel("Sample:")
     val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
     val dialogMultipleDevice = JDialog(frame, "Multiple devices connected", true)
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
     val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
-    val labelMultipleDevice = JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
+    val labelMultipleDevice =
+        JLabel("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>")
     val labelSdkDownload = JLabel("<html><font size='4'>No SDK found, please click button to install</font></html>")
-    val labelUpdate = JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
-    val labelUpdateVersion = JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
+    val labelUpdate =
+        JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
+    val labelUpdateVersion =
+        JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
     val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
