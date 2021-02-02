@@ -1,18 +1,21 @@
+import org.apache.maven.artifact.versioning.ComparableVersion
 import java.awt.Rectangle
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.*
+import java.net.URL
 import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
 import javax.swing.JFileChooser
 import javax.swing.SwingWorker
 import javax.swing.filechooser.FileNameExtensionFilter
+import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
-var arrayList = emptyArray<String>()
+var arrayList = java.util.ArrayList<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
 var selectedFilePath = ""
@@ -87,6 +90,7 @@ val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux
 val programBuildDate = getProgramBuildTime()
 const val programVersion = "1.0.0"
 var programVersionLatest = programVersion
+val appProp = Properties()
 open class AndroidTool : Command(){
     init {
         AndroidToolUI()
@@ -215,7 +219,7 @@ open class AndroidTool : Command(){
                     }
                     class MyWorker : SwingWorker<Unit, Int>() {
                         override fun doInBackground() {
-                            arrayList = emptyArray()
+                            arrayList.clear()
                             Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
                             val builderList = when {
                                 radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
@@ -663,8 +667,9 @@ open class AndroidTool : Command(){
                     override fun doInBackground() {
                         buttonCheck.isEnabled = false
                         textFieldIPa.isFocusable = true
-                        arrayList = emptyArray()
+                        arrayList.clear()
                         listModel.removeAllElements()
+                        apps.clear()
                         val reader = when {
                             radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
                             radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
@@ -675,7 +680,10 @@ open class AndroidTool : Command(){
                         for(element in reader){
                             if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
                                 if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                    arrayList += element.substring(8)
+                                    arrayList.add(if (appProp.getProperty(element.substring(8)) != null)
+                                        "${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
+                                    else
+                                        element.substring(8))
                                 }
                             }
                         }
@@ -685,6 +693,7 @@ open class AndroidTool : Command(){
                             listModel.addElement(element)
                             apps.add(element)
                         }
+                        list.model = listModel
                     }
                     override fun done() {
                         buttonCheck.isEnabled = true
@@ -878,6 +887,8 @@ open class AndroidTool : Command(){
             labelIP.isVisible = true
 
             frame.isVisible = true
+
+            appProp.load(AndroidTool::class.java.getResource("applist.properties").openStream())
 
             sdkCheck()
             Thread {
