@@ -88,7 +88,7 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-const val programVersion = "1.0.0"
+const val programVersion = "1.1.0-beta3"
 var programVersionLatest = programVersion
 val appProp = Properties()
 open class AndroidTool : Command(){
@@ -665,6 +665,7 @@ open class AndroidTool : Command(){
             buttonCheck.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
+                        val items: DefaultListModel<Any?> = DefaultListModel()
                         buttonCheck.isEnabled = false
                         textFieldIPa.isFocusable = true
                         arrayList.clear()
@@ -690,9 +691,10 @@ open class AndroidTool : Command(){
                         arrayList.sort()
                         buttonCheck.isEnabled = true
                         for (element in arrayList) {
-                            listModel.addElement(element)
+                            items.addElement(element)
                             apps.add(element)
                         }
+                        listModel = items
                         list.model = listModel
                     }
                     override fun done() {
