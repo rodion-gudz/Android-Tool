@@ -1,11 +1,9 @@
-import org.apache.maven.artifact.versioning.ComparableVersion
 import java.awt.Rectangle
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.*
-import java.net.URL
 import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
@@ -78,8 +76,8 @@ var FirstAdbConnection = true
 var functionButtonStart = true
 var ifStopSelected = false
 var logsWorking: Boolean = false
-var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/check.png"))
-var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/not.png"))
+var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/connectionSucces.png"))
+var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/connectionFailed.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")

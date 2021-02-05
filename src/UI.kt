@@ -4,7 +4,6 @@ import java.awt.Component
 import java.awt.Desktop
 import java.awt.Rectangle
 import java.awt.event.*
-import java.io.IOException
 import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.URI
@@ -126,7 +125,7 @@ open class AndroidToolUI {
     var labelTCPConnection = JLabel("Not connected")
     var labelUSBConnection = JLabel("Not connected")
     var textFieldIPa = JTextField("")
-    val labelICon = JLabel(ImageIcon(this::class.java.getResource("/icon/sa.png")))
+    val labelICon = JLabel(ImageIcon(this::class.java.getResource("/icon/searchIcon.png")))
     val list = JList(listModel)
     var scrollPaneLogs = JScrollPane()
     var listLogs = JList(listModelLogs)
@@ -158,7 +157,7 @@ open class AndroidToolUI {
     val labelUnauthorized =
         JLabel("<html><font size='4'>Please check the box <strong>\"Always allow from this computer\"</strong><br>and click <strong>\"Allow\"</strong> on your device</font></html>")
     val labelSample = JLabel("Sample:")
-    val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/una.png")))
+    val labelScreenshotUnauthorized = JLabel(ImageIcon(this::class.java.getResource("/icon/unathorized.png")))
     val dialogMultipleDevice = JDialog(frame, "Multiple devices connected", true)
     val dialogSdkDownload = JDialog(frame, "No SDK found!", true)
     val dialogUpdate = JDialog(frame, "Version $programVersionLatest available!", true)
@@ -1091,7 +1090,7 @@ open class AndroidToolUI {
         frame.layout = null
         frame.isResizable = false
         frame.setLocationRelativeTo(null)
-        frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/frameIcon.png")).image
+        frame.iconImage = ImageIcon(this.javaClass.getResource("/icon/appIcon.png")).image
 
 
         fastbootPanel.layout = null
