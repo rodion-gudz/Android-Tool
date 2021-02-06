@@ -1,16 +1,21 @@
 import com.formdev.flatlaf.FlatDarculaLaf
-import java.awt.Color
-import java.awt.Component
-import java.awt.Desktop
-import java.awt.Rectangle
 import java.awt.event.*
 import java.net.DatagramSocket
 import java.net.InetAddress
-import java.net.URI
+import java.net.*
 import javax.swing.*
 import javax.swing.border.TitledBorder
 import javax.swing.UIManager
-import java.awt.Insets
+import kotlin.system.exitProcess
+import java.awt.*
+import java.net.URL
+import javax.swing.ImageIcon
+
+
+
+
+
+
 
 
 open class AndroidToolUI {
@@ -25,6 +30,7 @@ open class AndroidToolUI {
         JDialog.setDefaultLookAndFeelDecorated(true)
         UIManager.put("ScrollBar.thumbArc", 999)
         UIManager.put("ScrollBar.thumbInsets", Insets(2, 2, 2, 2))
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
     }
 
     val frame = JFrame("Android Tool")
@@ -324,36 +330,36 @@ open class AndroidToolUI {
     val buttonInstallZip = JButton("Install")
     val buttonGetLogs = JButton("Save logs")
 
-    //    val menuBar = JMenuBar()
-//    val fileMenu = JMenu("Program")
+        val menuBar = JMenuBar()
+    val fileMenu = JMenu("Program")
 //    val settingsMenu = JMenuItem("Settings")
-//    val aboutItem = JMenuItem("About")
-//    val exitItem = JMenuItem("Exit")
+    val aboutItem = JMenuItem("About")
+    val exitItem = JMenuItem("Exit")
     init {
 //        settingsMenu.addActionListener {
 //
 //        }
 //        fileMenu.add(settingsMenu)
-//
-//
-//        fileMenu.add(aboutItem)
-//
-//        aboutItem.addActionListener {
-//
-//        }
-//
-//        fileMenu.addSeparator()
-//
-//
-//        fileMenu.add(exitItem)
-//
-//        exitItem.addActionListener {
-//            Runtime.getRuntime().exec("adb kill-server")
-//            exitProcess(0) }
-//
-//        menuBar.add(fileMenu)
-//
-//        frame.jMenuBar = menuBar
+
+
+        fileMenu.add(aboutItem)
+
+        aboutItem.addActionListener {
+            AboutDialog.main()
+        }
+
+        fileMenu.addSeparator()
+
+
+        fileMenu.add(exitItem)
+
+        exitItem.addActionListener {
+            Runtime.getRuntime().exec("adb kill-server")
+            exitProcess(0) }
+
+        menuBar.add(fileMenu)
+
+        frame.jMenuBar = menuBar
         buttonInstallZip.bounds = Rectangle(5, 25, 285, 50)
         buttonInstallZip.isFocusable = false
         recoveryPanel.add(buttonInstallZip)
