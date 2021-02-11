@@ -354,7 +354,7 @@ open class AndroidToolUI {
         fileMenu.add(exitItem)
 
         exitItem.addActionListener {
-            Runtime.getRuntime().exec("adb kill-server")
+            Command().exec("adb", "kill-server")
             exitProcess(0) }
 
         menuBar.add(fileMenu)

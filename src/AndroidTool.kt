@@ -13,6 +13,9 @@ import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
+
+
+
 var arrayList = java.util.ArrayList<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
@@ -86,7 +89,7 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-const val programVersion = "1.1.0-beta4"
+const val programVersion = "1.1.0-beta5"
 var programVersionLatest = programVersion
 val appProp = Properties()
 open class AndroidTool : Command(){
@@ -137,9 +140,6 @@ open class AndroidTool : Command(){
                         buttonSave.isEnabled = true
                     }
                 }
-
-                val worker = MyWorker()
-                worker.execute()
             }
             buttonSdkDownload.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
