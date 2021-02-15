@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Intellij Forms" type="repository">
+    <properties maven-id="com.intellij:forms_rt:LATEST" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/forms_rt-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/bcel-5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/regexp-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jdom-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

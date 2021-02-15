@@ -8,7 +8,6 @@ import javax.swing.border.TitledBorder
 import javax.swing.UIManager
 import kotlin.system.exitProcess
 import java.awt.*
-import java.net.URL
 import javax.swing.ImageIcon
 
 
@@ -124,14 +123,15 @@ open class AndroidToolUI {
     val labelUSB = JLabel("USB:")
     val labelTCP = JLabel("TCP/IP:")
     val logsPanel = JPanel()
+    val consolePanel = JPanel()
     val tabbedpane = JTabbedPane()
     var textFieldIP = JTextField("")
     var buttonIpConnect = JButton("Connect")
     var labelConnect = JLabel("")
     var labelTCPConnection = JLabel("Not connected")
     var labelUSBConnection = JLabel("Not connected")
-    var textFieldIPa = JTextField("")
-    val labelICon = JLabel(ImageIcon(this::class.java.getResource("/icon/searchIcon.png")))
+    var searchTextField = JTextField("")
+    val searchIcon = JLabel(ImageIcon(this::class.java.getResource("/icon/searchIcon.png")))
     val list = JList(listModel)
     var scrollPaneLogs = JScrollPane()
     var listLogs = JList(listModelLogs)
@@ -141,10 +141,6 @@ open class AndroidToolUI {
     val buttonRecoveryReboot = JButton("Reboot to Recovery")
     val buttonFastbootReboot = JButton("Reboot to Fastboot")
     val buttonPowerOff = JButton("Shutdown")
-    val textAreaCommandFastbootInput = JTextArea("")
-    val scroll24 = JScrollPane(textAreaCommandFastbootInput)
-    val textAreaCommandFastbootOutput = JTextArea("")
-    val scroll2 = JScrollPane(textAreaCommandFastbootOutput)
     val textAreaCommandInput = JTextArea("")
     val scroll23 = JScrollPane(textAreaCommandInput)
     val textAreaCommandOutput = JTextArea("")
@@ -174,7 +170,6 @@ open class AndroidToolUI {
         JLabel("<html><font size='4'>Android-Tool update available, please click button to update</font></html>")
     val labelUpdateVersion =
         JLabel("<html><font size='4'><b>Current version:</b> $programVersion <br> <b>Latest:</b> $programVersionLatest</font></html>")
-    val textAreaInput = JTextField("You can enter app package here")
     val labelInstallAll = JLabel("Install all APK in the folder")
     val labelInstallOne = JLabel("Install one APK")
     val labelSelectedOne = JLabel("Selected: -")
@@ -300,24 +295,25 @@ open class AndroidToolUI {
     val buttonANXDownload = JButton("Download")
     val buttonStart = JButton("Start")
     val buttonChooseOne = JButton("Select APK")
-    val buttonCheck = JButton("Get list of packages")
-    val buttonEnable = JButton("Enable")
-    val buttonUninstall = JButton("Uninstall")
-    val buttonDisable = JButton("Disable")
+    val refreshButton = JButton("Refresh")
+    val enableButton = JButton("Enable")
+    val uninstallButton = JButton("Uninstall")
+    val disableButton = JButton("Disable")
+    val clearButton = JButton("Clear data")
+    val forceStopButton = JButton("Force stop")
+    val openButton = JButton("Open")
     val buttonInstallOne = JButton("Install")
     val buttonChoseAll = JButton("Select Folder")
     val buttonRunCommand = JButton("Run")
+    val openConsole = JButton("Open system terminal")
     val labelErase = JLabel("Erase partition")
     val labelInstallRecovery = JLabel("Install or boot recovery")
-    val labelEnterFastbootCommand = JLabel("Enter other command")
-    val labelOutputFastbootCommand = JLabel("Output:")
     val checkBoxPartitionBoot = JCheckBox("Boot")
     val checkBoxPartitionRadio = JCheckBox("Radio")
     val checkBoxPartitionRecovery = JCheckBox("Recovery")
     val checkBoxPartitionCache = JCheckBox("Cache")
     val checkBoxPartitionData = JCheckBox("Data")
     val checkBoxPartitionSystem = JCheckBox("System")
-    val buttonRunCommandFastboot = JButton("Run")
     val buttonErase = JButton("Erase")
     val buttonChoseRecovery = JButton("Select Recovery")
     val buttonInstallRecovery = JButton("Install")
@@ -357,7 +353,7 @@ open class AndroidToolUI {
             Command().exec("adb", "kill-server")
             exitProcess(0) }
 
-        menuBar.add(fileMenu)
+//        menuBar.add(fileMenu)
 
         frame.jMenuBar = menuBar
         buttonInstallZip.bounds = Rectangle(5, 25, 285, 50)
@@ -386,9 +382,6 @@ open class AndroidToolUI {
         buttonErase.bounds = Rectangle(300, 178, 137, 25)
         buttonErase.isFocusable = false
         fastbootPanel.add(buttonErase)
-        buttonRunCommandFastboot.bounds = Rectangle(173, 513, 140, 25)
-        buttonRunCommandFastboot.isFocusable = false
-        fastbootPanel.add(buttonRunCommandFastboot)
         checkBoxPartitionSystem.bounds = Rectangle(300, 30, 100, 20)
         fastbootPanel.add(checkBoxPartitionSystem)
 
@@ -411,12 +404,6 @@ open class AndroidToolUI {
 
         checkBoxPartitionRadio.bounds = Rectangle(300, 155, 100, 20)
         fastbootPanel.add(checkBoxPartitionRadio)
-        labelOutputFastbootCommand.bounds = Rectangle(317, 425, 250, 20)
-        fastbootPanel.add(labelOutputFastbootCommand)
-
-
-        labelEnterFastbootCommand.bounds = Rectangle(7, 425, 250, 20)
-        fastbootPanel.add(labelEnterFastbootCommand)
 
 
         labelInstallRecovery.bounds = Rectangle(7, 5, 250, 20)
@@ -427,7 +414,11 @@ open class AndroidToolUI {
         fastbootPanel.add(labelErase)
         buttonRunCommand.bounds = Rectangle(173, 513, 140, 25)
         buttonRunCommand.isFocusable = false
-        adbPanel.add(buttonRunCommand)
+        consolePanel.add(buttonRunCommand)
+
+        openConsole.bounds = Rectangle(7, 7, 140, 25)
+        openConsole.isFocusable = false
+        consolePanel.add(openConsole)
 
         buttonChoseAll.bounds = Rectangle(5, 80, 285, 50)
         buttonChoseAll.isFocusable = false
@@ -435,18 +426,27 @@ open class AndroidToolUI {
         buttonInstallOne.bounds = Rectangle(5, 200, 285, 50)
         buttonInstallOne.isFocusable = false
         adbPanel.add(buttonInstallOne)
-        buttonDisable.bounds = Rectangle(328, 320, 176, 50)
-        buttonDisable.isFocusable = false
-        adbPanel.add(buttonDisable)
-        buttonUninstall.bounds = Rectangle(513, 320, 176, 50)
-        buttonUninstall.isFocusable = false
-        adbPanel.add(buttonUninstall)
-        buttonEnable.bounds = Rectangle(698, 320, 180, 50)
-        buttonEnable.isFocusable = false
-        adbPanel.add(buttonEnable)
-        buttonCheck.bounds = Rectangle(328, 260, 270, 50)
-        buttonCheck.isFocusable = false
-        adbPanel.add(buttonCheck)
+        disableButton.bounds = Rectangle(328, 500, 180, 40)
+        disableButton.isFocusable = false
+        adbPanel.add(disableButton)
+        uninstallButton.bounds = Rectangle(513, 500, 180, 40)
+        uninstallButton.isFocusable = false
+        adbPanel.add(uninstallButton)
+        enableButton.bounds = Rectangle(698, 500, 180, 40)
+        enableButton.isFocusable = false
+        adbPanel.add(enableButton)
+        clearButton.bounds = Rectangle(328, 455, 180, 40)
+        clearButton.isFocusable = false
+        adbPanel.add(clearButton)
+        forceStopButton.bounds = Rectangle(513, 455, 180, 40)
+        forceStopButton.isFocusable = false
+        adbPanel.add(forceStopButton)
+        openButton.bounds = Rectangle(698, 455, 180, 40)
+        openButton.isFocusable = false
+        adbPanel.add(openButton)
+        refreshButton.bounds = Rectangle(328, 7, 110, 25)
+        refreshButton.isFocusable = false
+        adbPanel.add(refreshButton)
         buttonChooseOne.bounds = Rectangle(5, 255, 285, 50)
         buttonChooseOne.isFocusable = false
         adbPanel.add(buttonChooseOne)
@@ -938,7 +938,7 @@ open class AndroidToolUI {
         groupApps.add(radioButtonSystem)
 
 
-        radioButtonEnabled.bounds = Rectangle(658, 35, 100, 20)
+        radioButtonEnabled.bounds = Rectangle(658, 35, 105, 20)
         adbPanel.add(radioButtonEnabled)
         groupApps.add(radioButtonEnabled)
 
@@ -972,24 +972,11 @@ open class AndroidToolUI {
 
 
         labelEnterAdbCommand.bounds = Rectangle(7, 425, 250, 20)
-        adbPanel.add(labelEnterAdbCommand)
+        consolePanel.add(labelEnterAdbCommand)
 
 
         labelOutputAdbCommand.bounds = Rectangle(317, 425, 250, 20)
-        adbPanel.add(labelOutputAdbCommand)
-        textAreaInput.bounds = Rectangle(608, 263, 267, 45)
-        adbPanel.add(textAreaInput)
-        textAreaInput.addMouseListener(object : MouseAdapter() {
-            override fun mouseClicked(e: MouseEvent?) {
-                if (textAreaInput.isEnabled)
-                    textAreaInput.text = ""
-            }
-        })
-        textAreaInput.addFocusListener(object : FocusAdapter() {
-            override fun focusLost(e: FocusEvent?) {
-                textAreaInput.text = "You can enter app package here"
-            }
-        })
+        consolePanel.add(labelOutputAdbCommand)
         dialogUnauthorizedDevice.setSize(400, 330)
         dialogUnauthorizedDevice.isResizable = false
         dialogUnauthorizedDevice.layout = null
@@ -1312,6 +1299,7 @@ open class AndroidToolUI {
         frame.add(deviceConnection)
 
         adbPanel.layout = null
+        consolePanel.layout = null
 
 
         labelUSB.bounds = Rectangle(15, 16, 50, 20)
@@ -1522,17 +1510,17 @@ open class AndroidToolUI {
 
 
         scrollPane.setViewportView(list)
-        scrollPane.setBounds(328, 55, 550, 195)
+        scrollPane.setBounds(328, 55, 550, 395)
         adbPanel.add(scrollPane)
 
 
-        labelICon.bounds = Rectangle(330, 9, 20, 20)
-        adbPanel.add(labelICon)
+        searchIcon.bounds = Rectangle(450, 9, 20, 20)
+        adbPanel.add(searchIcon)
 
 
-        textFieldIPa.bounds = Rectangle(355, 7, 200, 25)
-        textFieldIPa.isFocusable = false
-        adbPanel.add(textFieldIPa)
+        searchTextField.bounds = Rectangle(475, 7, 400, 25)
+        searchTextField.isFocusable = false
+        adbPanel.add(searchTextField)
 
         labelUSBConnection.bounds = Rectangle(55, 17, 200, 21)
         labelUSBConnection.font = labelUSB.font.deriveFont(12.0f)
@@ -1599,27 +1587,15 @@ open class AndroidToolUI {
         buttonReboot.isEnabled = false
         deviceControlPanel.add(buttonReboot)
 
-
-        textAreaCommandFastbootInput.bounds = Rectangle(6, 445, 305, 65)
-
-        scroll24.setBounds(6, 445, 305, 65)
-        fastbootPanel.add(scroll24)
-
-
-        textAreaCommandFastbootOutput.bounds = Rectangle(315, 443, 560, 98)
-
-        scroll2.setBounds(315, 443, 560, 98)
-        fastbootPanel.add(scroll2)
-
         textAreaCommandInput.bounds = Rectangle(6, 445, 305, 65)
 
         scroll23.setBounds(6, 445, 305, 65)
-        adbPanel.add(scroll23)
+        consolePanel.add(scroll23)
 
         textAreaCommandOutput.bounds = Rectangle(315, 443, 560, 98)
 
         scroll.setBounds(315, 443, 560, 98)
-        adbPanel.add(scroll)
+        consolePanel.add(scroll)
 
         DatagramSocket().use { socket ->
             socket.connect(InetAddress.getByName("8.8.8.8"), 10002)
@@ -1633,6 +1609,7 @@ open class AndroidToolUI {
         tabbedpane.add("Logcat", logsPanel)
         tabbedpane.add("Fastboot", fastbootPanel)
         tabbedpane.add("Recovery", recoveryPanel)
+        tabbedpane.add("Console", consolePanel)
         tabbedpane.add("Links", linksPanel)
 
         val components: Array<Component> = fastbootPanel.components

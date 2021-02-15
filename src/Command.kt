@@ -11,6 +11,7 @@ import java.util.jar.JarFile
 import java.net.URISyntaxException
 import java.util.*
 import javax.swing.DefaultListModel
+import javax.swing.SwingWorker
 
 
 open class Command : AndroidToolUI() {
@@ -235,15 +236,14 @@ open class Command : AndroidToolUI() {
                         }
                     }
                 }
-                textAreaCommandFastbootOutput.isFocusable = false
                 textAreaCommandOutput.isFocusable = true
                 textAreaCommandInput.isFocusable = true
-                textAreaCommandFastbootInput.isFocusable = false
                 listLogs.isFocusable = true
                 list.isFocusable = true
 
                 if (newPhone) {
                     getProp()
+                    getListOfPackages()
                 }
 
                 if (ConnectedAdbUsb) {
@@ -292,10 +292,8 @@ open class Command : AndroidToolUI() {
                         component.isEnabled = false
                     }
                 }
-                textAreaCommandFastbootOutput.isFocusable = true
                 textAreaCommandOutput.isFocusable = false
                 textAreaCommandInput.isFocusable = false
-                textAreaCommandFastbootInput.isFocusable = true
                 listLogs.isFocusable = false
                 list.isFocusable = false
 
@@ -341,10 +339,8 @@ open class Command : AndroidToolUI() {
                         }
                     }
                 }
-                textAreaCommandFastbootOutput.isFocusable = false
                 textAreaCommandOutput.isFocusable = false
                 textAreaCommandInput.isFocusable = false
-                textAreaCommandFastbootInput.isFocusable = false
                 listLogs.isFocusable = false
                 list.isFocusable = false
 
@@ -571,10 +567,8 @@ open class Command : AndroidToolUI() {
         buttonRecoveryReboot.isEnabled = false
         buttonFastbootReboot.isEnabled = false
         buttonPowerOff.isEnabled = false
-        textAreaCommandFastbootOutput.isFocusable = false
         textAreaCommandOutput.isFocusable = false
         textAreaCommandInput.isFocusable = false
-        textAreaCommandFastbootInput.isFocusable = false
         listLogs.isFocusable = false
         list.isFocusable = false
         listModel.removeAllElements()
@@ -610,16 +604,61 @@ open class Command : AndroidToolUI() {
         labelVendorFSValue.text = "-"
         labelVendorCapacityValue.text = "-"
         labelAllCapacityValue.text = "-"
-        textFieldIPa.text = ""
-        textFieldIPa.isEnabled = false
+        searchTextField.text = ""
+        searchTextField.isEnabled = false
         buttonIpConnect.isEnabled = true
         labelIP.isEnabled = true
         textFieldIP.isEnabled = true
         labelUSBConnection.text = "Not connected"
         labelUSBConnection.icon = iconNo
     }
-}
+    fun getListOfPackages(button: Boolean = false){
+        class Worker : SwingWorker<Unit, Int>() {
+            override fun doInBackground() {
+                val items: DefaultListModel<Any?> = DefaultListModel()
+                if (button)
+                    refreshButton.isEnabled = false
+                searchTextField.isFocusable = true
+                arrayList.clear()
+                apps.clear()
+                val reader = when {
+                    radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
+                    radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
+                    radioButtonEnabled.isSelected -> execLines("adb shell pm list packages -e")
+                    radioButtonThird.isSelected -> execLines("adb shell pm list packages -3")
+                    else -> execLines("adb shell pm list packages")
+                }
+                for(element in reader){
+                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                        if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+                            arrayList.add(if (appProp.getProperty(element.substring(8)) != null)
+                                "${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
+                            else
+                                element.substring(8))
+                        }
+                    }
+                }
+                arrayList.sort()
+                if (button)
+                    refreshButton.isEnabled = true
+                listModel.removeAllElements()
+                for (element in arrayList) {
+                    if (searchTextField.text == "")
+                        items.addElement(element)
+                    apps.add(element)
+                }
+                listModel = items
+                list.model = listModel
+            }
 
+            override fun done() {
+                refreshButton.isEnabled = true
+                searchFilter(searchTextField.text)
+            }
+        }
+        Worker().execute()
+    }
+}
 fun getProgramBuildTime(): String {
     var d: Date? = null
     val currentClass = object : Any() {}.javaClass.enclosingClass

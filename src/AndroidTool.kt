@@ -101,9 +101,9 @@ open class AndroidTool : Command(){
         @JvmStatic
         fun main(args: Array<String>) {
 
-            textFieldIPa.addKeyListener(object : KeyAdapter() {
+            searchTextField.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(evt: KeyEvent) {
-                    searchFilter(textFieldIPa.text)
+                    searchFilter(searchTextField.text)
                 }
             })
             frame.addWindowListener(object : WindowAdapter() {
@@ -168,6 +168,21 @@ open class AndroidTool : Command(){
                     }
                 }
                 Worker().execute()
+            }
+            radioButtonAll.addActionListener {
+                getListOfPackages()
+            }
+            radioButtonDisabled.addActionListener {
+                getListOfPackages()
+            }
+            radioButtonEnabled.addActionListener {
+                getListOfPackages()
+            }
+            radioButtonSystem.addActionListener {
+                getListOfPackages()
+            }
+            radioButtonThird.addActionListener {
+                getListOfPackages()
             }
             buttonUpdate.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
@@ -306,6 +321,12 @@ open class AndroidTool : Command(){
                     override fun done() { buttonGetLogs.isEnabled = true }
                 }
                 Worker().execute()
+            }
+            openConsole.addActionListener {
+                if (Windows)
+                    Runtime.getRuntime().exec("cmd.exe /c cd C:\\")
+                else
+                    Runtime.getRuntime().exec("open -a Terminal $SdkDir")
             }
             buttonFastbootReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
@@ -605,101 +626,88 @@ open class AndroidTool : Command(){
                 }
                 Worker().execute()
             }
-            buttonDisable.addActionListener {
-                val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
-                    textAreaInput.text
-                } else {
-                    list.selectedValue.toString()
-                }
-
+            disableButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
-                        buttonDisable.isEnabled = false
+                        disableButton.isEnabled = false
                         exec("adb", "shell pm disable-user --user 0 $textInput")
                     }
                     override fun done() {
-                        buttonDisable.isEnabled = true
+                        disableButton.isEnabled = true
                     }
                 }
                 Worker().execute()
             }
-            buttonUninstall.addActionListener {
-                val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
-                    textAreaInput.text
-                } else {
-                    list.selectedValue.toString()
-                }
+            uninstallButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
 
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
-                        buttonUninstall.isEnabled = false
+                        uninstallButton.isEnabled = false
                         exec("adb", "shell pm uninstall --user 0 $textInput")
                     }
 
                     override fun done() {
-                        buttonUninstall.isEnabled = true
+                        uninstallButton.isEnabled = true
                     }
                 }
                 Worker().execute()
             }
-            buttonEnable.addActionListener {
-                val textInput: String = if (textAreaInput.text != "You can enter app package here" && textAreaInput.text != "") {
-                    textAreaInput.text
-                } else {
-                    list.selectedValue.toString()
-                }
-
+            enableButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
-                        buttonEnable.isEnabled = false
+                        enableButton.isEnabled = false
                         exec("adb", "shell pm enable $textInput")
                     }
                     override fun done() {
-                        buttonEnable.isEnabled = true
+                        enableButton.isEnabled = true
                     }
                 }
                 Worker().execute()
             }
-            buttonCheck.addActionListener {
+            clearButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
-                        val items: DefaultListModel<Any?> = DefaultListModel()
-                        buttonCheck.isEnabled = false
-                        textFieldIPa.isFocusable = true
-                        arrayList.clear()
-                        listModel.removeAllElements()
-                        apps.clear()
-                        val reader = when {
-                            radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
-                            radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
-                            radioButtonEnabled.isSelected -> execLines("adb shell pm list packages -e")
-                            radioButtonThird.isSelected -> execLines("adb shell pm list packages -3")
-                            else -> execLines("adb shell pm list packages")
-                        }
-                        for(element in reader){
-                            if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
-                                if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-                                    arrayList.add(if (appProp.getProperty(element.substring(8)) != null)
-                                        "${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
-                                    else
-                                        element.substring(8))
-                                }
-                            }
-                        }
-                        arrayList.sort()
-                        buttonCheck.isEnabled = true
-                        for (element in arrayList) {
-                            items.addElement(element)
-                            apps.add(element)
-                        }
-                        listModel = items
-                        list.model = listModel
+                        clearButton.isEnabled = false
+                        exec("adb", "shell pm clear $textInput")
                     }
                     override fun done() {
-                        buttonCheck.isEnabled = true
+                        clearButton.isEnabled = true
                     }
                 }
                 Worker().execute()
+            }
+            openButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        openButton.isEnabled = false
+                        exec("adb", "shell monkey -p $textInput 1")
+                    }
+                    override fun done() {
+                        openButton.isEnabled = true
+                    }
+                }
+                Worker().execute()
+            }
+            forceStopButton.addActionListener {
+                val textInput = list.selectedValue.toString().substringBefore("(")
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        forceStopButton.isEnabled = false
+                        exec("adb", "shell am force-stop $textInput")
+                    }
+                    override fun done() {
+                        forceStopButton.isEnabled = true
+                    }
+                }
+                Worker().execute()
+            }
+            refreshButton.addActionListener {
+                getListOfPackages(true)
             }
             buttonChooseOne.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
@@ -747,19 +755,6 @@ open class AndroidTool : Command(){
                     }
                     override fun done() {
                         buttonRunCommand.isEnabled = true
-                    }
-                }
-                Worker().execute()
-            }
-            buttonRunCommandFastboot.addActionListener {
-                class Worker : SwingWorker<Unit, Int>() {
-                    override fun doInBackground() {
-                        buttonRunCommandFastboot.isEnabled = false
-                        textAreaCommandFastbootOutput.text = exec("fastboot", textAreaCommandFastbootInput.text, output = true)
-                    }
-
-                    override fun done() {
-                        buttonRunCommandFastboot.isEnabled = true
                     }
                 }
                 Worker().execute()
