@@ -89,7 +89,7 @@ val userFolder = System.getProperty("user.home").toString()
 var SdkDir = userFolder + if (Windows) { "\\.android_tool\\SDK-Tools\\"} else if (Linux) { "/.android_tool/SDK-Tools/" } else { "/.android_tool/SDK-Tools/"}
 val ProgramDir = userFolder + if (Windows) { "\\.android_tool\\"} else if (Linux) { "/.android_tool/" } else { "/.android_tool/"}
 val programBuildDate = getProgramBuildTime()
-const val programVersion = "1.1.0-beta5"
+const val programVersion = "1.1.0-rc"
 var programVersionLatest = programVersion
 val appProp = Properties()
 open class AndroidTool : Command(){
@@ -324,7 +324,7 @@ open class AndroidTool : Command(){
             }
             openConsole.addActionListener {
                 if (Windows)
-                    Runtime.getRuntime().exec("cmd.exe /c cd C:\\")
+                    Runtime.getRuntime().exec("cmd /c start cd $SdkDir")
                 else
                     Runtime.getRuntime().exec("open -a Terminal $SdkDir")
             }
@@ -751,7 +751,12 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRunCommand.isEnabled = false
-                        textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
+                        val command = textAreaCommandInput.text
+                        when {
+                            "adb" in command -> textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text.substring(4), output = true)
+                            "fastboot" in command -> textAreaCommandOutput.text = exec("fastboot", textAreaCommandInput.text.substring(9), output = true)
+                            else -> textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
+                        }
                     }
                     override fun done() {
                         buttonRunCommand.isEnabled = true

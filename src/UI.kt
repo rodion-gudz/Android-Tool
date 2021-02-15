@@ -174,8 +174,6 @@ open class AndroidToolUI {
     val labelInstallOne = JLabel("Install one APK")
     val labelSelectedOne = JLabel("Selected: -")
     val labelSelectedAll = JLabel("Selected: -")
-    val labelOutputAdbCommand = JLabel("Output:")
-    val labelEnterAdbCommand = JLabel("Enter other command")
     val groupApps = ButtonGroup()
     val radioButtonAll = JRadioButton("All apps", true)
     val radioButtonDisabled = JRadioButton("Disabled apps", false)
@@ -412,11 +410,11 @@ open class AndroidToolUI {
 
         labelErase.bounds = Rectangle(300, 5, 250, 20)
         fastbootPanel.add(labelErase)
-        buttonRunCommand.bounds = Rectangle(173, 513, 140, 25)
+        buttonRunCommand.bounds = Rectangle(170, 75, 140, 25)
         buttonRunCommand.isFocusable = false
         consolePanel.add(buttonRunCommand)
 
-        openConsole.bounds = Rectangle(7, 7, 140, 25)
+        openConsole.bounds = Rectangle(7, 500, 200, 40)
         openConsole.isFocusable = false
         consolePanel.add(openConsole)
 
@@ -970,13 +968,6 @@ open class AndroidToolUI {
         labelSelectedAll.bounds = Rectangle(7, 115, 250, 50)
         adbPanel.add(labelSelectedAll)
 
-
-        labelEnterAdbCommand.bounds = Rectangle(7, 425, 250, 20)
-        consolePanel.add(labelEnterAdbCommand)
-
-
-        labelOutputAdbCommand.bounds = Rectangle(317, 425, 250, 20)
-        consolePanel.add(labelOutputAdbCommand)
         dialogUnauthorizedDevice.setSize(400, 330)
         dialogUnauthorizedDevice.isResizable = false
         dialogUnauthorizedDevice.layout = null
@@ -1587,14 +1578,14 @@ open class AndroidToolUI {
         buttonReboot.isEnabled = false
         deviceControlPanel.add(buttonReboot)
 
-        textAreaCommandInput.bounds = Rectangle(6, 445, 305, 65)
+        textAreaCommandInput.bounds = Rectangle(6, 5, 305, 65)
 
-        scroll23.setBounds(6, 445, 305, 65)
+        scroll23.setBounds(6, 5, 305, 65)
         consolePanel.add(scroll23)
 
-        textAreaCommandOutput.bounds = Rectangle(315, 443, 560, 98)
+        textAreaCommandOutput.bounds = Rectangle(315, 5, 560, 400)
 
-        scroll.setBounds(315, 443, 560, 98)
+        scroll.setBounds(315, 5, 560, 400)
         consolePanel.add(scroll)
 
         DatagramSocket().use { socket ->
