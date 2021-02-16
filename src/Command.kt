@@ -217,24 +217,13 @@ open class Command : AndroidToolUI() {
                 }
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
-                    val components: Array<Component> = fastbootPanel.components
-                    for (component in components) {
+                    val disableComponents: Array<Component> = fastbootPanel.components + recoveryPanel.components
+                    for (component in disableComponents)
                         component.isEnabled = false
-                    }
-                    val components4: Array<Component> = recoveryPanel.components
-                    for (component in components4) {
-                        component.isEnabled = false
-                    }
-                    val components2: Array<Component> = adbPanel.components
-                    for (component in components2) {
-                        component.isEnabled = true
-                    }
-                    val components3: Array<Component> = logsPanel.components
-                    for (component in components3) {
-                        if (component != buttonStop && component != buttonSave) {
+                    val enableComponents: Array<Component> = adbPanel.components + consolePanel.components + logsPanel.components
+                    for (component in enableComponents)
+                        if (component != buttonStop && component != buttonSave)
                             component.isEnabled = true
-                        }
-                    }
                 }
                 textAreaCommandOutput.isFocusable = true
                 textAreaCommandInput.isFocusable = true
@@ -275,22 +264,13 @@ open class Command : AndroidToolUI() {
                 }
                 buttonIpConnect.isEnabled = false
                 if (enabledAll) {
-                    val components: Array<Component> = fastbootPanel.components
-                    for (component in components) {
-                        component.isEnabled = true
-                    }
-                    val components2: Array<Component> = adbPanel.components
-                    for (component in components2) {
+                    val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + recoveryPanel.components
+                    for (component in disableComponents)
                         component.isEnabled = false
-                    }
-                    val components4: Array<Component> = recoveryPanel.components
-                    for (component in components4) {
-                        component.isEnabled = false
-                    }
-                    val components3: Array<Component> = logsPanel.components
-                    for (component in components3) {
-                        component.isEnabled = false
-                    }
+                    val enableComponents: Array<Component> = fastbootPanel.components + consolePanel.components
+                    for (component in enableComponents)
+                        if (component != buttonStop && component != buttonSave)
+                            component.isEnabled = true
                 }
                 textAreaCommandOutput.isFocusable = false
                 textAreaCommandInput.isFocusable = false
@@ -320,24 +300,13 @@ open class Command : AndroidToolUI() {
                 frame.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
-                    val components: Array<Component> = fastbootPanel.components
-                    for (component in components) {
+                    val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + fastbootPanel.components
+                    for (component in disableComponents)
                         component.isEnabled = false
-                    }
-                    val components2: Array<Component> = adbPanel.components
-                    for (component in components2) {
-                        component.isEnabled = false
-                    }
-                    val components4: Array<Component> = recoveryPanel.components
-                    for (component in components4) {
-                        component.isEnabled = true
-                    }
-                    val components3: Array<Component> = logsPanel.components
-                    for (component in components3) {
-                        if (component != buttonStop && component != buttonSave) {
-                            component.isEnabled = false
-                        }
-                    }
+                    val enableComponents: Array<Component> = recoveryPanel.components + consolePanel.components
+                    for (component in enableComponents)
+                        if (component != buttonStop && component != buttonSave)
+                            component.isEnabled = true
                 }
                 textAreaCommandOutput.isFocusable = false
                 textAreaCommandInput.isFocusable = false
@@ -545,28 +514,11 @@ open class Command : AndroidToolUI() {
     }
 
     private fun noConnection() {
-        val components: Array<Component> = fastbootPanel.components
-        for (component in components) {
-            component.isEnabled = false
-        }
-        val components2: Array<Component> = adbPanel.components
-        for (component in components2) {
-            component.isEnabled = false
-        }
-        val components4: Array<Component> = recoveryPanel.components
-        for (component in components4) {
-            component.isEnabled = false
-        }
-        val components3: Array<Component> = logsPanel.components
-        for (component in components3) {
-            if (component != buttonStop && component != buttonSave) {
+        val components: Array<Component> = fastbootPanel.components + adbPanel.components + logsPanel.components + consolePanel.components
+        for (component in components)
+            if (component != buttonStop && component != buttonSave)
                 component.isEnabled = false
-            }
-        }
-        buttonReboot.isEnabled = false
-        buttonRecoveryReboot.isEnabled = false
-        buttonFastbootReboot.isEnabled = false
-        buttonPowerOff.isEnabled = false
+
         textAreaCommandOutput.isFocusable = false
         textAreaCommandInput.isFocusable = false
         listLogs.isFocusable = false

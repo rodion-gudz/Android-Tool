@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.io.*
+import java.net.DatagramSocket
+import java.net.InetAddress
 import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
@@ -25,6 +27,7 @@ var selectedZipName = ""
 var listModel = DefaultListModel<Any?>()
 var listModelLogs = DefaultListModel<Any?>()
 var apps: ArrayList<Any> = ArrayList()
+var systemIP = ""
 var Manufacturer = ""
 var Brand = ""
 var Model = ""
@@ -601,11 +604,10 @@ open class AndroidTool : Command(){
                         }
                         paths = file.listFiles(fileNameFilter)
                         for (path in paths) {
-                            if (Windows) {
+                            if (Windows)
                                 exec("adb", "install \"$path\"")
-                            } else {
+                            else
                                 exec("adb", "install $path")
-                            }
                         }
                     }
                     override fun done() { buttonInstallAll.isEnabled = true }
@@ -768,24 +770,18 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonErase.isEnabled = false
-                        if (checkBoxPartitionBoot.isSelected) {
+                        if (checkBoxPartitionBoot.isSelected)
                             exec("fastboot", "erase boot")
-                        }
-                        if (checkBoxPartitionSystem.isSelected) {
+                        if (checkBoxPartitionSystem.isSelected)
                             exec("fastboot", "erase system")
-                        }
-                        if (checkBoxPartitionData.isSelected) {
+                        if (checkBoxPartitionData.isSelected)
                             exec("fastboot", "erase userdata")
-                        }
-                        if (checkBoxPartitionCache.isSelected) {
+                        if (checkBoxPartitionCache.isSelected)
                             exec("fastboot", "erase cache")
-                        }
-                        if (checkBoxPartitionRecovery.isSelected) {
+                        if (checkBoxPartitionRecovery.isSelected)
                             exec("fastboot", "erase recovery")
-                        }
-                        if (checkBoxPartitionRadio.isSelected) {
+                        if (checkBoxPartitionRadio.isSelected)
                             exec("fastboot", "erase radio")
-                        }
                     }
                     override fun done() { buttonErase.isEnabled = true }
                 }
@@ -813,11 +809,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallRecovery.isEnabled = false
-                        if (Windows) {
+                        if (Windows)
                             exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
-                        } else {
+                        else
                             exec("fastboot", "flash recovery $selectedFileAbsolutePath")
-                        }
                     }
                     override fun done() { buttonInstallRecovery.isEnabled = true }
                 }
@@ -827,11 +822,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonBootToRecovery.isEnabled = false
-                        if (Windows) {
+                        if (Windows)
                             exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
-                        } else {
+                        else
                             exec("fastboot", "boot $selectedFileAbsolutePath")
-                        }
                     }
                     override fun done() { buttonBootToRecovery.isEnabled = true }
                 }
@@ -889,6 +883,15 @@ open class AndroidTool : Command(){
             frame.isVisible = true
 
             appProp.load(AndroidTool::class.java.getResource("applist.properties").openStream())
+
+            DatagramSocket().use { socket ->
+                socket.connect(InetAddress.getByName("8.8.8.8"), 10002)
+                systemIP = "${socket.localAddress.hostAddress.substringBeforeLast('.')}."
+            }
+            try {
+                textFieldIP.text = systemIP
+            } catch (e: Exception) {
+            }
 
             sdkCheck()
             Thread {

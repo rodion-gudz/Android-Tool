@@ -33,7 +33,6 @@ open class AndroidToolUI {
     }
 
     val frame = JFrame("Android Tool")
-    private var sdf = ""
     var labelManufacturerValue = JLabel("-")
     var labelBrandValue = JLabel("-")
     var labelModelValue = JLabel("-")
@@ -1588,14 +1587,6 @@ open class AndroidToolUI {
         scroll.setBounds(315, 5, 560, 400)
         consolePanel.add(scroll)
 
-        DatagramSocket().use { socket ->
-            socket.connect(InetAddress.getByName("8.8.8.8"), 10002)
-            sdf = "${socket.localAddress.hostAddress.substringBeforeLast('.')}."
-        }
-        try {
-            textFieldIP.text = sdf
-        } catch (e: Exception) {
-        }
         tabbedpane.add("App Manager", adbPanel)
         tabbedpane.add("Logcat", logsPanel)
         tabbedpane.add("Fastboot", fastbootPanel)
@@ -1603,22 +1594,10 @@ open class AndroidToolUI {
         tabbedpane.add("Console", consolePanel)
         tabbedpane.add("Links", linksPanel)
 
-        val components: Array<Component> = fastbootPanel.components
-        for (component in components) {
+        val components: Array<Component> = fastbootPanel.components + adbPanel.components + logsPanel.components + recoveryPanel.components + consolePanel.components
+        for (component in components)
             component.isEnabled = false
-        }
-        val components2: Array<Component> = adbPanel.components
-        for (component in components2) {
-            component.isEnabled = false
-        }
-        val components3: Array<Component> = logsPanel.components
-        for (component in components3) {
-            component.isEnabled = false
-        }
-        val components4: Array<Component> = recoveryPanel.components
-        for (component in components4) {
-            component.isEnabled = false
-        }
+
         frame.add(tabbedpane)
     }
 
