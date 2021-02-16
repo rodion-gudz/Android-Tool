@@ -82,7 +82,7 @@ var FirstAdbConnection = true
 var functionButtonStart = true
 var ifStopSelected = false
 var logsWorking: Boolean = false
-var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/connectionSucces.png"))
+var iconYes = ImageIcon(AndroidTool()::class.java.getResource("/icon/connectionSuccess.png"))
 var iconNo = ImageIcon(AndroidTool()::class.java.getResource("/icon/connectionFailed.png"))
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
@@ -637,6 +637,7 @@ open class AndroidTool : Command(){
                     }
                     override fun done() {
                         disableButton.isEnabled = true
+                        getListOfPackages()
                     }
                 }
                 Worker().execute()
@@ -652,6 +653,7 @@ open class AndroidTool : Command(){
 
                     override fun done() {
                         uninstallButton.isEnabled = true
+                        getListOfPackages()
                     }
                 }
                 Worker().execute()
