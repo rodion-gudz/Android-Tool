@@ -7,9 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
-    <orderEntry type="library" name="FlatLaf-library" level="project" />
-    <orderEntry type="library" name="Maven-Artifact" level="project" />
-    <orderEntry type="library" name="Intellij Forms" level="project" />
+    <orderEntry type="library" exported="" name="KotlinJavaRuntime" level="project" />
+    <orderEntry type="library" exported="" name="FlatLaf-library" level="project" />
+    <orderEntry type="library" exported="" name="Maven-Artifact" level="project" />
+    <orderEntry type="library" exported="" name="Intellij Forms" level="project" />
   </component>
 </module>
