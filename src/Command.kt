@@ -158,37 +158,9 @@ open class Command : AndroidToolUI() {
         if (MultipleDevicesConnected) {
             dialogUnauthorizedDevice.dispose()
             if (!dialogMultipleDevice.isVisible) {
-                labelManufacturerValue.text = "-"
-                labelBrandValue.text = "-"
-                labelModelValue.text = "-"
-                labelCodenameValue.text = "-"
-                labelCPUValue.text = "-"
-                labelCPUAValue.text = "-"
-                labelSNValue.text = "-"
-                labelGsmOperatorValue.text = "-"
-                labelFingerprintValue.text = "-"
-                labelVersionReleaseValue.text = "-"
-                labelSDKValue.text = "-"
-                labelSecurityPatchValue.text = "-"
-                labelLanguageValue.text = "-"
-                labelSelinuxValue.text = "-"
-                labelTrebleValue.text = "-"
-                labelUnlockValue.text = "-"
-                labelFastbootCodenameValue.text = "-"
-                labelFastbootSNValue.text = "-"
-                labelSystemFSValue.text = "-"
-                labelSystemCapacityValue.text = "-"
-                labelDataFSValue.text = "-"
-                labelDataCapacityValue.text = "-"
-                labelBootFSValue.text = "-"
-                labelBootCapacityValue.text = "-"
-                labelRecoveryFSValue.text = "-"
-                labelRecoveryCapacityValue.text = "-"
-                labelCacheFSValue.text = "-"
-                labelCacheCapacityValue.text = "-"
-                labelVendorFSValue.text = "-"
-                labelVendorCapacityValue.text = "-"
-                labelAllCapacityValue.text = "-"
+                if(model.rowCount != 0)
+                    for (i in model.rowCount - 1 downTo 0)
+                        model.removeRow(i)
                 labelUSBConnection.text = "Not connected"
                 labelUSBConnection.icon = iconNo
                 labelTCPConnection.text = "Not connected"
@@ -369,21 +341,21 @@ open class Command : AndroidToolUI() {
         Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) lineValue14 else "-"
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
         Treble = if (lineValue15.isNotBlank()) lineValue15 else "-"
-        labelManufacturerValue.text = Manufacturer
-        labelBrandValue.text = Brand
-        labelModelValue.text = Model
-        labelCodenameValue.text = Codename
-        labelCPUValue.text = CPU
-        labelCPUAValue.text = CPUArch
-        labelSNValue.text = SN
-        labelGsmOperatorValue.text = GsmOperator
-        labelFingerprintValue.text = Fingerprint
-        labelVersionReleaseValue.text = VersionRelease
-        labelSDKValue.text = SDK
-        labelSecurityPatchValue.text = SecurityPatch
-        labelLanguageValue.text = Language
-        labelSelinuxValue.text = Selinux
-        labelTrebleValue.text = Treble
+        model.addRow(arrayOf("Manufacturer", Manufacturer))
+        model.addRow(arrayOf("Brand", Brand))
+        model.addRow(arrayOf("Model", Model))
+        model.addRow(arrayOf("Codename", Codename))
+        model.addRow(arrayOf("CPU", CPU))
+        model.addRow(arrayOf("CPUArch", CPUArch))
+        model.addRow(arrayOf("SN", SN))
+        model.addRow(arrayOf("GsmOperator", GsmOperator))
+        model.addRow(arrayOf("Fingerprint", Fingerprint))
+        model.addRow(arrayOf("VersionRelease", VersionRelease))
+        model.addRow(arrayOf("SDK", SDK))
+        model.addRow(arrayOf("SecurityPatch", SecurityPatch))
+        model.addRow(arrayOf("Language", Language))
+        model.addRow(arrayOf("Selinux", Selinux))
+        model.addRow(arrayOf("Treble", Treble))
     }
 
     private fun getPropRecovery() {
@@ -430,24 +402,24 @@ open class Command : AndroidToolUI() {
         MockLocation = if (lineValue16.isNotBlank()) { if (lineValue16 == "1") "true" else "false" } else "-"
         val lineValue19 = deviceProps.substringAfter("ro.build.id]: [").substringBefore(']')
         Language = if (lineValue19.isNotBlank()) lineValue19 else "-"
-        labelManufacturerValue.text = Manufacturer
-        labelBrandValue.text = Brand
-        labelModelValue.text = Model
-        labelCodenameValue.text = Codename
-        labelCPUValue.text = CPU
-        labelCPUAValue.text = CPUArch
-        labelSNValue.text = SN
-        labelGsmOperatorValue.text = GsmOperator
-        labelFingerprintValue.text = Fingerprint
-        labelVersionReleaseValue.text = VersionRelease
-        labelSDKValue.text = SDK
-        labelSecurityPatchValue.text = SecurityPatch
-        labelLanguageValue.text = Language
-        labelSelinuxValue.text = Selinux
-        labelTrebleValue.text = Treble
-        labelDeviceHostnameValue.text = DeviceHost
-        labelSecureBootValue.text = SecureBoot
-        labelLocationsValue.text = MockLocation
+        model.addRow(arrayOf("Manufacturer", Manufacturer))
+        model.addRow(arrayOf("Brand", Brand))
+        model.addRow(arrayOf("Model", Model))
+        model.addRow(arrayOf("Codename", Codename))
+        model.addRow(arrayOf("CPU", CPU))
+        model.addRow(arrayOf("CPUArch", CPUArch))
+        model.addRow(arrayOf("SN", SN))
+        model.addRow(arrayOf("GsmOperator", GsmOperator))
+        model.addRow(arrayOf("Fingerprint", Fingerprint))
+        model.addRow(arrayOf("VersionRelease", VersionRelease))
+        model.addRow(arrayOf("SDK", SDK))
+        model.addRow(arrayOf("SecurityPatch", SecurityPatch))
+        model.addRow(arrayOf("Language", Language))
+        model.addRow(arrayOf("Selinux", Selinux))
+        model.addRow(arrayOf("Treble", Treble))
+        model.addRow(arrayOf("DeviceHost", DeviceHost))
+        model.addRow(arrayOf("SecureBoot", SecureBoot))
+        model.addRow(arrayOf("MockLocation", MockLocation))
     }
 
     private fun getPropFastboot() {
@@ -474,22 +446,22 @@ open class Command : AndroidToolUI() {
         val vendorDec = fastbootProps.substringAfter("(bootloader) partition-size:vendor: 0x").substringBefore("(bootloader) ").trimMargin()
         VendorCapacity = (java.lang.Long.parseLong(vendorDec, 16) / 1048576).toString()
         AllCapacity = (SystemCapacity.toInt() + DataCapacity.toInt() + BootCapacity.toInt() + RecoveryCapacity.toInt() + CacheCapacity.toInt() + VendorCapacity.toInt()).toString()
-        labelUnlockValue.text = if (Unlock != "< waiting for any device >") Unlock else "-"
-        labelFastbootCodenameValue.text = if (FastbootCodename != "< waiting for any device >") FastbootCodename else "-"
-        labelFastbootSNValue.text = if (FastbootSN != "< waiting for any device >") FastbootSN else "-"
-        labelSystemFSValue.text = if (SystemFS != "< waiting for any device >") SystemFS else "-"
-        labelSystemCapacityValue.text = if (SystemCapacity != "< waiting for any device >") SystemCapacity else "-"
-        labelDataFSValue.text = if (DataFS != "< waiting for any device >") DataFS else "-"
-        labelDataCapacityValue.text = if (DataCapacity != "< waiting for any device >") DataCapacity else "-"
-        labelBootFSValue.text = if (BootFS != "< waiting for any device >") BootFS else "-"
-        labelBootCapacityValue.text = if (BootCapacity != "< waiting for any device >") BootCapacity else "-"
-        labelRecoveryFSValue.text = if (RecoveryFS != "< waiting for any device >") RecoveryFS else "-"
-        labelRecoveryCapacityValue.text = if (RecoveryCapacity != "< waiting for any device >") RecoveryCapacity else "-"
-        labelCacheFSValue.text = if (CacheFS != "< waiting for any device >") CacheFS else "-"
-        labelCacheCapacityValue.text = if (CacheCapacity != "< waiting for any device >") CacheCapacity else "-"
-        labelVendorFSValue.text = if (VendorFS != "< waiting for any device >") VendorFS else "-"
-        labelVendorCapacityValue.text = if (VendorCapacity != "< waiting for any device >") VendorCapacity else "-"
-        labelAllCapacityValue.text = if (AllCapacity != "< waiting for any device >") AllCapacity else "-"
+        model.addRow(arrayOf("Unlocked", if (Unlock != "< waiting for any device >") Unlock else "-"))
+        model.addRow(arrayOf("Codename", if (FastbootCodename != "< waiting for any device >") FastbootCodename else "-"))
+        model.addRow(arrayOf("Serial Number", if (FastbootSN != "< waiting for any device >") FastbootSN else "-"))
+        model.addRow(arrayOf("System FS", if (SystemFS != "< waiting for any device >") SystemFS else "-"))
+        model.addRow(arrayOf("SystemCapacity", if (SystemCapacity != "< waiting for any device >") SystemCapacity else "-"))
+        model.addRow(arrayOf("DataFS", if (DataFS != "< waiting for any device >") DataFS else "-"))
+        model.addRow(arrayOf("DataCapacity", if (DataCapacity != "< waiting for any device >") DataCapacity else "-"))
+        model.addRow(arrayOf("BootFS", if (BootFS != "< waiting for any device >") BootFS else "-"))
+        model.addRow(arrayOf("BootCapacity", if (BootCapacity != "< waiting for any device >") BootCapacity else "-"))
+        model.addRow(arrayOf("RecoveryFS", if (RecoveryFS != "< waiting for any device >") RecoveryFS else "-"))
+        model.addRow(arrayOf("RecoveryCapacity", if (RecoveryCapacity != "< waiting for any device >") RecoveryCapacity else "-"))
+        model.addRow(arrayOf("CacheFS", if (CacheFS != "< waiting for any device >") CacheFS else "-"))
+        model.addRow(arrayOf("CacheCapacity", if (CacheCapacity != "< waiting for any device >") CacheCapacity else "-"))
+        model.addRow(arrayOf("VendorFS", if (VendorFS != "< waiting for any device >") VendorFS else "-"))
+        model.addRow(arrayOf("VendorCapacity", if (VendorCapacity != "< waiting for any device >") VendorCapacity else "-"))
+        model.addRow(arrayOf("AllCapacity", if (AllCapacity != "< waiting for any device >") AllCapacity else "-"))
     }
 
     fun exec(app: String, command: String, output: Boolean = false, streamType: String = "Input"): String {
@@ -525,37 +497,9 @@ open class Command : AndroidToolUI() {
         list.isFocusable = false
         listModel.removeAllElements()
         listModelLogs.removeAllElements()
-        labelManufacturerValue.text = "-"
-        labelBrandValue.text = "-"
-        labelModelValue.text = "-"
-        labelCodenameValue.text = "-"
-        labelCPUValue.text = "-"
-        labelCPUAValue.text = "-"
-        labelSNValue.text = "-"
-        labelGsmOperatorValue.text = "-"
-        labelFingerprintValue.text = "-"
-        labelVersionReleaseValue.text = "-"
-        labelSDKValue.text = "-"
-        labelSecurityPatchValue.text = "-"
-        labelLanguageValue.text = "-"
-        labelSelinuxValue.text = "-"
-        labelTrebleValue.text = "-"
-        labelUnlockValue.text = "-"
-        labelFastbootCodenameValue.text = "-"
-        labelFastbootSNValue.text = "-"
-        labelSystemFSValue.text = "-"
-        labelSystemCapacityValue.text = "-"
-        labelDataFSValue.text = "-"
-        labelDataCapacityValue.text = "-"
-        labelBootFSValue.text = "-"
-        labelBootCapacityValue.text = "-"
-        labelRecoveryFSValue.text = "-"
-        labelRecoveryCapacityValue.text = "-"
-        labelCacheFSValue.text = "-"
-        labelCacheCapacityValue.text = "-"
-        labelVendorFSValue.text = "-"
-        labelVendorCapacityValue.text = "-"
-        labelAllCapacityValue.text = "-"
+        if(model.rowCount != 0)
+            for (i in 0 .. model.rowCount)
+                model.removeRow(i)
         searchTextField.text = ""
         searchTextField.isEnabled = false
         buttonIpConnect.isEnabled = true
