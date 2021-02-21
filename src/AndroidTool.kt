@@ -366,7 +366,7 @@ open class AndroidTool : Command(){
                 if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
                     if (!ConnectedViaAdb){
                         if(model.rowCount != 0)
-                            for (i in 0 .. model.rowCount)
+                            for (i in model.rowCount - 1 downTo 0)
                                 model.removeRow(i)
                     }else{
                         if(model.rowCount == 0) {
@@ -498,7 +498,15 @@ open class AndroidTool : Command(){
                         buttonPowerOff.isEnabled = false
                     }
                 }
-                else if (tabbedpane.selectedIndex == 4) {
+                else if (tabbedpane.selectedIndex == 3) {
+                    if(model.rowCount != 0)
+                        for (i in model.rowCount - 1 downTo 0)
+                            model.removeRow(i)
+                }
+                else if (tabbedpane.selectedIndex == 5) {
+                    if(model.rowCount != 0)
+                        for (i in model.rowCount - 1 downTo 0)
+                            model.removeRow(i)
                     contents.setBounds(5, 5, 310, 375)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)

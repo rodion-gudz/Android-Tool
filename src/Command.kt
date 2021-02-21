@@ -182,11 +182,6 @@ open class Command : AndroidToolUI() {
                     buttonRecoveryReboot.isEnabled = true
                     buttonFastbootReboot.isEnabled = true
                 }
-
-                if (FirstAdbConnection) {
-                    tabbedpane.selectedIndex = 0
-                    FirstAdbConnection = false
-                }
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
                     val disableComponents: Array<Component> = fastbootPanel.components + recoveryPanel.components
@@ -205,6 +200,10 @@ open class Command : AndroidToolUI() {
                 if (newPhone) {
                     getProp()
                     getListOfPackages()
+                }
+                if (FirstAdbConnection) {
+                    tabbedpane.selectedIndex = 0
+                    FirstAdbConnection = false
                 }
 
                 if (ConnectedAdbUsb) {
@@ -230,10 +229,7 @@ open class Command : AndroidToolUI() {
                     buttonRecoveryReboot.isEnabled = true
                     buttonFastbootReboot.isEnabled = true
                 }
-                if (FirstFastbootConnection) {
-                    tabbedpane.selectedIndex = 2
-                    FirstFastbootConnection = false
-                }
+
                 buttonIpConnect.isEnabled = false
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + recoveryPanel.components
@@ -254,6 +250,10 @@ open class Command : AndroidToolUI() {
                     labelUSBConnection.text = "Connected via Fastboot"
                     labelUSBConnection.icon = iconYes
                 }
+                if (FirstFastbootConnection) {
+                    tabbedpane.selectedIndex = 2
+                    FirstFastbootConnection = false
+                }
                 newPhone = false
                 enabledAll = false
             }
@@ -264,10 +264,7 @@ open class Command : AndroidToolUI() {
                     buttonFastbootReboot.isEnabled = true
                     buttonPowerOff.isEnabled = true
                 }
-                if (FirstRecoveryConnection) {
-                    tabbedpane.selectedIndex = 3
-                    FirstRecoveryConnection = false
-                }
+
                 buttonIpConnect.isEnabled = false
                 frame.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
@@ -289,6 +286,10 @@ open class Command : AndroidToolUI() {
                     getPropRecovery()
                     labelUSBConnection.text = "Connected via Adb"
                     labelUSBConnection.icon = iconYes
+                }
+                if (FirstRecoveryConnection) {
+                    tabbedpane.selectedIndex = 3
+                    FirstRecoveryConnection = false
                 }
                 newPhone = false
                 enabledAll = false
@@ -498,7 +499,7 @@ open class Command : AndroidToolUI() {
         listModel.removeAllElements()
         listModelLogs.removeAllElements()
         if(model.rowCount != 0)
-            for (i in 0 .. model.rowCount)
+            for (i in model.rowCount - 1 downTo 0)
                 model.removeRow(i)
         searchTextField.text = ""
         searchTextField.isEnabled = false
