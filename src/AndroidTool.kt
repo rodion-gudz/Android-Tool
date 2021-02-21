@@ -458,24 +458,26 @@ open class AndroidTool : Command(){
                             for (i in model.rowCount - 1 downTo 0)
                                 model.removeRow(i)
                     }else{
-                        model.addRow(arrayOf("Manufacturer", Manufacturer))
-                        model.addRow(arrayOf("Brand", Brand))
-                        model.addRow(arrayOf("Model", Model))
-                        model.addRow(arrayOf("Codename", Codename))
-                        model.addRow(arrayOf("CPU", CPU))
-                        model.addRow(arrayOf("CPUArch", CPUArch))
-                        model.addRow(arrayOf("SN", SN))
-                        model.addRow(arrayOf("GsmOperator", GsmOperator))
-                        model.addRow(arrayOf("Fingerprint", Fingerprint))
-                        model.addRow(arrayOf("VersionRelease", VersionRelease))
-                        model.addRow(arrayOf("SDK", SDK))
-                        model.addRow(arrayOf("SecurityPatch", SecurityPatch))
-                        model.addRow(arrayOf("Language", Language))
-                        model.addRow(arrayOf("Selinux", Selinux))
-                        model.addRow(arrayOf("Treble", Treble))
-                        model.addRow(arrayOf("DeviceHost", DeviceHost))
-                        model.addRow(arrayOf("SecureBoot", SecureBoot))
-                        model.addRow(arrayOf("MockLocation", MockLocation))
+                        if(model.rowCount == 0) {
+                            model.addRow(arrayOf("Manufacturer", Manufacturer))
+                            model.addRow(arrayOf("Brand", Brand))
+                            model.addRow(arrayOf("Model", Model))
+                            model.addRow(arrayOf("Codename", Codename))
+                            model.addRow(arrayOf("CPU", CPU))
+                            model.addRow(arrayOf("CPUArch", CPUArch))
+                            model.addRow(arrayOf("SN", SN))
+                            model.addRow(arrayOf("GsmOperator", GsmOperator))
+                            model.addRow(arrayOf("Fingerprint", Fingerprint))
+                            model.addRow(arrayOf("VersionRelease", VersionRelease))
+                            model.addRow(arrayOf("SDK", SDK))
+                            model.addRow(arrayOf("SecurityPatch", SecurityPatch))
+                            model.addRow(arrayOf("Language", Language))
+                            model.addRow(arrayOf("Selinux", Selinux))
+                            model.addRow(arrayOf("Treble", Treble))
+                            model.addRow(arrayOf("DeviceHost", DeviceHost))
+                            model.addRow(arrayOf("SecureBoot", SecureBoot))
+                            model.addRow(arrayOf("MockLocation", MockLocation))
+                        }
                     }
                     contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
@@ -554,11 +556,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallOne.isEnabled = false
-                        if (Windows) {
+                        if (Windows)
                             exec("adb", "install \"$selectedFileAbsolutePath\"")
-                        } else {
+                        else
                             exec("adb", "install $selectedFileAbsolutePath")
-                        }
                     }
                     override fun done() { buttonInstallOne.isEnabled = true }
                 }
