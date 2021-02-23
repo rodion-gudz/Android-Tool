@@ -95,6 +95,7 @@ val programBuildDate = getProgramBuildTime()
 const val programVersion = "1.1.0"
 var programVersionLatest = programVersion
 val appProp = Properties()
+
 open class AndroidTool : Command(){
     init {
         AndroidToolUI()
@@ -364,61 +365,29 @@ open class AndroidTool : Command(){
                 } catch (e: Exception) { }
                 if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
                     if (!ConnectedViaAdb){
-                        labelManufacturerValue.text = "-"
-                        labelBrandValue.text = "-"
-                        labelModelValue.text = "-"
-                        labelCodenameValue.text = "-"
-                        labelCPUValue.text = "-"
-                        labelCPUAValue.text = "-"
-                        labelSNValue.text = "-"
-                        labelGsmOperatorValue.text = "-"
-                        labelFingerprintValue.text = "-"
-                        labelVersionReleaseValue.text = "-"
-                        labelSDKValue.text = "-"
-                        labelSecurityPatchValue.text = "-"
-                        labelLanguageValue.text = "-"
-                        labelSelinuxValue.text = "-"
-                        labelTrebleValue.text = "-"
+                        if(model.rowCount != 0)
+                            for (i in model.rowCount - 1 downTo 0)
+                                model.removeRow(i)
                     }else{
-                        labelManufacturerValue.text = Manufacturer
-                        labelBrandValue.text = Brand
-                        labelModelValue.text = Model
-                        labelCodenameValue.text = Codename
-                        labelCPUValue.text = CPU
-                        labelCPUAValue.text = CPUArch
-                        labelSNValue.text = SN
-                        labelGsmOperatorValue.text = GsmOperator
-                        labelFingerprintValue.text = Fingerprint
-                        labelVersionReleaseValue.text = VersionRelease
-                        labelSDKValue.text = SDK
-                        labelSecurityPatchValue.text = SecurityPatch
-                        labelLanguageValue.text = Language
-                        labelSelinuxValue.text = Selinux
-                        labelTrebleValue.text = Treble
+                        if(model.rowCount == 0) {
+                            model.addRow(arrayOf("Manufacturer", Manufacturer))
+                            model.addRow(arrayOf("Brand", Brand))
+                            model.addRow(arrayOf("Model", Model))
+                            model.addRow(arrayOf("Codename", Codename))
+                            model.addRow(arrayOf("CPU", CPU))
+                            model.addRow(arrayOf("CPUArch", CPUArch))
+                            model.addRow(arrayOf("SN", SN))
+                            model.addRow(arrayOf("GsmOperator", GsmOperator))
+                            model.addRow(arrayOf("Fingerprint", Fingerprint))
+                            model.addRow(arrayOf("VersionRelease", VersionRelease))
+                            model.addRow(arrayOf("SDK", SDK))
+                            model.addRow(arrayOf("SecurityPatch", SecurityPatch))
+                            model.addRow(arrayOf("Language", Language))
+                            model.addRow(arrayOf("Selinux", Selinux))
+                            model.addRow(arrayOf("Treble", Treble))
+                        }
                     }
-                    labelGsmOperator.text = "Cellular provider:"
-                    labelGsmOperator.bounds = Rectangle(15, 156, 115, 20)
-                    labelGsmOperatorValue.bounds = Rectangle(130, 156, 155, 20)
-                    labelCPU.text = "CPU:"
-                    labelCPU.bounds = Rectangle(15, 96, 35, 20)
-                    labelCPUValue.bounds = Rectangle(55, 96, 230, 20)
-                    labelVersionRelease.text = "Android version:"
-                    labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
-                    labelLanguage.text = "Language:"
-                    labelLanguageValue.setBounds(85, 93, 195, 20)
-                    labelSecureBoot.isVisible = false
-                    labelDeviceHostname.isVisible = false
-                    labelLocations.isVisible = false
-                    labelSecureBootValue.isVisible = false
-                    labelDeviceHostnameValue.isVisible = false
-                    labelLocationsValue.isVisible = false
-                    boardInfoPanel.isVisible = true
-                    softInfoPanel.isVisible = true
-                    BootloaderFastbootInfoPanel.isVisible = false
-                    softFastbootInfoPanel.isVisible = false
-                    StorageFastbootInfoPanel.isVisible = false
-                    softInfoPanel.setBounds(10, 205, 290, 160)
-                    deviceInfoPanel.setBounds(5, 5, 310, 376)
+                    contents.setBounds(5, 5, 310, 375)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
                     labelTCP.isVisible = true
@@ -439,13 +408,31 @@ open class AndroidTool : Command(){
                         buttonPowerOff.isEnabled = false
                     }
                 } else if (tabbedpane.selectedIndex == 2) {
-                    boardInfoPanel.isVisible = false
-                    softInfoPanel.isVisible = false
-                    BootloaderFastbootInfoPanel.isVisible = true
-                    softFastbootInfoPanel.isVisible = true
-                    StorageFastbootInfoPanel.isVisible = true
-                    softInfoPanel.setBounds(10, 205, 290, 165)
-                    deviceInfoPanel.setBounds(5, 5, 310, 430)
+                    if (!ConnectedViaFastboot){
+                        if(model.rowCount != 0)
+                            for (i in model.rowCount - 1 downTo 0)
+                                model.removeRow(i)
+                    }else{
+                        if(model.rowCount == 0) {
+                            model.addRow(arrayOf("Unlocked", if (Unlock != "< waiting for any device >") Unlock else "-"))
+                            model.addRow(arrayOf("Codename", if (FastbootCodename != "< waiting for any device >") FastbootCodename else "-"))
+                            model.addRow(arrayOf("Serial Number", if (FastbootSN != "< waiting for any device >") FastbootSN else "-"))
+                            model.addRow(arrayOf("System FS", if (SystemFS != "< waiting for any device >") SystemFS else "-"))
+                            model.addRow(arrayOf("SystemCapacity", if (SystemCapacity != "< waiting for any device >") SystemCapacity else "-"))
+                            model.addRow(arrayOf("DataFS", if (DataFS != "< waiting for any device >") DataFS else "-"))
+                            model.addRow(arrayOf("DataCapacity", if (DataCapacity != "< waiting for any device >") DataCapacity else "-"))
+                            model.addRow(arrayOf("BootFS", if (BootFS != "< waiting for any device >") BootFS else "-"))
+                            model.addRow(arrayOf("BootCapacity", if (BootCapacity != "< waiting for any device >") BootCapacity else "-"))
+                            model.addRow(arrayOf("RecoveryFS", if (RecoveryFS != "< waiting for any device >") RecoveryFS else "-"))
+                            model.addRow(arrayOf("RecoveryCapacity", if (RecoveryCapacity != "< waiting for any device >") RecoveryCapacity else "-"))
+                            model.addRow(arrayOf("CacheFS", if (CacheFS != "< waiting for any device >") CacheFS else "-"))
+                            model.addRow(arrayOf("CacheCapacity", if (CacheCapacity != "< waiting for any device >") CacheCapacity else "-"))
+                            model.addRow(arrayOf("VendorFS", if (VendorFS != "< waiting for any device >") VendorFS else "-"))
+                            model.addRow(arrayOf("VendorCapacity", if (VendorCapacity != "< waiting for any device >") VendorCapacity else "-"))
+                            model.addRow(arrayOf("AllCapacity", if (AllCapacity != "< waiting for any device >") AllCapacity else "-"))
+                        }
+                    }
+                    contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
                     deviceConnection.setBounds(5, 525, 310, 50)
                     labelTCP.isVisible = false
@@ -467,67 +454,32 @@ open class AndroidTool : Command(){
                     }
                 } else if (tabbedpane.selectedIndex == 3) {
                     if (!ConnectedViaRecovery){
-                        labelManufacturerValue.text = "-"
-                        labelBrandValue.text = "-"
-                        labelModelValue.text = "-"
-                        labelCodenameValue.text = "-"
-                        labelCPUValue.text = "-"
-                        labelCPUAValue.text = "-"
-                        labelSNValue.text = "-"
-                        labelGsmOperatorValue.text = "-"
-                        labelFingerprintValue.text = "-"
-                        labelVersionReleaseValue.text = "-"
-                        labelSDKValue.text = "-"
-                        labelSecurityPatchValue.text = "-"
-                        labelLanguageValue.text = "-"
-                        labelSelinuxValue.text = "-"
-                        labelTrebleValue.text = "-"
-                        labelDeviceHostnameValue.text = "-"
-                        labelLocationsValue.text = "-"
-                        labelSecureBootValue.text = "-"
+                        if(model.rowCount != 0)
+                            for (i in model.rowCount - 1 downTo 0)
+                                model.removeRow(i)
                     }else{
-                        labelManufacturerValue.text = Manufacturer
-                        labelBrandValue.text = Brand
-                        labelModelValue.text = Model
-                        labelCodenameValue.text = Codename
-                        labelCPUValue.text = CPU
-                        labelCPUAValue.text = CPUArch
-                        labelSNValue.text = SN
-                        labelGsmOperatorValue.text = GsmOperator
-                        labelFingerprintValue.text = Fingerprint
-                        labelVersionReleaseValue.text = VersionRelease
-                        labelSDKValue.text = SDK
-                        labelSecurityPatchValue.text = SecurityPatch
-                        labelLanguageValue.text = Language
-                        labelSelinuxValue.text = Selinux
-                        labelTrebleValue.text = Treble
-                        labelDeviceHostnameValue.text = DeviceHost
-                        labelSecureBootValue.text = SecureBoot
-                        labelLocationsValue.text = MockLocation
+                        if(model.rowCount == 0) {
+                            model.addRow(arrayOf("Manufacturer", Manufacturer))
+                            model.addRow(arrayOf("Brand", Brand))
+                            model.addRow(arrayOf("Model", Model))
+                            model.addRow(arrayOf("Codename", Codename))
+                            model.addRow(arrayOf("CPU", CPU))
+                            model.addRow(arrayOf("CPUArch", CPUArch))
+                            model.addRow(arrayOf("SN", SN))
+                            model.addRow(arrayOf("GsmOperator", GsmOperator))
+                            model.addRow(arrayOf("Fingerprint", Fingerprint))
+                            model.addRow(arrayOf("VersionRelease", VersionRelease))
+                            model.addRow(arrayOf("SDK", SDK))
+                            model.addRow(arrayOf("SecurityPatch", SecurityPatch))
+                            model.addRow(arrayOf("Language", Language))
+                            model.addRow(arrayOf("Selinux", Selinux))
+                            model.addRow(arrayOf("Treble", Treble))
+                            model.addRow(arrayOf("DeviceHost", DeviceHost))
+                            model.addRow(arrayOf("SecureBoot", SecureBoot))
+                            model.addRow(arrayOf("MockLocation", MockLocation))
+                        }
                     }
-                    labelGsmOperator.text = "USB mode:"
-                    labelGsmOperator.bounds = Rectangle(15, 156, 75, 20)
-                    labelGsmOperatorValue.bounds = Rectangle(95, 156, 175, 20)
-                    labelCPU.text = "CPU vendor:"
-                    labelCPU.bounds = Rectangle(15, 96, 85, 20)
-                    labelVersionRelease.text = "Recovery version:"
-                    labelVersionReleaseValue.bounds = Rectangle(125, 34, 165, 20)
-                    labelCPUValue.bounds = Rectangle(105, 96, 280, 20)
-                    labelLanguage.text = "Build ID:"
-                    labelLanguageValue.setBounds(73, 93, 195, 20)
-                    labelSecureBoot.isVisible = true
-                    labelDeviceHostname.isVisible = true
-                    labelLocations.isVisible = true
-                    labelSecureBootValue.isVisible = true
-                    labelDeviceHostnameValue.isVisible = true
-                    labelLocationsValue.isVisible = true
-                    boardInfoPanel.isVisible = true
-                    softInfoPanel.isVisible = true
-                    BootloaderFastbootInfoPanel.isVisible = false
-                    softFastbootInfoPanel.isVisible = false
-                    StorageFastbootInfoPanel.isVisible = false
-                    softInfoPanel.setBounds(10, 205, 290, 215)
-                    deviceInfoPanel.setBounds(5, 5, 310, 430)
+                    contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
                     deviceConnection.setBounds(5, 525, 310, 50)
                     labelTCP.isVisible = false
@@ -548,32 +500,18 @@ open class AndroidTool : Command(){
                         buttonPowerOff.isEnabled = false
                     }
                 }
-                else if (tabbedpane.selectedIndex == 4) {
-                    boardInfoPanel.isVisible = true
-                    softInfoPanel.isVisible = true
-                    BootloaderFastbootInfoPanel.isVisible = false
-                    softFastbootInfoPanel.isVisible = false
-                    StorageFastbootInfoPanel.isVisible = false
-                    softInfoPanel.setBounds(10, 205, 290, 160)
-                    deviceInfoPanel.setBounds(5, 5, 310, 376)
+                else if (tabbedpane.selectedIndex == 3) {
+                    if(model.rowCount != 0)
+                        for (i in model.rowCount - 1 downTo 0)
+                            model.removeRow(i)
+                }
+                else if (tabbedpane.selectedIndex == 5) {
+                    if(model.rowCount != 0)
+                        for (i in model.rowCount - 1 downTo 0)
+                            model.removeRow(i)
+                    contents.setBounds(5, 5, 310, 375)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
-                    labelGsmOperator.text = "Cellular provider:"
-                    labelGsmOperator.bounds = Rectangle(15, 156, 115, 20)
-                    labelGsmOperatorValue.bounds = Rectangle(130, 156, 155, 20)
-                    labelCPU.text = "CPU:"
-                    labelCPU.bounds = Rectangle(15, 96, 35, 20)
-                    labelCPUValue.bounds = Rectangle(55, 96, 230, 20)
-                    labelVersionRelease.text = "Android version:"
-                    labelVersionReleaseValue.bounds = Rectangle(120, 34, 160, 20)
-                    labelLanguage.text = "Language:"
-                    labelLanguageValue.setBounds(85, 93, 195, 20)
-                    labelSecureBoot.isVisible = false
-                    labelDeviceHostname.isVisible = false
-                    labelLocations.isVisible = false
-                    labelSecureBootValue.isVisible = false
-                    labelDeviceHostnameValue.isVisible = false
-                    labelLocationsValue.isVisible = false
                     labelTCP.isVisible = true
                     labelTCPConnection.isVisible = true
                     buttonIpConnect.isVisible = true
@@ -618,11 +556,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonInstallOne.isEnabled = false
-                        if (Windows) {
+                        if (Windows)
                             exec("adb", "install \"$selectedFileAbsolutePath\"")
-                        } else {
+                        else
                             exec("adb", "install $selectedFileAbsolutePath")
-                        }
                     }
                     override fun done() { buttonInstallOne.isEnabled = true }
                 }
@@ -866,13 +803,6 @@ open class AndroidTool : Command(){
                 }
                 Worker().execute()
             }
-
-            boardInfoPanel.isVisible = true
-            softInfoPanel.isVisible = true
-            BootloaderFastbootInfoPanel.isVisible = false
-            softFastbootInfoPanel.isVisible = false
-            StorageFastbootInfoPanel.isVisible = false
-            deviceInfoPanel.setBounds(5, 5, 310, 376)
             deviceControlPanel.setBounds(5, 385, 310, 85)
             deviceConnection.setBounds(5, 475, 310, 100)
             labelTCP.isVisible = true
@@ -894,7 +824,6 @@ open class AndroidTool : Command(){
                 textFieldIP.text = systemIP
             } catch (e: Exception) {
             }
-
             sdkCheck()
             Thread {
                 while (true) {
