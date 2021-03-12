@@ -176,12 +176,10 @@ open class Command : AndroidToolUI() {
 
         when {
             ConnectedViaAdb -> {
-                if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
-                    buttonPowerOff.isEnabled = true
-                    buttonReboot.isEnabled = true
-                    buttonRecoveryReboot.isEnabled = true
-                    buttonFastbootReboot.isEnabled = true
-                }
+                buttonPowerOff.isEnabled = true
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
                     val disableComponents: Array<Component> = fastbootPanel.components + recoveryPanel.components
@@ -223,13 +221,10 @@ open class Command : AndroidToolUI() {
                 enabledAll = false
             }
             ConnectedViaFastboot -> {
-                if (tabbedpane.selectedIndex == 2) {
-                    buttonPowerOff.isEnabled = false
-                    buttonReboot.isEnabled = true
-                    buttonRecoveryReboot.isEnabled = true
-                    buttonFastbootReboot.isEnabled = true
-                }
-
+                buttonPowerOff.isEnabled = false
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
                 buttonIpConnect.isEnabled = false
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + recoveryPanel.components
@@ -258,13 +253,10 @@ open class Command : AndroidToolUI() {
                 enabledAll = false
             }
             ConnectedViaRecovery -> {
-                if (tabbedpane.selectedIndex == 3) {
-                    buttonReboot.isEnabled = true
-                    buttonRecoveryReboot.isEnabled = true
-                    buttonFastbootReboot.isEnabled = true
-                    buttonPowerOff.isEnabled = true
-                }
-
+                buttonReboot.isEnabled = true
+                buttonRecoveryReboot.isEnabled = true
+                buttonFastbootReboot.isEnabled = true
+                buttonPowerOff.isEnabled = true
                 buttonIpConnect.isEnabled = false
                 frame.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
@@ -295,10 +287,10 @@ open class Command : AndroidToolUI() {
                 enabledAll = false
             }
             else -> {
-                buttonIpConnect.isEnabled = true
-                FirstFastbootConnection = true
-                FirstAdbConnection = true
-                FirstRecoveryConnection = true
+                buttonIpConnect.isEnabled = false
+                FirstFastbootConnection = false
+                FirstAdbConnection = false
+                FirstRecoveryConnection = false
                 enabledAll = true
                 newPhone = true
                 if (!UnauthorizedDevice) {

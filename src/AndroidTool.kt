@@ -286,10 +286,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot")
-                            2 -> exec("fastboot", "reboot")
-                            3 -> exec("adb", "shell twrp reboot")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot")
+                            ConnectedViaFastboot -> exec("fastboot", "reboot")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
                         }
                     }
                     override fun done() {
@@ -302,10 +302,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRecoveryReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot recovery")
-                            2 -> exec("fastboot", "oem reboot-recovery")
-                            3 -> exec("adb", "shell twrp reboot recovery")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot recovery")
+                            ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
                         }
                     }
 
@@ -335,10 +335,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonFastbootReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot bootloader")
-                            2 -> exec("fastboot", "reboot-bootloader")
-                            3 -> exec("adb", "shell twrp reboot bootloader")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot bootloader")
+                            ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
                         }
                     }
                     override fun done() { buttonFastbootReboot.isEnabled = true }
@@ -349,9 +349,9 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonPowerOff.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot -p")
-                            3 -> exec("adb", "shell twrp reboot poweroff")
+                        when{
+                            ConnectedViaAdb -> exec("adb", "reboot -p")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
                         }
                     }
                     override fun done() { buttonPowerOff.isEnabled = true }
@@ -372,17 +372,6 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
-                    if (ConnectedViaAdb) {
-                        buttonPowerOff.isEnabled = true
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 } else if (tabbedpane.selectedIndex == 2) {
                     contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
@@ -393,17 +382,6 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = false
                     labelConnect.isVisible = false
                     labelIP.isVisible = false
-                    if (ConnectedViaFastboot) {
-                        buttonPowerOff.isEnabled = false
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 } else if (tabbedpane.selectedIndex == 3) {
                     contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
@@ -414,17 +392,6 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = false
                     labelConnect.isVisible = false
                     labelIP.isVisible = false
-                    if (ConnectedViaRecovery) {
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                        buttonPowerOff.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 }
                 else if (tabbedpane.selectedIndex == 3) {
 
@@ -439,10 +406,6 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
-                    buttonReboot.isEnabled = false
-                    buttonRecoveryReboot.isEnabled = false
-                    buttonFastbootReboot.isEnabled = false
-                    buttonPowerOff.isEnabled = false
                 }
             }
             buttonInstallAll.addActionListener {
