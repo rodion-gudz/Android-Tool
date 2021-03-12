@@ -269,10 +269,10 @@ open class Command : AndroidToolUI() {
                 frame.isEnabled = true
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
-                    val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + fastbootPanel.components
+                    val disableComponents: Array<Component> = adbPanel.components + fastbootPanel.components
                     for (component in disableComponents)
                         component.isEnabled = false
-                    val enableComponents: Array<Component> = recoveryPanel.components + consolePanel.components
+                    val enableComponents: Array<Component> = recoveryPanel.components + consolePanel.components + logsPanel.components
                     for (component in enableComponents)
                         if (component != buttonStop && component != buttonSave)
                             component.isEnabled = true
@@ -312,36 +312,36 @@ open class Command : AndroidToolUI() {
 
     private fun getProp() {
         val deviceProps = exec("adb", "shell getprop", output = true)
-        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (lineValue1.isNotBlank()) lineValue1 else "-"
-        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (lineValue2.isNotBlank()) lineValue2 else "-"
-        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (lineValue3.isNotBlank()) lineValue3 else "-"
-        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (lineValue4.isNotBlank()) lineValue4 else "-"
-        val lineValue5 = deviceProps.substringAfter("ro.product.board]: [").substringBefore(']')
-        CPU = if (lineValue5.isNotBlank()) lineValue5 else "-"
-        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (lineValue6.isNotBlank()) lineValue6 else "-"
-        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (lineValue7.isNotBlank()) lineValue7 else "-"
-        val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [").substringBefore(']')
-        GsmOperator = if (lineValue8.isNotBlank() && lineValue8 != ",") lineValue8 else "-"
-        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (lineValue9.isNotBlank()) lineValue9 else "-"
-        val lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [").substringBefore(']')
-        VersionRelease = if (lineValue10.isNotBlank()) lineValue10 else "-"
-        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (lineValue11.isNotBlank()) lineValue11 else "-"
-        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (lineValue12.isNotBlank()) lineValue12 else "-"
-        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (lineValue13.isNotBlank()) lineValue13 else "-"
-        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) lineValue14 else "-"
-        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (lineValue15.isNotBlank()) lineValue15 else "-"
+        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [")
+        Manufacturer = if (lineValue1 == deviceProps) "Unknown" else lineValue1.substringBefore(']')
+        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [")
+        Brand = if (lineValue2 == deviceProps) "Unknown" else lineValue2.substringBefore(']')
+        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [")
+        Model = if (lineValue3 == deviceProps) "Unknown" else lineValue3.substringBefore(']')
+        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [")
+        Codename = if (lineValue4 == deviceProps) "Unknown" else lineValue4.substringBefore(']')
+        val lineValue5 = deviceProps.substringAfter("ro.product.board]: [")
+        CPU = if (lineValue5 == deviceProps) "Unknown" else lineValue5.substringBefore(']')
+        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [")
+        CPUArch = if (lineValue6 == deviceProps) "Unknown" else lineValue6.substringBefore(']')
+        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [")
+        SN = if (lineValue7 == deviceProps) "Unknown" else lineValue7.substringBefore(']')
+        val lineValue8 = deviceProps.substringAfter("gsm.operator.alpha]: [")
+        GsmOperator = if (lineValue8 == deviceProps || lineValue8 == ",") "Unknown" else lineValue8.substringBefore(']')
+        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [")
+        Fingerprint = if (lineValue9 == deviceProps) "Unknown" else lineValue9.substringBefore(']')
+        val lineValue10 = deviceProps.substringAfter("ro.build.version.release]: [")
+        VersionRelease = if (lineValue10 == deviceProps) "Unknown" else lineValue10.substringBefore(']')
+        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [")
+        SDK = if (lineValue11 == deviceProps) "Unknown" else lineValue11.substringBefore(']')
+        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [")
+        SecurityPatch = if (lineValue12 == deviceProps) "Unknown" else lineValue12.substringBefore(']')
+        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [")
+        Language = if (lineValue13 == deviceProps) "Unknown" else lineValue13.substringBefore(']')
+        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [")
+        Selinux = if (lineValue14 == deviceProps || "DEVICE" in lineValue14) "Unknown" else lineValue14.substringBefore(']')
+        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [")
+        Treble = if (lineValue15 == deviceProps) "Unknown" else lineValue15.substringBefore(']')
         model.addRow(arrayOf("Manufacturer", Manufacturer))
         model.addRow(arrayOf("Brand", Brand))
         model.addRow(arrayOf("Model", Model))
@@ -361,47 +361,47 @@ open class Command : AndroidToolUI() {
 
     private fun getPropRecovery() {
         val deviceProps = exec("adb", "shell getprop", output = true)
-        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
-        Manufacturer = if (lineValue1.isNotBlank()) lineValue1 else "Unknown"
-        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
-        Brand = if (lineValue2.isNotBlank())  lineValue2 else "-"
-        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
-        Model = if (lineValue3.isNotBlank()) lineValue3 else "-"
-        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [").substringBefore(']')
-        Codename = if (lineValue4.isNotBlank()) lineValue4 else "-"
-        val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [").substringBefore(']')
-        CPU = if (lineValue5.isNotBlank()) lineValue5 else "-"
-        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [").substringBefore(']')
-        CPUArch = if (lineValue6.isNotBlank()) lineValue6 else "-"
-        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [").substringBefore(']')
-        SN = if (lineValue7.isNotBlank()) lineValue7 else "-"
-        val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [").substringBefore(']')
-        GsmOperator = if (lineValue8.isNotBlank()) lineValue8 else "-"
-        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [").substringBefore(']')
-        Fingerprint = if (lineValue9.isNotBlank()) lineValue9 else "-"
+        val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [")
+        Manufacturer = if (lineValue1 == deviceProps) "Unknown" else lineValue1.substringBefore(']')
+        val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [")
+        Brand = if (lineValue2 == deviceProps) "Unknown" else lineValue2.substringBefore(']')
+        val lineValue3 = deviceProps.substringAfter("ro.product.model]: [")
+        Model = if (lineValue3 == deviceProps) "Unknown" else lineValue3.substringBefore(']')
+        val lineValue4 = deviceProps.substringAfter("ro.product.name]: [")
+        Codename = if (lineValue4 == deviceProps) "Unknown" else lineValue4.substringBefore(']')
+        val lineValue5 = deviceProps.substringAfter("ro.boot.hardware]: [")
+        CPU = if (lineValue5 == deviceProps) "Unknown" else lineValue5.substringBefore(']')
+        val lineValue6 = deviceProps.substringAfter("ro.product.cpu.abi]: [")
+        CPUArch = if (lineValue6 == deviceProps) "Unknown" else lineValue6.substringBefore(']')
+        val lineValue7 = deviceProps.substringAfter("ro.serialno]: [")
+        SN = if (lineValue7 == deviceProps) "Unknown" else lineValue7.substringBefore(']')
+        val lineValue8 = deviceProps.substringAfter("sys.usb.state]: [")
+        GsmOperator = if (lineValue8 == deviceProps) "Unknown" else lineValue8.substringBefore(']')
+        val lineValue9 = deviceProps.substringAfter("ro.build.fingerprint]: [")
+        Fingerprint = if (lineValue9 == deviceProps) "Unknown" else lineValue9.substringBefore(']')
         var lineValue10 = deviceProps.substringAfter("ro.orangefox.version]: [").substringBefore(']')
         if (lineValue10.isNotBlank()) VersionRelease = lineValue10 else {
-            lineValue10 = deviceProps.substringAfter("ro.twrp.version]: [").substringBefore(']')
-            VersionRelease = if (lineValue10.isNotBlank()) lineValue10 else "-"
+            lineValue10 = deviceProps.substringAfter("ro.twrp.version]: [")
+            VersionRelease = if (lineValue10 == deviceProps) "Unknown" else lineValue10.substringBefore(']')
         }
-        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [").substringBefore(']')
-        SDK = if (lineValue11.isNotBlank()) lineValue11 else "-"
-        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [").substringBefore(']')
-        SecurityPatch = if (lineValue12.isNotBlank()) lineValue12 else "-"
-        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [").substringBefore(']')
-        Language = if (lineValue13.isNotBlank()) lineValue13 else "-"
-        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [").substringBefore(']')
-        Selinux = if (lineValue14.isNotBlank() && "DEVICE" !in lineValue14) lineValue14 else "-"
-        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [").substringBefore(']')
-        Treble = if (lineValue15.isNotBlank()) lineValue15 else "-"
-        val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [").substringBefore(']')
-        SecureBoot = if (lineValue17.isNotBlank()) { if (lineValue17 == "1") "true" else "false" } else "-"
-        val lineValue18 = deviceProps.substringAfter("ro.build.host]: [").substringBefore(']')
-        DeviceHost = if (lineValue18.isNotBlank() && "DEVICE" !in lineValue14) lineValue18 else "-"
-        val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [").substringBefore(']')
-        MockLocation = if (lineValue16.isNotBlank()) { if (lineValue16 == "1") "true" else "false" } else "-"
-        val lineValue19 = deviceProps.substringAfter("ro.build.id]: [").substringBefore(']')
-        Language = if (lineValue19.isNotBlank()) lineValue19 else "-"
+        val lineValue11 = deviceProps.substringAfter("ro.build.version.sdk]: [")
+        SDK = if (lineValue11 == deviceProps) "Unknown" else lineValue11.substringBefore(']')
+        val lineValue12 = deviceProps.substringAfter("ro.build.version.security_patch]: [")
+        SecurityPatch = if (lineValue12 == deviceProps) "Unknown" else lineValue12.substringBefore(']')
+        val lineValue13 = deviceProps.substringAfter("ro.product.locale]: [")
+        Language = if (lineValue13 == deviceProps) "Unknown" else lineValue13.substringBefore(']')
+        val lineValue14 = deviceProps.substringAfter("ro.boot.selinux]: [")
+        Selinux = if (lineValue14 == deviceProps) "Unknown" else lineValue14.substringBefore(']')
+        val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [")
+        Treble = if (lineValue15 == deviceProps) "Unknown" else lineValue15.substringBefore(']')
+        val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [")
+        SecureBoot = if (lineValue17 == deviceProps) "Unknown" else {if (lineValue17.substringBefore(']') == "1") "true" else "false"}
+        val lineValue18 = deviceProps.substringAfter("ro.build.host]: [")
+        DeviceHost = if (lineValue17 == deviceProps) "Unknown" else lineValue18.substringBefore(']')
+        val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [")
+        MockLocation = if (lineValue16 == deviceProps) "Unknown" else {if (lineValue16.substringBefore(']') == "1") "true" else "false" }
+        val lineValue19 = deviceProps.substringAfter("ro.build.id]: [")
+        Language = if (lineValue19 == deviceProps) "Unknown" else lineValue19.substringBefore(']')
         model.addRow(arrayOf("Manufacturer", Manufacturer))
         model.addRow(arrayOf("Brand", Brand))
         model.addRow(arrayOf("Model", Model))
