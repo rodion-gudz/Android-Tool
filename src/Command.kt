@@ -363,7 +363,6 @@ open class Command : AndroidToolUI() {
         val deviceProps = exec("adb", "shell getprop", output = true)
         val lineValue1 = deviceProps.substringAfter("ro.product.manufacturer]: [").substringBefore(']')
         Manufacturer = if (lineValue1.isNotBlank()) lineValue1 else "Unknown"
-
         val lineValue2 = deviceProps.substringAfter("ro.product.brand]: [").substringBefore(']')
         Brand = if (lineValue2.isNotBlank())  lineValue2 else "-"
         val lineValue3 = deviceProps.substringAfter("ro.product.model]: [").substringBefore(']')
@@ -418,8 +417,8 @@ open class Command : AndroidToolUI() {
         model.addRow(arrayOf("Build ID", Language))
         model.addRow(arrayOf("Selinux", Selinux))
         model.addRow(arrayOf("Project Treble", Treble))
-        model.addRow(arrayOf("Secure Boot", DeviceHost))
-        model.addRow(arrayOf("Build Hostname", SecureBoot))
+        model.addRow(arrayOf("Secure Boot", SecureBoot))
+        model.addRow(arrayOf("Build Hostname", DeviceHost))
         model.addRow(arrayOf("Mock Locations", MockLocation))
     }
 
