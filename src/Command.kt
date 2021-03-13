@@ -287,6 +287,10 @@ open class Command : AndroidToolUI() {
                 enabledAll = false
             }
             else -> {
+                buttonReboot.isEnabled = false
+                buttonRecoveryReboot.isEnabled = false
+                buttonFastbootReboot.isEnabled = false
+                buttonPowerOff.isEnabled = false
                 buttonIpConnect.isEnabled = false
                 FirstFastbootConnection = false
                 FirstAdbConnection = false
