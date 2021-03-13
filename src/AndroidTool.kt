@@ -104,7 +104,6 @@ open class AndroidTool : Command(){
     companion object : AndroidTool() {
         @JvmStatic
         fun main(args: Array<String>) {
-
             searchTextField.addKeyListener(object : KeyAdapter() {
                 override fun keyReleased(evt: KeyEvent) {
                     searchFilter(searchTextField.text)
@@ -287,10 +286,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot")
-                            2 -> exec("fastboot", "reboot")
-                            3 -> exec("adb", "shell twrp reboot")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot")
+                            ConnectedViaFastboot -> exec("fastboot", "reboot")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
                         }
                     }
                     override fun done() {
@@ -303,10 +302,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonRecoveryReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot recovery")
-                            2 -> exec("fastboot", "oem reboot-recovery")
-                            3 -> exec("adb", "shell twrp reboot recovery")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot recovery")
+                            ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
                         }
                     }
 
@@ -336,10 +335,10 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonFastbootReboot.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot bootloader")
-                            2 -> exec("fastboot", "reboot-bootloader")
-                            3 -> exec("adb", "shell twrp reboot bootloader")
+                        when {
+                            ConnectedViaAdb -> exec("adb", "reboot bootloader")
+                            ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
                         }
                     }
                     override fun done() { buttonFastbootReboot.isEnabled = true }
@@ -350,9 +349,9 @@ open class AndroidTool : Command(){
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
                         buttonPowerOff.isEnabled = false
-                        when (tabbedpane.selectedIndex) {
-                            0, 1 -> exec("adb", "reboot -p")
-                            3 -> exec("adb", "shell twrp reboot poweroff")
+                        when{
+                            ConnectedViaAdb -> exec("adb", "reboot -p")
+                            ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
                         }
                     }
                     override fun done() { buttonPowerOff.isEnabled = true }
@@ -364,29 +363,6 @@ open class AndroidTool : Command(){
                     textFieldIP.text = AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
                 } catch (e: Exception) { }
                 if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
-                    if (!ConnectedViaAdb){
-                        if(model.rowCount != 0)
-                            for (i in model.rowCount - 1 downTo 0)
-                                model.removeRow(i)
-                    }else{
-                        if(model.rowCount == 0) {
-                            model.addRow(arrayOf("Manufacturer", Manufacturer))
-                            model.addRow(arrayOf("Brand", Brand))
-                            model.addRow(arrayOf("Model", Model))
-                            model.addRow(arrayOf("Codename", Codename))
-                            model.addRow(arrayOf("CPU", CPU))
-                            model.addRow(arrayOf("CPUArch", CPUArch))
-                            model.addRow(arrayOf("SN", SN))
-                            model.addRow(arrayOf("GsmOperator", GsmOperator))
-                            model.addRow(arrayOf("Fingerprint", Fingerprint))
-                            model.addRow(arrayOf("VersionRelease", VersionRelease))
-                            model.addRow(arrayOf("SDK", SDK))
-                            model.addRow(arrayOf("SecurityPatch", SecurityPatch))
-                            model.addRow(arrayOf("Language", Language))
-                            model.addRow(arrayOf("Selinux", Selinux))
-                            model.addRow(arrayOf("Treble", Treble))
-                        }
-                    }
                     contents.setBounds(5, 5, 310, 375)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
@@ -396,42 +372,7 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
-                    if (ConnectedViaAdb) {
-                        buttonPowerOff.isEnabled = true
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 } else if (tabbedpane.selectedIndex == 2) {
-                    if (!ConnectedViaFastboot){
-                        if(model.rowCount != 0)
-                            for (i in model.rowCount - 1 downTo 0)
-                                model.removeRow(i)
-                    }else{
-                        if(model.rowCount == 0) {
-                            model.addRow(arrayOf("Unlocked", if (Unlock != "< waiting for any device >") Unlock else "-"))
-                            model.addRow(arrayOf("Codename", if (FastbootCodename != "< waiting for any device >") FastbootCodename else "-"))
-                            model.addRow(arrayOf("Serial Number", if (FastbootSN != "< waiting for any device >") FastbootSN else "-"))
-                            model.addRow(arrayOf("System FS", if (SystemFS != "< waiting for any device >") SystemFS else "-"))
-                            model.addRow(arrayOf("SystemCapacity", if (SystemCapacity != "< waiting for any device >") SystemCapacity else "-"))
-                            model.addRow(arrayOf("DataFS", if (DataFS != "< waiting for any device >") DataFS else "-"))
-                            model.addRow(arrayOf("DataCapacity", if (DataCapacity != "< waiting for any device >") DataCapacity else "-"))
-                            model.addRow(arrayOf("BootFS", if (BootFS != "< waiting for any device >") BootFS else "-"))
-                            model.addRow(arrayOf("BootCapacity", if (BootCapacity != "< waiting for any device >") BootCapacity else "-"))
-                            model.addRow(arrayOf("RecoveryFS", if (RecoveryFS != "< waiting for any device >") RecoveryFS else "-"))
-                            model.addRow(arrayOf("RecoveryCapacity", if (RecoveryCapacity != "< waiting for any device >") RecoveryCapacity else "-"))
-                            model.addRow(arrayOf("CacheFS", if (CacheFS != "< waiting for any device >") CacheFS else "-"))
-                            model.addRow(arrayOf("CacheCapacity", if (CacheCapacity != "< waiting for any device >") CacheCapacity else "-"))
-                            model.addRow(arrayOf("VendorFS", if (VendorFS != "< waiting for any device >") VendorFS else "-"))
-                            model.addRow(arrayOf("VendorCapacity", if (VendorCapacity != "< waiting for any device >") VendorCapacity else "-"))
-                            model.addRow(arrayOf("AllCapacity", if (AllCapacity != "< waiting for any device >") AllCapacity else "-"))
-                        }
-                    }
                     contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
                     deviceConnection.setBounds(5, 525, 310, 50)
@@ -441,44 +382,7 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = false
                     labelConnect.isVisible = false
                     labelIP.isVisible = false
-                    if (ConnectedViaFastboot) {
-                        buttonPowerOff.isEnabled = false
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 } else if (tabbedpane.selectedIndex == 3) {
-                    if (!ConnectedViaRecovery){
-                        if(model.rowCount != 0)
-                            for (i in model.rowCount - 1 downTo 0)
-                                model.removeRow(i)
-                    }else{
-                        if(model.rowCount == 0) {
-                            model.addRow(arrayOf("Manufacturer", Manufacturer))
-                            model.addRow(arrayOf("Brand", Brand))
-                            model.addRow(arrayOf("Model", Model))
-                            model.addRow(arrayOf("Codename", Codename))
-                            model.addRow(arrayOf("CPU", CPU))
-                            model.addRow(arrayOf("CPUArch", CPUArch))
-                            model.addRow(arrayOf("SN", SN))
-                            model.addRow(arrayOf("GsmOperator", GsmOperator))
-                            model.addRow(arrayOf("Fingerprint", Fingerprint))
-                            model.addRow(arrayOf("VersionRelease", VersionRelease))
-                            model.addRow(arrayOf("SDK", SDK))
-                            model.addRow(arrayOf("SecurityPatch", SecurityPatch))
-                            model.addRow(arrayOf("Language", Language))
-                            model.addRow(arrayOf("Selinux", Selinux))
-                            model.addRow(arrayOf("Treble", Treble))
-                            model.addRow(arrayOf("DeviceHost", DeviceHost))
-                            model.addRow(arrayOf("SecureBoot", SecureBoot))
-                            model.addRow(arrayOf("MockLocation", MockLocation))
-                        }
-                    }
                     contents.setBounds(5, 5, 310, 425)
                     deviceControlPanel.setBounds(5, 435, 310, 85)
                     deviceConnection.setBounds(5, 525, 310, 50)
@@ -488,27 +392,11 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = false
                     labelConnect.isVisible = false
                     labelIP.isVisible = false
-                    if (ConnectedViaRecovery) {
-                        buttonReboot.isEnabled = true
-                        buttonRecoveryReboot.isEnabled = true
-                        buttonFastbootReboot.isEnabled = true
-                        buttonPowerOff.isEnabled = true
-                    }else{
-                        buttonReboot.isEnabled = false
-                        buttonRecoveryReboot.isEnabled = false
-                        buttonFastbootReboot.isEnabled = false
-                        buttonPowerOff.isEnabled = false
-                    }
                 }
                 else if (tabbedpane.selectedIndex == 3) {
-                    if(model.rowCount != 0)
-                        for (i in model.rowCount - 1 downTo 0)
-                            model.removeRow(i)
+
                 }
                 else if (tabbedpane.selectedIndex == 5) {
-                    if(model.rowCount != 0)
-                        for (i in model.rowCount - 1 downTo 0)
-                            model.removeRow(i)
                     contents.setBounds(5, 5, 310, 375)
                     deviceControlPanel.setBounds(5, 385, 310, 85)
                     deviceConnection.setBounds(5, 475, 310, 100)
@@ -518,10 +406,6 @@ open class AndroidTool : Command(){
                     textFieldIP.isVisible = true
                     labelConnect.isVisible = true
                     labelIP.isVisible = true
-                    buttonReboot.isEnabled = false
-                    buttonRecoveryReboot.isEnabled = false
-                    buttonFastbootReboot.isEnabled = false
-                    buttonPowerOff.isEnabled = false
                 }
             }
             buttonInstallAll.addActionListener {
