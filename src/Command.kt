@@ -386,12 +386,12 @@ open class Command : AndroidToolUI() {
         Selinux = if (lineValue14 == deviceProps) "Unknown" else lineValue14.substringBefore(']')
         val lineValue15 = deviceProps.substringAfter("ro.treble.enabled]: [")
         Treble = if (lineValue15 == deviceProps) "Unknown" else lineValue15.substringBefore(']')
-        val lineValue17 = deviceProps.substringAfter("ro.boot.secureboot]: [")
-        SecureBoot = if (lineValue17 == deviceProps) "Unknown" else {if (lineValue17.substringBefore(']') == "1") "true" else "false"}
-        val lineValue18 = deviceProps.substringAfter("ro.build.host]: [")
-        DeviceHost = if (lineValue17 == deviceProps) "Unknown" else lineValue18.substringBefore(']')
-        val lineValue16 = deviceProps.substringAfter("ro.allow.mock.location]: [")
-        MockLocation = if (lineValue16 == deviceProps) "Unknown" else {if (lineValue16.substringBefore(']') == "1") "true" else "false" }
+        val lineValue16 = deviceProps.substringAfter("ro.boot.secureboot]: [")
+        SecureBoot = if (lineValue16 == deviceProps) "Unknown" else {if (lineValue16.substringBefore(']') == "1") "true" else "false"}
+        val lineValue17 = deviceProps.substringAfter("ro.build.host]: [")
+        DeviceHost = if (lineValue17 == deviceProps) "Unknown" else lineValue17.substringBefore(']')
+        val lineValue18 = deviceProps.substringAfter("ro.allow.mock.location]: [")
+        MockLocation = if (lineValue18 == deviceProps) "Unknown" else {if (lineValue18.substringBefore(']') == "1") "true" else "false" }
         val lineValue19 = deviceProps.substringAfter("ro.build.id]: [")
         Language = if (lineValue19 == deviceProps) "Unknown" else lineValue19.substringBefore(']')
         model.addRow(arrayOf("Manufacturer", Manufacturer))
