@@ -115,8 +115,10 @@ open class AndroidTool : Command(){
                 }
             })
             buttonSave.addActionListener {
+                print("test")
                 class MyWorker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
+                        print("test")
                         buttonSave.isEnabled = false
                         val choseFile = JFileChooser()
                         choseFile.dialogTitle = "Save logs file"
@@ -138,11 +140,11 @@ open class AndroidTool : Command(){
                             bw.close()
                         }
                     }
-
                     override fun done() {
                         buttonSave.isEnabled = true
                     }
                 }
+                MyWorker().execute()
             }
             buttonSdkDownload.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
