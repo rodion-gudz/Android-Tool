@@ -10,6 +10,6 @@
     <orderEntry type="library" exported="" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" exported="" name="FlatLaf-library" level="project" />
     <orderEntry type="library" exported="" name="Maven-Artifact" level="project" />
-    <orderEntry type="library" exported="" name="com.intellij:forms_rt:7.0.3" level="project" />
+    <orderEntry type="library" exported="" name="Intellij Forms" level="project" />
   </component>
 </module>
