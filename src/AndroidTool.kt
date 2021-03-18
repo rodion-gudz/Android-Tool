@@ -76,9 +76,6 @@ var MultipleDevicesConnected = false
 var CommandRunning = false
 var ConnectedAdbUsb = false
 var ConnectedAdbWifi = false
-var FirstFastbootConnection = true
-var FirstRecoveryConnection = true
-var FirstAdbConnection = true
 var functionButtonStart = true
 var ifStopSelected = false
 var logsWorking: Boolean = false
@@ -115,10 +112,8 @@ open class AndroidTool : Command(){
                 }
             })
             buttonSave.addActionListener {
-                print("test")
                 class MyWorker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
-                        print("test")
                         buttonSave.isEnabled = false
                         val choseFile = JFileChooser()
                         choseFile.dialogTitle = "Save logs file"

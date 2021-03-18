@@ -184,7 +184,8 @@ open class Command : AndroidToolUI() {
                 if (enabledAll) {
                     val disableComponents: Array<Component> = fastbootPanel.components + recoveryPanel.components
                     for (component in disableComponents)
-                        component.isEnabled = false
+                        if (component != openConsole)
+                            component.isEnabled = false
                     val enableComponents: Array<Component> = adbPanel.components + consolePanel.components + logsPanel.components
                     for (component in enableComponents)
                         if (component != buttonStop && component != buttonSave)
@@ -194,15 +195,6 @@ open class Command : AndroidToolUI() {
                 textAreaCommandInput.isFocusable = true
                 listLogs.isFocusable = true
                 list.isFocusable = true
-
-                if (newPhone) {
-                    getProp()
-                    getListOfPackages()
-                }
-                if (FirstAdbConnection) {
-                    tabbedpane.selectedIndex = 0
-                    FirstAdbConnection = false
-                }
 
                 if (ConnectedAdbUsb) {
                     labelUSBConnection.text = "Connected via Adb"
@@ -217,6 +209,11 @@ open class Command : AndroidToolUI() {
                         labelConnect.text = ""
                     }
                 }
+                if (newPhone) {
+                    tabbedpane.selectedIndex = 0
+                    getProp()
+                    getListOfPackages()
+                }
                 newPhone = false
                 enabledAll = false
             }
@@ -229,7 +226,8 @@ open class Command : AndroidToolUI() {
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + recoveryPanel.components
                     for (component in disableComponents)
-                        component.isEnabled = false
+                        if (component != openConsole)
+                            component.isEnabled = false
                     val enableComponents: Array<Component> = fastbootPanel.components + consolePanel.components
                     for (component in enableComponents)
                         if (component != buttonStop && component != buttonSave)
@@ -241,13 +239,10 @@ open class Command : AndroidToolUI() {
                 list.isFocusable = false
 
                 if (newPhone) {
-                    getPropFastboot()
+                    tabbedpane.selectedIndex = 2
                     labelUSBConnection.text = "Connected via Fastboot"
                     labelUSBConnection.icon = iconYes
-                }
-                if (FirstFastbootConnection) {
-                    tabbedpane.selectedIndex = 2
-                    FirstFastbootConnection = false
+                    getPropFastboot()
                 }
                 newPhone = false
                 enabledAll = false
@@ -263,7 +258,8 @@ open class Command : AndroidToolUI() {
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + fastbootPanel.components
                     for (component in disableComponents)
-                        component.isEnabled = false
+                        if (component != openConsole)
+                            component.isEnabled = false
                     val enableComponents: Array<Component> = recoveryPanel.components + consolePanel.components + logsPanel.components
                     for (component in enableComponents)
                         if (component != buttonStop && component != buttonSave)
@@ -275,14 +271,13 @@ open class Command : AndroidToolUI() {
                 list.isFocusable = false
 
                 if (newPhone) {
-                    getPropRecovery()
+                    tabbedpane.selectedIndex = 3
+
                     labelUSBConnection.text = "Connected via Adb"
                     labelUSBConnection.icon = iconYes
+                    getPropRecovery()
                 }
-                if (FirstRecoveryConnection) {
-                    tabbedpane.selectedIndex = 3
-                    FirstRecoveryConnection = false
-                }
+
                 newPhone = false
                 enabledAll = false
             }
@@ -292,9 +287,6 @@ open class Command : AndroidToolUI() {
                 buttonFastbootReboot.isEnabled = false
                 buttonPowerOff.isEnabled = false
                 buttonIpConnect.isEnabled = false
-                FirstFastbootConnection = false
-                FirstAdbConnection = false
-                FirstRecoveryConnection = false
                 enabledAll = true
                 newPhone = true
                 if (!UnauthorizedDevice) {
@@ -482,9 +474,9 @@ open class Command : AndroidToolUI() {
     }
 
     private fun noConnection() {
-        val components: Array<Component> = fastbootPanel.components + adbPanel.components + logsPanel.components + consolePanel.components
+        val components: Array<Component> = fastbootPanel.components + adbPanel.components + logsPanel.components + consolePanel.components + recoveryPanel.components
         for (component in components)
-            if (component != buttonStop && component != buttonSave)
+            if (component != buttonStop && component != buttonSave && component != openConsole)
                 component.isEnabled = false
 
         textAreaCommandOutput.isFocusable = false
