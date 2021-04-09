@@ -117,6 +117,7 @@ open class AndroidTool : Command(){
                         buttonSave.isEnabled = false
                         val choseFile = JFileChooser()
                         choseFile.dialogTitle = "Save logs file"
+                        choseFile.selectedFile = File("ATLog");
                         choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
                         choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
                         choseFile.fileFilter = choseFile.choosableFileFilters[1]
