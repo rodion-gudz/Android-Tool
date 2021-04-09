@@ -259,8 +259,7 @@ open class AndroidToolUI {
     val recoveryPanel = JPanel()
     val buttonInstallZip = JButton("Install")
     val buttonGetLogs = JButton("Save logs")
-
-        val menuBar = JMenuBar()
+    val menuBar = JMenuBar()
     val fileMenu = JMenu("Program")
 //    val settingsMenu = JMenuItem("Settings")
     val aboutItem = JMenuItem("About")
@@ -273,10 +272,6 @@ open class AndroidToolUI {
 
 
         fileMenu.add(aboutItem)
-
-        aboutItem.addActionListener {
-            AboutDialog.main()
-        }
 
         fileMenu.addSeparator()
 
