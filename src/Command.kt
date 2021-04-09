@@ -513,7 +513,7 @@ open class Command : AndroidToolUI() {
                     else -> execLines("adb shell pm list packages")
                 }
                 for(element in reader){
-                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element) {
+                    if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element && "not access" !in element) {
                         if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
                             arrayList.add(if (appProp.getProperty(element.substring(8)) != null)
                                 "${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
