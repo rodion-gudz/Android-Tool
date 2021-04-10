@@ -296,6 +296,18 @@ open class AndroidTool : Command(){
                 }
                 Worker().execute()
             }
+            buttonResetPort.addActionListener {
+                class Worker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        buttonResetPort.isEnabled = false
+                        exec("adb", "tcpip 5555")
+                    }
+                    override fun done() {
+                        buttonResetPort.isEnabled = true
+                    }
+                }
+                Worker().execute()
+            }
             buttonRecoveryReboot.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {

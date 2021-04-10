@@ -202,6 +202,7 @@ open class Command : AndroidToolUI() {
                     buttonIpConnect.isEnabled = false
                     labelIP.isEnabled = false
                     textFieldIP.isEnabled = false
+                    buttonResetPort.isVisible = true
                 } else {
                     if (ConnectedAdbWifi) {
                         labelTCPConnection.text = "Connected to ${AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')}"
@@ -223,6 +224,7 @@ open class Command : AndroidToolUI() {
                 buttonRecoveryReboot.isEnabled = true
                 buttonFastbootReboot.isEnabled = true
                 buttonIpConnect.isEnabled = false
+                buttonResetPort.isVisible = false
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + logsPanel.components + recoveryPanel.components
                     for (component in disableComponents)
@@ -254,6 +256,7 @@ open class Command : AndroidToolUI() {
                 buttonPowerOff.isEnabled = true
                 buttonIpConnect.isEnabled = false
                 frame.isEnabled = true
+                buttonResetPort.isVisible = false
                 dialogUnauthorizedDevice.dispose()
                 if (enabledAll) {
                     val disableComponents: Array<Component> = adbPanel.components + fastbootPanel.components
@@ -282,6 +285,7 @@ open class Command : AndroidToolUI() {
                 enabledAll = false
             }
             else -> {
+                buttonResetPort.isVisible = false
                 buttonReboot.isEnabled = false
                 buttonRecoveryReboot.isEnabled = false
                 buttonFastbootReboot.isEnabled = false

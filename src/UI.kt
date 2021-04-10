@@ -63,6 +63,7 @@ open class AndroidToolUI {
     val tabbedpane = JTabbedPane()
     var textFieldIP = JTextField("")
     var buttonIpConnect = JButton("Connect")
+    var buttonResetPort = JButton("Set 5555 Port")
     var labelConnect = JLabel("")
     var labelTCPConnection = JLabel("Not connected")
     var labelUSBConnection = JLabel("Not connected")
@@ -1035,7 +1036,7 @@ open class AndroidToolUI {
         labelUSB.font = labelUSB.font.deriveFont(14.0f)
         deviceConnection.add(labelUSB)
 
-        labelTCP.bounds = Rectangle(15, 36, 50, 20)
+        labelTCP.bounds = Rectangle(15, 40, 50, 20)
         labelTCP.font = labelTCP.font.deriveFont(14.0f)
         deviceConnection.add(labelTCP)
 
@@ -1079,7 +1080,7 @@ open class AndroidToolUI {
         labelUSBConnection.icon = iconNo
 
 
-        labelTCPConnection.bounds = Rectangle(70, 36, 200, 21)
+        labelTCPConnection.bounds = Rectangle(70, 40, 200, 21)
         labelTCPConnection.font = labelTCP.font.deriveFont(12.0f)
         labelTCPConnection.icon = iconNo
         deviceConnection.add(labelTCPConnection)
@@ -1101,6 +1102,9 @@ open class AndroidToolUI {
         buttonIpConnect.isFocusable = false
         deviceConnection.add(buttonIpConnect)
 
+        buttonResetPort.bounds = Rectangle(185, 15, 112, 25)
+        buttonResetPort.isFocusable = false
+        deviceConnection.add(buttonResetPort)
 
         textFieldIP.bounds = Rectangle(45, 65, 100, 25)
         textFieldIP.addFocusListener(object : FocusAdapter() {
