@@ -934,7 +934,7 @@ open class AndroidToolUI {
         labelMultipleDevice.bounds = Rectangle(20, 5, 400, 35)
         dialogMultipleDevice.add(labelMultipleDevice)
 
-        dialogSdkDownload.setSize(380, 100)
+        dialogSdkDownload.setSize(380, 110)
         dialogSdkDownload.isResizable = false
         dialogSdkDownload.layout = null
         dialogSdkDownload.setLocationRelativeTo(null)
@@ -1005,7 +1005,7 @@ open class AndroidToolUI {
         radioButtonSilent.bounds = Rectangle(765, 436, 80, 20)
         logsPanel.add(radioButtonSilent)
         group.add(radioButtonSilent)
-        frame.setSize(1205, 610)
+        frame.setSize(1205, 615)
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.layout = null
         frame.isResizable = false
@@ -1106,7 +1106,7 @@ open class AndroidToolUI {
         buttonIpConnect.isFocusable = false
         deviceConnection.add(buttonIpConnect)
 
-        buttonResetPort.bounds = Rectangle(185, 15, 112, 25)
+        buttonResetPort.bounds = Rectangle(185, 15, 115, 25)
         buttonResetPort.isFocusable = false
         deviceConnection.add(buttonResetPort)
 
