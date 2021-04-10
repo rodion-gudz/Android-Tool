@@ -6,13 +6,14 @@
   ## What is it?
 
   #### Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. A dark theme, intuitive interface and other features
-  ### Latest Version: **1.1.0**
+  ### Latest Version: **1.2.3**
   ## Main Features:
   * #### Batch and single app installation (.apk files)
   * #### Disable, enable or uninstall system apps
   * #### Open, force stop or clear data of your apps
   * #### Receive and save logs from your device
   * #### Install or boot custom recovery or wipe partitions
+  * #### Save apps list
   * #### Always relevant links to firmware and everything you need
   * #### And not only 😉
   
@@ -22,18 +23,18 @@
   * #### 4PDA thread - [Android Tool](https://4pda.ru/forum/index.php?showtopic=1000362)
 
   ## Screenshots:
-  * ##### Adb 
-  ![Adb Screenshot](https://i.imgur.com/zwdtIX3.png)
+  * ##### App Manager 
+  ![Adb Screenshot](https://i.imgur.com/NRrZ5oY.png)
   * ##### Logcat
-  ![Logcat Screenshot](https://i.imgur.com/lwLcS2Z.png)
+  ![Logcat Screenshot](https://i.imgur.com/Lw8tmvf.png)
   * ##### Fastboot 
-  ![Fastboot Screenshot](https://i.imgur.com/yX5PzHs.png)
+  ![Fastboot Screenshot](https://i.imgur.com/j4RAqKL.png)
   * ##### Recovery
-  ![Recovery Screenshot](https://i.imgur.com/1dulPXb.png)
+  ![Recovery Screenshot](https://i.imgur.com/GSBSGcJ.png)
   * ##### Console
-  ![Console Screenshot](https://i.imgur.com/ukc21M6.png)
+  ![Console Screenshot](https://i.imgur.com/8xlIacy.png)
   * ##### Links
-  ![Links Screenshot](https://i.imgur.com/EmmYFbv.png)
+  ![Links Screenshot](https://i.imgur.com/gZQgPdL.png)
 
   ## The Latest Version And Updates
   ##### You can find the latest version on [Github Repository Releases](https://github.com/fast-geek/Android-Tool/releases)
