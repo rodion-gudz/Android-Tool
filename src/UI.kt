@@ -231,6 +231,7 @@ open class AndroidToolUI {
     val buttonStart = JButton("Start")
     val buttonChooseOne = JButton("Select APK")
     val refreshButton = JButton("Refresh")
+    val saveListButton = JButton("Save")
     val enableButton = JButton("Enable")
     val uninstallButton = JButton("Uninstall")
     val disableButton = JButton("Disable")
@@ -377,6 +378,9 @@ open class AndroidToolUI {
         refreshButton.bounds = Rectangle(328, 7, 110, 25)
         refreshButton.isFocusable = false
         adbPanel.add(refreshButton)
+        saveListButton.bounds = Rectangle(790, 7, 80, 25)
+        saveListButton.isFocusable = false
+        adbPanel.add(saveListButton)
         buttonChooseOne.bounds = Rectangle(5, 255, 285, 50)
         buttonChooseOne.isFocusable = false
         adbPanel.add(buttonChooseOne)
@@ -1071,7 +1075,7 @@ open class AndroidToolUI {
         adbPanel.add(searchIcon)
 
 
-        searchTextField.bounds = Rectangle(475, 7, 400, 25)
+        searchTextField.bounds = Rectangle(475, 7, 300, 25)
         searchTextField.isFocusable = false
         adbPanel.add(searchTextField)
 

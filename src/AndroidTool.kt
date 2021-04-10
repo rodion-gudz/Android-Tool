@@ -544,6 +544,36 @@ open class AndroidTool : Command(){
             refreshButton.addActionListener {
                 getListOfPackages(true)
             }
+            saveListButton.addActionListener {
+                class MyWorker : SwingWorker<Unit, Int>() {
+                    override fun doInBackground() {
+                        saveListButton.isEnabled = false
+                        val choseFile = JFileChooser()
+                        choseFile.dialogTitle = "Save app list"
+                        choseFile.selectedFile = File("ATAppList");
+                        choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
+                        choseFile.fileFilter = choseFile.choosableFileFilters[1]
+                        val chooseDialog = choseFile.showSaveDialog(frame)
+                        if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+                            val file = File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
+                            if (!file.exists()) {
+                                file.createNewFile()
+                            }
+                            val fw = FileWriter(file.absoluteFile)
+                            val bw = BufferedWriter(fw)
+                            for (element in 0 until listModel.size()) {
+                                bw.write(listModel[element].toString())
+                                bw.write("\n")
+                            }
+                            bw.close()
+                        }
+                    }
+                    override fun done() {
+                        saveListButton.isEnabled = true
+                    }
+                }
+                MyWorker().execute()
+            }
             buttonChooseOne.addActionListener {
                 class Worker : SwingWorker<Unit, Int>() {
                     override fun doInBackground() {
