@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Android-Tool:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Android_Tool_jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/Android-Tool-Jar</output-path>
     <root id="archive" name="Android-Tool.jar">
       <element id="module-output" name="Android-Tool" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.1.2/flatlaf-1.1.2.jar" path-in-jar="/" />
