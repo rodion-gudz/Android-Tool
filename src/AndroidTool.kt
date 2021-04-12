@@ -14,7 +14,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
 
-var arrayList = java.util.ArrayList<String>()
+var arrayList = ArrayList<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
 var selectedFilePath = ""
@@ -82,21 +82,18 @@ val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
 val JarDir = System.getProperty("user.dir").toString()
 val userFolder = System.getProperty("user.home").toString()
-var SdkDir = userFolder + if (Windows) {
-	"\\.android_tool\\SDK-Tools\\"
-} else if (Linux) {
-	"/.android_tool/SDK-Tools/"
-} else {
-	"/.android_tool/SDK-Tools/"
+val ProgramDir = userFolder + when {
+	Windows -> "\\.android_tool\\"
+	Linux -> "/.android_tool/"
+	else -> "/.android_tool/"
 }
-val ProgramDir = userFolder + if (Windows) {
-	"\\.android_tool\\"
-} else if (Linux) {
-	"/.android_tool/"
-} else {
-	"/.android_tool/"
+var SdkDir = ProgramDir + when {
+	Windows -> "SDK-Tools\\"
+	Linux -> "SDK-Tools/"
+	else -> "SDK-Tools/"
 }
-val programBuildDate = getProgramBuildTime()
+
+var remoteArgs = ""
 const val programVersion = "1.2.3"
 var programVersionLatest = programVersion
 val appProp = Properties()
@@ -240,6 +237,12 @@ open class AndroidTool : Command() {
 					}
 				}
 				Worker().execute()
+			}
+			buttonStartRemote.addActionListener {
+				if (Windows) {
+					Runtime.getRuntime().exec("${ProgramDir}\\scrcpy\\scrcpy.exe $remoteArgs", arrayOf("ADB=${SdkDir}adb.exe"))
+				}else if (MacOS || Linux)
+					Runtime.getRuntime().exec("scrcpy $remoteArgs", arrayOf("ADB=${SdkDir}adb"))
 			}
 			buttonStart.addActionListener {
 				buttonStop.isEnabled = true

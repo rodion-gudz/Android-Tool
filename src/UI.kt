@@ -39,6 +39,7 @@ open class AndroidToolUI {
 	val labelUSB = JLabel("USB:")
 	val labelTCP = JLabel("TCP/IP:")
 	val logsPanel = JPanel()
+	val remotePanel = JPanel()
 	val consolePanel = JPanel()
 	val tabbedpane = JTabbedPane()
 	var textFieldIP = JTextField("")
@@ -219,10 +220,12 @@ open class AndroidToolUI {
 	val forceStopButton = JButton("Force stop")
 	val openButton = JButton("Open")
 	val buttonInstallOne = JButton("Install")
+	val buttonStartRemote = JButton("Start")
 	val buttonChoseAll = JButton("Select Folder")
 	val buttonRunCommand = JButton("Run")
 	val openConsole = JButton("Open system terminal")
 	val labelErase = JLabel("Erase partition")
+	val buttonPowered = JButton("<html>Powered by <b>scrcpy</b></html>")
 	val labelInstallRecovery = JLabel("Install or boot recovery")
 	val checkBoxPartitionBoot = JCheckBox("Boot")
 	val checkBoxPartitionRadio = JCheckBox("Radio")
@@ -340,6 +343,9 @@ open class AndroidToolUI {
 		buttonInstallOne.bounds = Rectangle(5, 200, 285, 50)
 		buttonInstallOne.isFocusable = false
 		adbPanel.add(buttonInstallOne)
+		buttonStartRemote.bounds = Rectangle(5, 500, 170, 40)
+		buttonStartRemote.isFocusable = false
+		remotePanel.add(buttonStartRemote)
 		disableButton.bounds = Rectangle(328, 500, 180, 40)
 		disableButton.isFocusable = false
 		adbPanel.add(disableButton)
@@ -1084,6 +1090,12 @@ open class AndroidToolUI {
 		labelConnect.font = labelIP.font.deriveFont(13.0f)
 		deviceConnection.add(labelConnect)
 
+		buttonPowered.bounds = Rectangle(727, 510, 150, 30)
+		buttonPowered.font = labelIP.font.deriveFont(13.0f)
+		buttonPowered.isFocusable = false
+		buttonPowered.addActionListener { runUrl("https://github.com/Genymobile/scrcpy") }
+		remotePanel.add(buttonPowered)
+
 
 		buttonIpConnect.bounds = Rectangle(147, 65, 100, 25)
 		buttonIpConnect.isFocusable = false
@@ -1105,6 +1117,7 @@ open class AndroidToolUI {
 
 
 		logsPanel.layout = null
+		remotePanel.layout = null
 
 
 		buttonPowerOff.bounds = Rectangle(13, 45, 120, 25)
@@ -1142,6 +1155,7 @@ open class AndroidToolUI {
 
 		tabbedpane.add("App Manager", adbPanel)
 		tabbedpane.add("Logcat", logsPanel)
+		tabbedpane.add("Remote", remotePanel)
 		tabbedpane.add("Fastboot", fastbootPanel)
 		tabbedpane.add("Recovery", recoveryPanel)
 		tabbedpane.add("Console", consolePanel)
