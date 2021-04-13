@@ -94,7 +94,7 @@ var SdkDir = ProgramDir + when {
 }
 
 var remoteArgs = ""
-const val programVersion = "1.2.3"
+const val programVersion = "1.3.0-alpha"
 var programVersionLatest = programVersion
 val appProp = Properties()
 
