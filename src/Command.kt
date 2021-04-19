@@ -194,7 +194,7 @@ open class Command : AndroidToolUI() {
 						if (component != openConsole)
 							component.isEnabled = false
 					val enableComponents: Array<Component> =
-						adbPanel.components + consolePanel.components + logsPanel.components
+						adbPanel.components + consolePanel.components + logsPanel.components + remotePanel.components
 					for (component in enableComponents)
 						if (component != buttonStop && component != buttonSave)
 							component.isEnabled = true
@@ -237,7 +237,7 @@ open class Command : AndroidToolUI() {
 				buttonResetPort.isVisible = false
 				if (enabledAll) {
 					val disableComponents: Array<Component> =
-						adbPanel.components + logsPanel.components + recoveryPanel.components
+						adbPanel.components + logsPanel.components + recoveryPanel.components + remotePanel.components
 					for (component in disableComponents)
 						if (component != openConsole)
 							component.isEnabled = false
@@ -252,7 +252,7 @@ open class Command : AndroidToolUI() {
 				list.isFocusable = false
 
 				if (newPhone) {
-					tabbedpane.selectedIndex = 2
+					tabbedpane.selectedIndex = 3
 					labelUSBConnection.text = "Connected via Fastboot"
 					labelUSBConnection.icon = iconYes
 					getPropFastboot()
@@ -270,7 +270,7 @@ open class Command : AndroidToolUI() {
 				buttonResetPort.isVisible = false
 				dialogUnauthorizedDevice.dispose()
 				if (enabledAll) {
-					val disableComponents: Array<Component> = adbPanel.components + fastbootPanel.components
+					val disableComponents: Array<Component> = adbPanel.components + fastbootPanel.components + remotePanel.components
 					for (component in disableComponents)
 						if (component != openConsole)
 							component.isEnabled = false
@@ -286,7 +286,7 @@ open class Command : AndroidToolUI() {
 				list.isFocusable = false
 
 				if (newPhone) {
-					tabbedpane.selectedIndex = 3
+					tabbedpane.selectedIndex = 4
 
 					labelUSBConnection.text = "Connected via Adb"
 					labelUSBConnection.icon = iconYes
@@ -563,7 +563,7 @@ open class Command : AndroidToolUI() {
 
 	private fun noConnection() {
 		val components: Array<Component> =
-			fastbootPanel.components + adbPanel.components + logsPanel.components + consolePanel.components + recoveryPanel.components
+			fastbootPanel.components + adbPanel.components + logsPanel.components + consolePanel.components + recoveryPanel.components + remotePanel.components
 		for (component in components)
 			if (component != buttonStop && component != buttonSave && component != openConsole)
 				component.isEnabled = false

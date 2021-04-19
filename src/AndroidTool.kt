@@ -94,7 +94,7 @@ var SdkDir = ProgramDir + when {
 }
 
 var remoteArgs = ""
-const val programVersion = "1.3.0-alpha"
+const val programVersion = "1.3.0-alpha3"
 var programVersionLatest = programVersion
 val appProp = Properties()
 
@@ -412,7 +412,7 @@ open class AndroidTool : Command() {
 						AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
 				} catch (e: Exception) {
 				}
-				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
+				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 || tabbedpane.selectedIndex == 2)  {
 					contents.setBounds(5, 5, 310, 375)
 					deviceControlPanel.setBounds(5, 385, 310, 85)
 					deviceConnection.setBounds(5, 475, 310, 100)
@@ -422,16 +422,6 @@ open class AndroidTool : Command() {
 					textFieldIP.isVisible = true
 					labelConnect.isVisible = true
 					labelIP.isVisible = true
-				} else if (tabbedpane.selectedIndex == 2) {
-					contents.setBounds(5, 5, 310, 425)
-					deviceControlPanel.setBounds(5, 435, 310, 85)
-					deviceConnection.setBounds(5, 525, 310, 50)
-					labelTCP.isVisible = false
-					labelTCPConnection.isVisible = false
-					buttonIpConnect.isVisible = false
-					textFieldIP.isVisible = false
-					labelConnect.isVisible = false
-					labelIP.isVisible = false
 				} else if (tabbedpane.selectedIndex == 3) {
 					contents.setBounds(5, 5, 310, 425)
 					deviceControlPanel.setBounds(5, 435, 310, 85)
@@ -442,9 +432,17 @@ open class AndroidTool : Command() {
 					textFieldIP.isVisible = false
 					labelConnect.isVisible = false
 					labelIP.isVisible = false
-				} else if (tabbedpane.selectedIndex == 3) {
-
-				} else if (tabbedpane.selectedIndex == 5) {
+				} else if (tabbedpane.selectedIndex == 4) {
+					contents.setBounds(5, 5, 310, 425)
+					deviceControlPanel.setBounds(5, 435, 310, 85)
+					deviceConnection.setBounds(5, 525, 310, 50)
+					labelTCP.isVisible = false
+					labelTCPConnection.isVisible = false
+					buttonIpConnect.isVisible = false
+					textFieldIP.isVisible = false
+					labelConnect.isVisible = false
+					labelIP.isVisible = false
+				} else if (tabbedpane.selectedIndex == 6) {
 					contents.setBounds(5, 5, 310, 375)
 					deviceControlPanel.setBounds(5, 385, 310, 85)
 					deviceConnection.setBounds(5, 475, 310, 100)
