@@ -11,6 +11,8 @@ import java.util.jar.JarFile
 import java.util.zip.ZipFile
 import javax.swing.DefaultListModel
 import javax.swing.SwingWorker
+import kotlinx.coroutines.*
+import kotlinx.coroutines.swing.Swing
 
 
 open class Command : AndroidToolUI() {
@@ -587,51 +589,45 @@ open class Command : AndroidToolUI() {
 	}
 
 	fun getListOfPackages(button: Boolean = false) {
-		class Worker : SwingWorker<Unit, Int>() {
-			override fun doInBackground() {
-				val items: DefaultListModel<Any?> = DefaultListModel()
-				if (button)
-					refreshButton.isEnabled = false
-				searchTextField.isFocusable = true
-				arrayList.clear()
-				apps.clear()
-				val reader = when {
-					radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
-					radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
-					radioButtonEnabled.isSelected -> execLines("adb shell pm list packages -e")
-					radioButtonThird.isSelected -> execLines("adb shell pm list packages -3")
-					else -> execLines("adb shell pm list packages")
-				}
-				for (element in reader) {
-					if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element && "not access" !in element) {
-						if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
-							arrayList.add(
-								if (appProp.getProperty(element.substring(8)) != null)
-									"${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
-								else
-									element.substring(8)
-							)
-						}
+		GlobalScope.launch(Dispatchers.Swing) {
+			val items: DefaultListModel<Any?> = DefaultListModel()
+			if (button)
+				refreshButton.isEnabled = false
+			searchTextField.isFocusable = true
+			arrayList.clear()
+			apps.clear()
+			val reader = when {
+				radioButtonDisabled.isSelected -> execLines("adb shell pm list packages -d")
+				radioButtonSystem.isSelected -> execLines("adb shell pm list packages -s")
+				radioButtonEnabled.isSelected -> execLines("adb shell pm list packages -e")
+				radioButtonThird.isSelected -> execLines("adb shell pm list packages -3")
+				else -> execLines("adb shell pm list packages")
+			}
+			for (element in reader) {
+				if ("no devices/emulators found" !in element && "device unauthorized." !in element && "kill-server" !in element && "server's" !in element && "a confirmation dialog" !in element && "not access" !in element) {
+					if (element != "* daemon not running starting now at tcp:5037" && element != "* daemon started successfully") {
+						arrayList.add(
+							if (appProp.getProperty(element.substring(8)) != null)
+								"${element.substring(8)} (${appProp.getProperty(element.substring(8), "")})"
+							else
+								element.substring(8)
+						)
 					}
 				}
-				arrayList.sort()
-				if (button)
-					refreshButton.isEnabled = true
-				listModel.removeAllElements()
-				for (element in arrayList) {
-					if (searchTextField.text == "")
-						items.addElement(element)
-					apps.add(element)
-				}
-				listModel = items
-				list.model = listModel
 			}
-
-			override fun done() {
+			arrayList.sort()
+			if (button)
 				refreshButton.isEnabled = true
-				searchFilter(searchTextField.text)
+			listModel.removeAllElements()
+			for (element in arrayList) {
+				if (searchTextField.text == "")
+					items.addElement(element)
+				apps.add(element)
 			}
+			listModel = items
+			list.model = listModel
 		}
-		Worker().execute()
+		refreshButton.isEnabled = true
+		searchFilter(searchTextField.text)
 	}
 }

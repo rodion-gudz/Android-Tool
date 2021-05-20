@@ -1,3 +1,5 @@
+import kotlinx.coroutines.*
+import kotlinx.coroutines.swing.Swing
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
@@ -9,7 +11,6 @@ import java.util.*
 import javax.swing.DefaultListModel
 import javax.swing.ImageIcon
 import javax.swing.JFileChooser
-import javax.swing.SwingWorker
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
@@ -118,75 +119,63 @@ open class AndroidTool : Command() {
 				}
 			})
 			buttonSave.addActionListener {
-				class MyWorker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonSave.isEnabled = false
-						val choseFile = JFileChooser()
-						choseFile.dialogTitle = "Save logs file"
-						choseFile.selectedFile = File("ATLog");
-						choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
-						choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
-						choseFile.fileFilter = choseFile.choosableFileFilters[1]
-						val chooseDialog = choseFile.showSaveDialog(frame)
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							val file =
-								File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
-							if (!file.exists()) {
-								file.createNewFile()
-							}
-							val fw = FileWriter(file.absoluteFile)
-							val bw = BufferedWriter(fw)
-							for (element in 0 until listModelLogs.size()) {
-								bw.write(listModelLogs[element].toString())
-								bw.write("\n")
-							}
-							bw.close()
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonSave.isEnabled = false
+					val choseFile = JFileChooser()
+					choseFile.dialogTitle = "Save logs file"
+					choseFile.selectedFile = File("ATLog");
+					choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
+					choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
+					choseFile.fileFilter = choseFile.choosableFileFilters[1]
+					val chooseDialog = choseFile.showSaveDialog(frame)
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						val file =
+							File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
+						if (!file.exists()) {
+							file.createNewFile()
 						}
-					}
-
-					override fun done() {
-						buttonSave.isEnabled = true
+						val fw = FileWriter(file.absoluteFile)
+						val bw = BufferedWriter(fw)
+						for (element in 0 until listModelLogs.size()) {
+							bw.write(listModelLogs[element].toString())
+							bw.write("\n")
+						}
+						bw.close()
 					}
 				}
-				MyWorker().execute()
+				buttonSave.isEnabled = true
 			}
 			buttonSdkDownload.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonSdkDownload.isEnabled = false
-						createFolder()
-						when {
-							Windows -> downloadFile(
-								"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip",
-								"$SdkDir\\Windows.zip"
-							)
-							Linux -> downloadFile(
-								"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip",
-								"$SdkDir/Linux.zip"
-							)
-							MacOS -> downloadFile(
-								"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/MacOS.zip",
-								"$SdkDir/MacOS.zip"
-							)
-						}
-						when {
-							Windows -> unZipFile("$SdkDir\\Windows.zip")
-							Linux -> unZipFile("$SdkDir/Linux.zip")
-							MacOS -> unZipFile("$SdkDir/MacOS.zip")
-						}
-						if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
-						when {
-							Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
-							Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-							MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-						}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonSdkDownload.isEnabled = false
+					createFolder()
+					when {
+						Windows -> downloadFile(
+							"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip",
+							"$SdkDir\\Windows.zip"
+						)
+						Linux -> downloadFile(
+							"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip",
+							"$SdkDir/Linux.zip"
+						)
+						MacOS -> downloadFile(
+							"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/MacOS.zip",
+							"$SdkDir/MacOS.zip"
+						)
 					}
-
-					override fun done() {
-						dialogSdkDownload.dispose()
+					when {
+						Windows -> unZipFile("$SdkDir\\Windows.zip")
+						Linux -> unZipFile("$SdkDir/Linux.zip")
+						MacOS -> unZipFile("$SdkDir/MacOS.zip")
+					}
+					if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
+					when {
+						Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+						Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+						MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
 					}
 				}
-				Worker().execute()
+				dialogSdkDownload.dispose()
 			}
 			radioButtonAll.addActionListener {
 				getListOfPackages()
@@ -204,44 +193,34 @@ open class AndroidTool : Command() {
 				getListOfPackages()
 			}
 			buttonUpdate.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonUpdate.isEnabled = false
-						runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
-					}
-
-					override fun done() {
-						Runtime.getRuntime().exec("${SdkDir}adb kill-server")
-						exitProcess(0)
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonUpdate.isEnabled = false
+					runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
 				}
-				Worker().execute()
+				Runtime.getRuntime().exec("${SdkDir}adb kill-server")
+				exitProcess(0)
 			}
 			buttonIpConnect.addActionListener {
 				labelConnect.text = ""
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonIpConnect.isEnabled = false
-						exec("adb", "kill-server")
-						val output = exec("adb", "connect ${textFieldIP.text}", output = true)
-						if ("connected to" in output || "failed to authenticate to" in output) {
-							labelTCPConnection.text = "Connected to ${textFieldIP.text}"
-							labelTCPConnection.icon = iconYes
-						} else {
-							labelConnect.text = "Failed"
-						}
-					}
-
-					override fun done() {
-						buttonIpConnect.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonIpConnect.isEnabled = false
+					exec("adb", "kill-server")
+					val output = exec("adb", "connect ${textFieldIP.text}", output = true)
+					if ("connected to" in output || "failed to authenticate to" in output) {
+						labelTCPConnection.text = "Connected to ${textFieldIP.text}"
+						labelTCPConnection.icon = iconYes
+					} else {
+						labelConnect.text = "Failed"
 					}
 				}
-				Worker().execute()
+
+				buttonIpConnect.isEnabled = true
 			}
 			buttonStartRemote.addActionListener {
 				if (Windows) {
-					Runtime.getRuntime().exec("${ProgramDir}\\scrcpy\\scrcpy.exe $remoteArgs", arrayOf("ADB=${SdkDir}adb.exe"))
-				}else if (MacOS || Linux)
+					Runtime.getRuntime()
+						.exec("${ProgramDir}\\scrcpy\\scrcpy.exe $remoteArgs", arrayOf("ADB=${SdkDir}adb.exe"))
+				} else if (MacOS || Linux)
 					Runtime.getRuntime().exec("scrcpy $remoteArgs", arrayOf("ADB=${SdkDir}adb"))
 			}
 			buttonStart.addActionListener {
@@ -257,36 +236,31 @@ open class AndroidTool : Command() {
 					if (ifStopSelected) {
 						listModelLogs.removeAllElements()
 					}
-					class MyWorker : SwingWorker<Unit, Int>() {
-						override fun doInBackground() {
-							arrayList.clear()
-							Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
-							val builderList = when {
-								radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
-								radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:D")
-								radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:I")
-								radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:W")
-								radioButtonError.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:E")
-								radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:F")
-								radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:S")
-								else -> Runtime.getRuntime().exec("${SdkDir}adb logcat -c")
-							}
-							val input = builderList.inputStream
-							val reader = BufferedReader(InputStreamReader(input))
-							var line: String?
-							while (reader.readLine().also { line = it } != null) {
-								if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-									if (logsWorking) {
-										listModelLogs.addElement(line)
-										listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
-									}
+					GlobalScope.launch(Dispatchers.Swing) {
+						arrayList.clear()
+						Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
+						val builderList = when {
+							radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
+							radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:D")
+							radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:I")
+							radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:W")
+							radioButtonError.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:E")
+							radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:F")
+							radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:S")
+							else -> Runtime.getRuntime().exec("${SdkDir}adb logcat -c")
+						}
+						val input = builderList.inputStream
+						val reader = BufferedReader(InputStreamReader(input))
+						var line: String?
+						while (reader.readLine().also { line = it } != null) {
+							if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
+								if (logsWorking) {
+									listModelLogs.addElement(line)
+									listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
 								}
 							}
 						}
 					}
-
-					val worker = MyWorker()
-					worker.execute()
 					functionButtonStart = false
 					ifStopSelected = false
 				} else {
@@ -308,64 +282,48 @@ open class AndroidTool : Command() {
 				functionButtonStart = true
 			}
 			buttonReboot.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonReboot.isEnabled = false
-						when {
-							ConnectedViaAdb -> exec("adb", "reboot")
-							ConnectedViaFastboot -> exec("fastboot", "reboot")
-							ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
-						}
-					}
-
-					override fun done() {
-						buttonReboot.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonReboot.isEnabled = false
+					when {
+						ConnectedViaAdb -> exec("adb", "reboot")
+						ConnectedViaFastboot -> exec("fastboot", "reboot")
+						ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
 					}
 				}
-				Worker().execute()
+
+
+				buttonReboot.isEnabled = true
 			}
 			buttonResetPort.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonResetPort.isEnabled = false
-						exec("adb", "tcpip 5555")
-					}
-
-					override fun done() {
-						buttonResetPort.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonResetPort.isEnabled = false
+					exec("adb", "tcpip 5555")
 				}
-				Worker().execute()
+
+
+				buttonResetPort.isEnabled = true
 			}
 			buttonRecoveryReboot.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonRecoveryReboot.isEnabled = false
-						when {
-							ConnectedViaAdb -> exec("adb", "reboot recovery")
-							ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
-							ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
-						}
-					}
-
-					override fun done() {
-						buttonRecoveryReboot.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonRecoveryReboot.isEnabled = false
+					when {
+						ConnectedViaAdb -> exec("adb", "reboot recovery")
+						ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
+						ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
 					}
 				}
-				Worker().execute()
+
+
+				buttonRecoveryReboot.isEnabled = true
 			}
 			buttonGetLogs.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonGetLogs.isEnabled = false
-						exec("adb", "shell cp -f /tmp/recovery.log /sdcard")
-					}
-
-					override fun done() {
-						buttonGetLogs.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonGetLogs.isEnabled = false
+					exec("adb", "shell cp -f /tmp/recovery.log /sdcard")
 				}
-				Worker().execute()
+
+
+				buttonGetLogs.isEnabled = true
 			}
 			openConsole.addActionListener {
 				if (Windows)
@@ -374,37 +332,29 @@ open class AndroidTool : Command() {
 					Runtime.getRuntime().exec("open -a Terminal $SdkDir")
 			}
 			buttonFastbootReboot.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonFastbootReboot.isEnabled = false
-						when {
-							ConnectedViaAdb -> exec("adb", "reboot bootloader")
-							ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
-							ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
-						}
-					}
-
-					override fun done() {
-						buttonFastbootReboot.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonFastbootReboot.isEnabled = false
+					when {
+						ConnectedViaAdb -> exec("adb", "reboot bootloader")
+						ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
+						ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
 					}
 				}
-				Worker().execute()
+
+
+				buttonFastbootReboot.isEnabled = true
 			}
 			buttonPowerOff.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonPowerOff.isEnabled = false
-						when {
-							ConnectedViaAdb -> exec("adb", "reboot -p")
-							ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
-						}
-					}
-
-					override fun done() {
-						buttonPowerOff.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonPowerOff.isEnabled = false
+					when {
+						ConnectedViaAdb -> exec("adb", "reboot -p")
+						ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
 					}
 				}
-				Worker().execute()
+
+
+				buttonPowerOff.isEnabled = true
 			}
 			tabbedpane.addChangeListener {
 				try {
@@ -412,7 +362,7 @@ open class AndroidTool : Command() {
 						AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
 				} catch (e: Exception) {
 				}
-				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 || tabbedpane.selectedIndex == 2)  {
+				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 || tabbedpane.selectedIndex == 2) {
 					contents.setBounds(5, 5, 310, 375)
 					deviceControlPanel.setBounds(5, 385, 310, 85)
 					deviceConnection.setBounds(5, 475, 310, 100)
@@ -455,354 +405,274 @@ open class AndroidTool : Command() {
 				}
 			}
 			buttonInstallAll.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonInstallAll.isEnabled = false
-						val paths: Array<File>?
-						val file = File(selectedDirectoryPath)
-						val fileNameFilter = FilenameFilter { _, name ->
-							if (name.lastIndexOf('.') > 0) {
-								val lastIndex = name.lastIndexOf('.')
-								val str = name.substring(lastIndex)
-								if (str == ".apk") {
-									return@FilenameFilter true
-								}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonInstallAll.isEnabled = false
+					val paths: Array<File>?
+					val file = File(selectedDirectoryPath)
+					val fileNameFilter = FilenameFilter { _, name ->
+						if (name.lastIndexOf('.') > 0) {
+							val lastIndex = name.lastIndexOf('.')
+							val str = name.substring(lastIndex)
+							if (str == ".apk") {
+								return@FilenameFilter true
 							}
-							false
 						}
-						paths = file.listFiles(fileNameFilter)
-						for (path in paths) {
-							if (Windows)
-								exec("adb", "install \"$path\"")
-							else
-								exec("adb", "install $path")
-						}
+						false
 					}
-
-					override fun done() {
-						buttonInstallAll.isEnabled = true
+					paths = file.listFiles(fileNameFilter)
+					for (path in paths) {
+						if (Windows)
+							exec("adb", "install \"$path\"")
+						else
+							exec("adb", "install $path")
 					}
 				}
-				Worker().execute()
+
+
+				buttonInstallAll.isEnabled = true
 			}
 			buttonInstallOne.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonInstallOne.isEnabled = false
-						if (Windows)
-							exec("adb", "install \"$selectedFileAbsolutePath\"")
-						else
-							exec("adb", "install $selectedFileAbsolutePath")
-					}
-
-					override fun done() {
-						buttonInstallOne.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonInstallOne.isEnabled = false
+					if (Windows)
+						exec("adb", "install \"$selectedFileAbsolutePath\"")
+					else
+						exec("adb", "install $selectedFileAbsolutePath")
 				}
-				Worker().execute()
+
+
+				buttonInstallOne.isEnabled = true
 			}
 			disableButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						disableButton.isEnabled = false
-						exec("adb", "shell pm disable-user --user 0 $textInput")
-					}
-
-					override fun done() {
-						disableButton.isEnabled = true
-						getListOfPackages()
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					disableButton.isEnabled = false
+					exec("adb", "shell pm disable-user --user 0 $textInput")
 				}
-				Worker().execute()
+
+
+				disableButton.isEnabled = true
+				getListOfPackages()
 			}
 			uninstallButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						uninstallButton.isEnabled = false
-						exec("adb", "shell pm uninstall --user 0 $textInput")
-					}
-
-					override fun done() {
-						uninstallButton.isEnabled = true
-						getListOfPackages()
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					uninstallButton.isEnabled = false
+					exec("adb", "shell pm uninstall --user 0 $textInput")
 				}
-				Worker().execute()
+
+
+				uninstallButton.isEnabled = true
+				getListOfPackages()
 			}
 			enableButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						enableButton.isEnabled = false
-						exec("adb", "shell pm enable $textInput")
-					}
-
-					override fun done() {
-						enableButton.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					enableButton.isEnabled = false
+					exec("adb", "shell pm enable $textInput")
 				}
-				Worker().execute()
+				enableButton.isEnabled = true
 			}
 			clearButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						clearButton.isEnabled = false
-						exec("adb", "shell pm clear $textInput")
-					}
-
-					override fun done() {
-						clearButton.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					clearButton.isEnabled = false
+					exec("adb", "shell pm clear $textInput")
 				}
-				Worker().execute()
+				clearButton.isEnabled = true
 			}
 			openButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						openButton.isEnabled = false
-						exec("adb", "shell monkey -p $textInput 1")
-					}
-
-					override fun done() {
-						openButton.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					openButton.isEnabled = false
+					exec("adb", "shell monkey -p $textInput 1")
 				}
-				Worker().execute()
+				openButton.isEnabled = true
+
 			}
 			forceStopButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
 
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						forceStopButton.isEnabled = false
-						exec("adb", "shell am force-stop $textInput")
-					}
-
-					override fun done() {
-						forceStopButton.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					forceStopButton.isEnabled = false
+					exec("adb", "shell am force-stop $textInput")
 				}
-				Worker().execute()
+
+				forceStopButton.isEnabled = true
 			}
 			refreshButton.addActionListener {
 				getListOfPackages(true)
 			}
 			saveListButton.addActionListener {
-				class MyWorker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						saveListButton.isEnabled = false
-						val choseFile = JFileChooser()
-						choseFile.dialogTitle = "Save app list"
-						choseFile.selectedFile = File("ATAppList");
-						choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
-						choseFile.fileFilter = choseFile.choosableFileFilters[1]
-						val chooseDialog = choseFile.showSaveDialog(frame)
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							val file =
-								File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
-							if (!file.exists()) {
-								file.createNewFile()
-							}
-							val fw = FileWriter(file.absoluteFile)
-							val bw = BufferedWriter(fw)
-							for (element in 0 until listModel.size()) {
-								bw.write(listModel[element].toString())
-								bw.write("\n")
-							}
-							bw.close()
+				GlobalScope.launch(Dispatchers.Swing) {
+					saveListButton.isEnabled = false
+					val choseFile = JFileChooser()
+					choseFile.dialogTitle = "Save app list"
+					choseFile.selectedFile = File("ATAppList");
+					choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
+					choseFile.fileFilter = choseFile.choosableFileFilters[1]
+					val chooseDialog = choseFile.showSaveDialog(frame)
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						val file =
+							File(choseFile.selectedFile.canonicalPath.toString() + "." + (choseFile.fileFilter as FileNameExtensionFilter).extensions[0])
+						if (!file.exists()) {
+							file.createNewFile()
 						}
-					}
-
-					override fun done() {
-						saveListButton.isEnabled = true
+						val fw = FileWriter(file.absoluteFile)
+						val bw = BufferedWriter(fw)
+						for (element in 0 until listModel.size()) {
+							bw.write(listModel[element].toString())
+							bw.write("\n")
+						}
+						bw.close()
 					}
 				}
-				MyWorker().execute()
+				saveListButton.isEnabled = true
 			}
+
 			buttonChooseOne.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonChooseOne.isEnabled = false
-						val choseFile = JFileChooser()
-						val filter = FileNameExtensionFilter("APK Files", "apk")
-						choseFile.fileFilter = filter
-						val chooseDialog = choseFile.showDialog(null, "Choose APK")
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
-							selectedFilePath = choseFile.selectedFile.path
-							labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
-						}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonChooseOne.isEnabled = false
+					val choseFile = JFileChooser()
+					val filter = FileNameExtensionFilter("APK Files", "apk")
+					choseFile.fileFilter = filter
+					val chooseDialog = choseFile.showDialog(null, "Choose APK")
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
+						selectedFilePath = choseFile.selectedFile.path
+						labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
 					}
 
-					override fun done() {
-						buttonChooseOne.isEnabled = true
-					}
 				}
-				Worker().execute()
+				buttonChooseOne.isEnabled = true
 			}
 			buttonChoseAll.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonChoseAll.isEnabled = false
-						val choseDirectory = JFileChooser()
-						choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
-						val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							selectedDirectoryPath = choseDirectory.selectedFile.path
-							labelSelectedAll.text = "Selected: ${choseDirectory.selectedFile.path}"
-						}
-					}
-
-					override fun done() {
-						buttonChoseAll.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonChoseAll.isEnabled = false
+					val choseDirectory = JFileChooser()
+					choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+					val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						selectedDirectoryPath = choseDirectory.selectedFile.path
+						labelSelectedAll.text = "Selected: ${choseDirectory.selectedFile.path}"
 					}
 				}
-				Worker().execute()
+
+
+				buttonChoseAll.isEnabled = true
 			}
 			buttonRunCommand.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonRunCommand.isEnabled = false
-						val command = textAreaCommandInput.text
-						when {
-							"adb" in command -> textAreaCommandOutput.text =
-								exec("adb", textAreaCommandInput.text.substring(4), output = true)
-							"fastboot" in command -> textAreaCommandOutput.text =
-								exec("fastboot", textAreaCommandInput.text.substring(9), output = true)
-							else -> textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
-						}
-					}
-
-					override fun done() {
-						buttonRunCommand.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonRunCommand.isEnabled = false
+					val command = textAreaCommandInput.text
+					when {
+						"adb" in command -> textAreaCommandOutput.text =
+							exec("adb", textAreaCommandInput.text.substring(4), output = true)
+						"fastboot" in command -> textAreaCommandOutput.text =
+							exec("fastboot", textAreaCommandInput.text.substring(9), output = true)
+						else -> textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
 					}
 				}
-				Worker().execute()
+
+
+				buttonRunCommand.isEnabled = true
 			}
 			buttonErase.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonErase.isEnabled = false
-						if (checkBoxPartitionBoot.isSelected)
-							exec("fastboot", "erase boot")
-						if (checkBoxPartitionSystem.isSelected)
-							exec("fastboot", "erase system")
-						if (checkBoxPartitionData.isSelected)
-							exec("fastboot", "erase userdata")
-						if (checkBoxPartitionCache.isSelected)
-							exec("fastboot", "erase cache")
-						if (checkBoxPartitionRecovery.isSelected)
-							exec("fastboot", "erase recovery")
-						if (checkBoxPartitionRadio.isSelected)
-							exec("fastboot", "erase radio")
-					}
-
-					override fun done() {
-						buttonErase.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonErase.isEnabled = false
+					if (checkBoxPartitionBoot.isSelected)
+						exec("fastboot", "erase boot")
+					if (checkBoxPartitionSystem.isSelected)
+						exec("fastboot", "erase system")
+					if (checkBoxPartitionData.isSelected)
+						exec("fastboot", "erase userdata")
+					if (checkBoxPartitionCache.isSelected)
+						exec("fastboot", "erase cache")
+					if (checkBoxPartitionRecovery.isSelected)
+						exec("fastboot", "erase recovery")
+					if (checkBoxPartitionRadio.isSelected)
+						exec("fastboot", "erase radio")
 				}
-				Worker().execute()
+
+
+				buttonErase.isEnabled = true
 			}
 			buttonChoseRecovery.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonChoseRecovery.isEnabled = false
-						val choseFile = JFileChooser()
-						val filter = FileNameExtensionFilter("Recovery Files", "img")
-						choseFile.fileFilter = filter
-						val chooseDialog = choseFile.showDialog(null, "Select Recovery img")
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
-							selectedFilePath = choseFile.selectedFile.path
-							labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
-						}
-					}
-
-					override fun done() {
-						buttonChoseRecovery.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonChoseRecovery.isEnabled = false
+					val choseFile = JFileChooser()
+					val filter = FileNameExtensionFilter("Recovery Files", "img")
+					choseFile.fileFilter = filter
+					val chooseDialog = choseFile.showDialog(null, "Select Recovery img")
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
+						selectedFilePath = choseFile.selectedFile.path
+						labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
 					}
 				}
-				Worker().execute()
+
+
+				buttonChoseRecovery.isEnabled = true
 			}
 			buttonInstallRecovery.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonInstallRecovery.isEnabled = false
-						if (Windows)
-							exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
-						else
-							exec("fastboot", "flash recovery $selectedFileAbsolutePath")
-					}
-
-					override fun done() {
-						buttonInstallRecovery.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonInstallRecovery.isEnabled = false
+					if (Windows)
+						exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
+					else
+						exec("fastboot", "flash recovery $selectedFileAbsolutePath")
 				}
-				Worker().execute()
+
+
+				buttonInstallRecovery.isEnabled = true
 			}
 			buttonBootToRecovery.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonBootToRecovery.isEnabled = false
-						if (Windows)
-							exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
-						else
-							exec("fastboot", "boot $selectedFileAbsolutePath")
-					}
-
-					override fun done() {
-						buttonBootToRecovery.isEnabled = true
-					}
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonBootToRecovery.isEnabled = false
+					if (Windows)
+						exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
+					else
+						exec("fastboot", "boot $selectedFileAbsolutePath")
 				}
-				Worker().execute()
+
+
+				buttonBootToRecovery.isEnabled = true
 			}
 			buttonChooseZip.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonChooseZip.isEnabled = false
-						val choseFile = JFileChooser()
-						val filter = FileNameExtensionFilter("Zip files", "zip")
-						choseFile.fileFilter = filter
-						val chooseDialog = choseFile.showDialog(null, "Select Zip")
-						if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-							selectedZipPath = choseFile.selectedFile.absolutePath
-							selectedZipName = choseFile.selectedFile.name
-						}
-					}
-
-					override fun done() {
-						buttonChooseZip.isEnabled = true
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonChooseZip.isEnabled = false
+					val choseFile = JFileChooser()
+					val filter = FileNameExtensionFilter("Zip files", "zip")
+					choseFile.fileFilter = filter
+					val chooseDialog = choseFile.showDialog(null, "Select Zip")
+					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+						selectedZipPath = choseFile.selectedFile.absolutePath
+						selectedZipName = choseFile.selectedFile.name
 					}
 				}
-				Worker().execute()
+
+
+				buttonChooseZip.isEnabled = true
 			}
 			buttonInstallZip.addActionListener {
-				class Worker : SwingWorker<Unit, Int>() {
-					override fun doInBackground() {
-						buttonInstallZip.isEnabled = false
-						if (Windows) {
-							exec("adb", "push \"${selectedZipPath}\" /sdcard/")
-						} else {
-							exec("adb", "push $selectedZipPath /sdcard/")
-						}
-						exec("adb", "shell twrp install $selectedZipName")
-						exec("adb", "shell rm $selectedZipName")
+				GlobalScope.launch(Dispatchers.Swing) {
+					buttonInstallZip.isEnabled = false
+					if (Windows) {
+						exec("adb", "push \"${selectedZipPath}\" /sdcard/")
+					} else {
+						exec("adb", "push $selectedZipPath /sdcard/")
 					}
-
-					override fun done() {
-						buttonInstallZip.isEnabled = true
-					}
+					exec("adb", "shell twrp install $selectedZipName")
+					exec("adb", "shell rm $selectedZipName")
 				}
-				Worker().execute()
+
+
+				buttonInstallZip.isEnabled = true
 			}
 			deviceControlPanel.setBounds(5, 385, 310, 85)
 			deviceConnection.setBounds(5, 475, 310, 100)
@@ -826,15 +696,13 @@ open class AndroidTool : Command() {
 			} catch (e: Exception) {
 			}
 			sdkCheck()
-			Thread {
+			GlobalScope.launch(Dispatchers.Swing) {
 				while (true) {
-					try {
-						connectionCheck()
-						Thread.sleep(1000)
-					} catch (ex: InterruptedException) {
-					}
+					connectionCheck()
+					delay(1000)
 				}
-			}.start()
+			}
+
 			versionCheck()
 		}
 	}
