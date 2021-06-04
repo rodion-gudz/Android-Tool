@@ -472,7 +472,7 @@ open class AndroidTool : Command() {
 						}
 						paths = file.listFiles(fileNameFilter)
 						for (path in paths) {
-							if (Windows)
+							if (Windows or MacOS)
 								exec("adb", "install \"$path\"")
 							else
 								exec("adb", "install $path")
@@ -489,7 +489,7 @@ open class AndroidTool : Command() {
 				class Worker : SwingWorker<Unit, Int>() {
 					override fun doInBackground() {
 						buttonInstallOne.isEnabled = false
-						if (Windows)
+						if (Windows or MacOS)
 							exec("adb", "install \"$selectedFileAbsolutePath\"")
 						else
 							exec("adb", "install $selectedFileAbsolutePath")
