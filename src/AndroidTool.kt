@@ -106,6 +106,7 @@ open class AndroidTool : Command() {
 	}
 
 	companion object : AndroidTool() {
+		@OptIn(DelicateCoroutinesApi::class)
 		@JvmStatic
 		fun main(args: Array<String>) {
 			searchTextField.addKeyListener(object : KeyAdapter() {
@@ -119,8 +120,8 @@ open class AndroidTool : Command() {
 				}
 			})
 			buttonSave.addActionListener {
+				buttonSave.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonSave.isEnabled = false
 					val choseFile = JFileChooser()
 					choseFile.dialogTitle = "Save logs file"
 					choseFile.selectedFile = File("ATLog");
@@ -142,12 +143,12 @@ open class AndroidTool : Command() {
 						}
 						bw.close()
 					}
+					buttonSave.isEnabled = true
 				}
-				buttonSave.isEnabled = true
 			}
 			buttonSdkDownload.addActionListener {
+				buttonSdkDownload.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonSdkDownload.isEnabled = false
 					createFolder()
 					when {
 						Windows -> downloadFile(
@@ -174,8 +175,8 @@ open class AndroidTool : Command() {
 						Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
 						MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
 					}
+					dialogSdkDownload.dispose()
 				}
-				dialogSdkDownload.dispose()
 			}
 			radioButtonAll.addActionListener {
 				getListOfPackages()
@@ -193,8 +194,8 @@ open class AndroidTool : Command() {
 				getListOfPackages()
 			}
 			buttonUpdate.addActionListener {
+				buttonUpdate.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonUpdate.isEnabled = false
 					runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
 				}
 				Runtime.getRuntime().exec("${SdkDir}adb kill-server")
@@ -202,8 +203,8 @@ open class AndroidTool : Command() {
 			}
 			buttonIpConnect.addActionListener {
 				labelConnect.text = ""
+				buttonIpConnect.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonIpConnect.isEnabled = false
 					exec("adb", "kill-server")
 					val output = exec("adb", "connect ${textFieldIP.text}", output = true)
 					if ("connected to" in output || "failed to authenticate to" in output) {
@@ -212,9 +213,8 @@ open class AndroidTool : Command() {
 					} else {
 						labelConnect.text = "Failed"
 					}
+					buttonIpConnect.isEnabled = true
 				}
-
-				buttonIpConnect.isEnabled = true
 			}
 			buttonStartRemote.addActionListener {
 				if (Windows) {
@@ -282,48 +282,40 @@ open class AndroidTool : Command() {
 				functionButtonStart = true
 			}
 			buttonReboot.addActionListener {
+				buttonReboot.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonReboot.isEnabled = false
 					when {
 						ConnectedViaAdb -> exec("adb", "reboot")
 						ConnectedViaFastboot -> exec("fastboot", "reboot")
 						ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
 					}
+					buttonReboot.isEnabled = true
 				}
-
-
-				buttonReboot.isEnabled = true
 			}
 			buttonResetPort.addActionListener {
+				buttonResetPort.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonResetPort.isEnabled = false
 					exec("adb", "tcpip 5555")
+					buttonResetPort.isEnabled = true
 				}
-
-
-				buttonResetPort.isEnabled = true
 			}
 			buttonRecoveryReboot.addActionListener {
+				buttonRecoveryReboot.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonRecoveryReboot.isEnabled = false
 					when {
 						ConnectedViaAdb -> exec("adb", "reboot recovery")
 						ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
 						ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
 					}
+					buttonRecoveryReboot.isEnabled = true
 				}
-
-
-				buttonRecoveryReboot.isEnabled = true
 			}
 			buttonGetLogs.addActionListener {
+				buttonGetLogs.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonGetLogs.isEnabled = false
 					exec("adb", "shell cp -f /tmp/recovery.log /sdcard")
+					buttonGetLogs.isEnabled = true
 				}
-
-
-				buttonGetLogs.isEnabled = true
 			}
 			openConsole.addActionListener {
 				if (Windows)
@@ -332,29 +324,25 @@ open class AndroidTool : Command() {
 					Runtime.getRuntime().exec("open -a Terminal $SdkDir")
 			}
 			buttonFastbootReboot.addActionListener {
+				buttonFastbootReboot.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonFastbootReboot.isEnabled = false
 					when {
 						ConnectedViaAdb -> exec("adb", "reboot bootloader")
 						ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
 						ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
 					}
+					buttonFastbootReboot.isEnabled = true
 				}
-
-
-				buttonFastbootReboot.isEnabled = true
 			}
 			buttonPowerOff.addActionListener {
+				buttonPowerOff.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonPowerOff.isEnabled = false
 					when {
 						ConnectedViaAdb -> exec("adb", "reboot -p")
 						ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
 					}
+					buttonPowerOff.isEnabled = true
 				}
-
-
-				buttonPowerOff.isEnabled = true
 			}
 			tabbedpane.addChangeListener {
 				try {
@@ -405,8 +393,8 @@ open class AndroidTool : Command() {
 				}
 			}
 			buttonInstallAll.addActionListener {
+				buttonInstallAll.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonInstallAll.isEnabled = false
 					val paths: Array<File>?
 					val file = File(selectedDirectoryPath)
 					val fileNameFilter = FilenameFilter { _, name ->
@@ -426,91 +414,75 @@ open class AndroidTool : Command() {
 						else
 							exec("adb", "install $path")
 					}
+					buttonInstallAll.isEnabled = true
 				}
-
-
-				buttonInstallAll.isEnabled = true
 			}
 			buttonInstallOne.addActionListener {
+				buttonInstallOne.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonInstallOne.isEnabled = false
 					if (Windows)
 						exec("adb", "install \"$selectedFileAbsolutePath\"")
 					else
 						exec("adb", "install $selectedFileAbsolutePath")
+					buttonInstallOne.isEnabled = true
 				}
-
-
-				buttonInstallOne.isEnabled = true
 			}
 			disableButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				disableButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					disableButton.isEnabled = false
 					exec("adb", "shell pm disable-user --user 0 $textInput")
+					disableButton.isEnabled = true
 				}
-
-
-				disableButton.isEnabled = true
 				getListOfPackages()
 			}
 			uninstallButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				uninstallButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					uninstallButton.isEnabled = false
 					exec("adb", "shell pm uninstall --user 0 $textInput")
+					uninstallButton.isEnabled = true
 				}
-
-
-				uninstallButton.isEnabled = true
 				getListOfPackages()
 			}
 			enableButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				enableButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					enableButton.isEnabled = false
 					exec("adb", "shell pm enable $textInput")
+					enableButton.isEnabled = true
 				}
-				enableButton.isEnabled = true
 			}
 			clearButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				clearButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					clearButton.isEnabled = false
 					exec("adb", "shell pm clear $textInput")
+					clearButton.isEnabled = true
 				}
-				clearButton.isEnabled = true
 			}
 			openButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				openButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					openButton.isEnabled = false
 					exec("adb", "shell monkey -p $textInput 1")
+					openButton.isEnabled = true
 				}
-				openButton.isEnabled = true
-
 			}
 			forceStopButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
-
+				forceStopButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					forceStopButton.isEnabled = false
 					exec("adb", "shell am force-stop $textInput")
+					forceStopButton.isEnabled = true
 				}
-
-				forceStopButton.isEnabled = true
 			}
 			refreshButton.addActionListener {
 				getListOfPackages(true)
 			}
 			saveListButton.addActionListener {
+				saveListButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					saveListButton.isEnabled = false
 					val choseFile = JFileChooser()
 					choseFile.dialogTitle = "Save app list"
 					choseFile.selectedFile = File("ATAppList");
@@ -531,13 +503,13 @@ open class AndroidTool : Command() {
 						}
 						bw.close()
 					}
+					saveListButton.isEnabled = true
 				}
-				saveListButton.isEnabled = true
 			}
 
 			buttonChooseOne.addActionListener {
+				buttonChooseOne.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonChooseOne.isEnabled = false
 					val choseFile = JFileChooser()
 					val filter = FileNameExtensionFilter("APK Files", "apk")
 					choseFile.fileFilter = filter
@@ -547,13 +519,12 @@ open class AndroidTool : Command() {
 						selectedFilePath = choseFile.selectedFile.path
 						labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
 					}
-
+					buttonChooseOne.isEnabled = true
 				}
-				buttonChooseOne.isEnabled = true
 			}
 			buttonChoseAll.addActionListener {
+				buttonChoseAll.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonChoseAll.isEnabled = false
 					val choseDirectory = JFileChooser()
 					choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 					val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
@@ -561,14 +532,13 @@ open class AndroidTool : Command() {
 						selectedDirectoryPath = choseDirectory.selectedFile.path
 						labelSelectedAll.text = "Selected: ${choseDirectory.selectedFile.path}"
 					}
+					buttonChoseAll.isEnabled = true
 				}
-
-
-				buttonChoseAll.isEnabled = true
 			}
 			buttonRunCommand.addActionListener {
+				buttonRunCommand.isEnabled = false
+
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonRunCommand.isEnabled = false
 					val command = textAreaCommandInput.text
 					when {
 						"adb" in command -> textAreaCommandOutput.text =
@@ -577,14 +547,12 @@ open class AndroidTool : Command() {
 							exec("fastboot", textAreaCommandInput.text.substring(9), output = true)
 						else -> textAreaCommandOutput.text = exec("adb", textAreaCommandInput.text, output = true)
 					}
+					buttonRunCommand.isEnabled = true
 				}
-
-
-				buttonRunCommand.isEnabled = true
 			}
 			buttonErase.addActionListener {
+				buttonErase.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonErase.isEnabled = false
 					if (checkBoxPartitionBoot.isSelected)
 						exec("fastboot", "erase boot")
 					if (checkBoxPartitionSystem.isSelected)
@@ -597,14 +565,12 @@ open class AndroidTool : Command() {
 						exec("fastboot", "erase recovery")
 					if (checkBoxPartitionRadio.isSelected)
 						exec("fastboot", "erase radio")
+					buttonErase.isEnabled = true
 				}
-
-
-				buttonErase.isEnabled = true
 			}
 			buttonChoseRecovery.addActionListener {
+				buttonChoseRecovery.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonChoseRecovery.isEnabled = false
 					val choseFile = JFileChooser()
 					val filter = FileNameExtensionFilter("Recovery Files", "img")
 					choseFile.fileFilter = filter
@@ -614,38 +580,32 @@ open class AndroidTool : Command() {
 						selectedFilePath = choseFile.selectedFile.path
 						labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
 					}
+					buttonChoseRecovery.isEnabled = true
 				}
-
-
-				buttonChoseRecovery.isEnabled = true
 			}
 			buttonInstallRecovery.addActionListener {
+				buttonInstallRecovery.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonInstallRecovery.isEnabled = false
 					if (Windows)
 						exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
 					else
 						exec("fastboot", "flash recovery $selectedFileAbsolutePath")
+					buttonInstallRecovery.isEnabled = true
 				}
-
-
-				buttonInstallRecovery.isEnabled = true
 			}
 			buttonBootToRecovery.addActionListener {
+				buttonBootToRecovery.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonBootToRecovery.isEnabled = false
 					if (Windows)
 						exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
 					else
 						exec("fastboot", "boot $selectedFileAbsolutePath")
+					buttonBootToRecovery.isEnabled = true
 				}
-
-
-				buttonBootToRecovery.isEnabled = true
 			}
 			buttonChooseZip.addActionListener {
+				buttonChooseZip.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonChooseZip.isEnabled = false
 					val choseFile = JFileChooser()
 					val filter = FileNameExtensionFilter("Zip files", "zip")
 					choseFile.fileFilter = filter
@@ -654,14 +614,12 @@ open class AndroidTool : Command() {
 						selectedZipPath = choseFile.selectedFile.absolutePath
 						selectedZipName = choseFile.selectedFile.name
 					}
+					buttonChooseZip.isEnabled = true
 				}
-
-
-				buttonChooseZip.isEnabled = true
 			}
 			buttonInstallZip.addActionListener {
+				buttonInstallZip.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					buttonInstallZip.isEnabled = false
 					if (Windows) {
 						exec("adb", "push \"${selectedZipPath}\" /sdcard/")
 					} else {
@@ -669,10 +627,8 @@ open class AndroidTool : Command() {
 					}
 					exec("adb", "shell twrp install $selectedZipName")
 					exec("adb", "shell rm $selectedZipName")
+					buttonInstallZip.isEnabled = true
 				}
-
-
-				buttonInstallZip.isEnabled = true
 			}
 			deviceControlPanel.setBounds(5, 385, 310, 85)
 			deviceConnection.setBounds(5, 475, 310, 100)

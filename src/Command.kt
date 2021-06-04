@@ -589,10 +589,10 @@ open class Command : AndroidToolUI() {
 	}
 
 	fun getListOfPackages(button: Boolean = false) {
+		if (button)
+			refreshButton.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val items: DefaultListModel<Any?> = DefaultListModel()
-			if (button)
-				refreshButton.isEnabled = false
 			searchTextField.isFocusable = true
 			arrayList.clear()
 			apps.clear()
@@ -626,8 +626,8 @@ open class Command : AndroidToolUI() {
 			}
 			listModel = items
 			list.model = listModel
+			refreshButton.isEnabled = true
 		}
-		refreshButton.isEnabled = true
 		searchFilter(searchTextField.text)
 	}
 }
