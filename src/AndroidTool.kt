@@ -95,7 +95,7 @@ var SdkDir = ProgramDir + when {
 }
 
 var remoteArgs = ""
-const val programVersion = "1.3.0-alpha3"
+const val programVersion = "1.3.0-alpha5"
 var programVersionLatest = programVersion
 val appProp = Properties()
 
@@ -238,25 +238,28 @@ open class AndroidTool : Command() {
 					}
 					GlobalScope.launch(Dispatchers.Swing) {
 						arrayList.clear()
-						Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
-						val builderList = when {
-							radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
-							radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:D")
-							radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:I")
-							radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:W")
-							radioButtonError.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:E")
-							radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:F")
-							radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:S")
-							else -> Runtime.getRuntime().exec("${SdkDir}adb logcat -c")
-						}
-						val input = builderList.inputStream
-						val reader = BufferedReader(InputStreamReader(input))
-						var line: String?
-						while (reader.readLine().also { line = it } != null) {
-							if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
-								if (logsWorking) {
-									listModelLogs.addElement(line)
-									listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
+						withContext(Dispatchers.Default) {
+							Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
+							val builderList = when {
+								radioButtonVerbose.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
+								radioButtonDebug.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:D")
+								radioButtonInfo.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:I")
+								radioButtonWarning.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:W")
+								radioButtonError.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:E")
+								radioButtonFatal.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:F")
+								radioButtonSilent.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:S")
+								else -> Runtime.getRuntime().exec("${SdkDir}adb logcat -c")
+							}
+
+							val input = builderList.inputStream
+							val reader = BufferedReader(InputStreamReader(input))
+							var line: String?
+							while (reader.readLine().also { line = it } != null) {
+								if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
+									if (logsWorking) {
+										listModelLogs.addElement(line)
+										listLogs.ensureIndexIsVisible(listLogs.model.size - 1)
+									}
 								}
 							}
 						}
@@ -416,6 +419,7 @@ open class AndroidTool : Command() {
 					}
 					buttonInstallAll.isEnabled = true
 				}
+				getListOfPackages()
 			}
 			buttonInstallOne.addActionListener {
 				buttonInstallOne.isEnabled = false
@@ -426,6 +430,7 @@ open class AndroidTool : Command() {
 						exec("adb", "install $selectedFileAbsolutePath")
 					buttonInstallOne.isEnabled = true
 				}
+				getListOfPackages()
 			}
 			disableButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
@@ -452,6 +457,7 @@ open class AndroidTool : Command() {
 					exec("adb", "shell pm enable $textInput")
 					enableButton.isEnabled = true
 				}
+				getListOfPackages()
 			}
 			clearButton.addActionListener {
 				val textInput = list.selectedValue.toString().substringBefore("(")
