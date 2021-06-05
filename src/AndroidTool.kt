@@ -407,15 +407,15 @@ open class AndroidTool : Command() {
 							if (str == ".apk") {
 								return@FilenameFilter true
 							}
-							false
 						}
-						paths = file.listFiles(fileNameFilter)
-						for (path in paths) {
-							if (Windows or MacOS)
-								exec("adb", "install \"$path\"")
-							else
-								exec("adb", "install \'$path\'")
-            }
+						false
+					}
+					paths = file.listFiles(fileNameFilter)
+					for (path in paths) {
+						if (Windows or MacOS)
+							exec("adb", "install \"$path\"")
+						else
+							exec("adb", "install \'$path\'")
 					}
 					buttonInstallAll.isEnabled = true
 				}
