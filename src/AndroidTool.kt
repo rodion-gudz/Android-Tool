@@ -407,15 +407,15 @@ open class AndroidTool : Command() {
 							if (str == ".apk") {
 								return@FilenameFilter true
 							}
+							false
 						}
-						false
-					}
-					paths = file.listFiles(fileNameFilter)
-					for (path in paths) {
-						if (Windows)
-							exec("adb", "install \"$path\"")
-						else
-							exec("adb", "install $path")
+						paths = file.listFiles(fileNameFilter)
+						for (path in paths) {
+							if (Windows or MacOS)
+								exec("adb", "install \"$path\"")
+							else
+								exec("adb", "install \'$path\'")
+            }
 					}
 					buttonInstallAll.isEnabled = true
 				}
@@ -424,10 +424,10 @@ open class AndroidTool : Command() {
 			buttonInstallOne.addActionListener {
 				buttonInstallOne.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows)
+					if (Windows or MacOS)
 						exec("adb", "install \"$selectedFileAbsolutePath\"")
 					else
-						exec("adb", "install $selectedFileAbsolutePath")
+						exec("adb", "install \'$selectedFileAbsolutePath\'")
 					buttonInstallOne.isEnabled = true
 				}
 				getListOfPackages()
