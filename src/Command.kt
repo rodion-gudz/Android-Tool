@@ -628,7 +628,7 @@ open class Command : AndroidToolUI() {
 			listModel = items
 			list.model = listModel
 			refreshButton.isEnabled = true
+			searchFilter(searchTextField.text)
 		}
-		searchFilter(searchTextField.text)
 	}
 }

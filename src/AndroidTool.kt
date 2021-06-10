@@ -426,55 +426,25 @@ open class AndroidTool : Command() {
 				getListOfPackages()
 			}
 			disableButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				disableButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell pm disable-user --user 0 $textInput")
-					disableButton.isEnabled = true
-				}
+				AppsControl("Disable", disableButton, list)
 				getListOfPackages()
 			}
 			uninstallButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				uninstallButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell pm uninstall --user 0 $textInput")
-					uninstallButton.isEnabled = true
-				}
+				AppsControl("Uninstall", uninstallButton, list)
 				getListOfPackages()
 			}
 			enableButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				enableButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell pm enable $textInput")
-					enableButton.isEnabled = true
-				}
+				AppsControl("Enable", enableButton, list)
 				getListOfPackages()
 			}
 			clearButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				clearButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell pm clear $textInput")
-					clearButton.isEnabled = true
-				}
+				AppsControl("Clear", clearButton, list)
 			}
 			openButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				openButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell monkey -p $textInput 1")
-					openButton.isEnabled = true
-				}
+				AppsControl("Open", openButton, list)
 			}
 			forceStopButton.addActionListener {
-				val textInput = list.selectedValue.toString().substringBefore("(")
-				forceStopButton.isEnabled = false
-				GlobalScope.launch(Dispatchers.Swing) {
-					exec("adb", "shell am force-stop $textInput")
-					forceStopButton.isEnabled = true
-				}
+				AppsControl("Stop", forceStopButton, list)
 			}
 			refreshButton.addActionListener {
 				getListOfPackages(true)
