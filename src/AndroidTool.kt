@@ -95,7 +95,6 @@ var SdkDir = ProgramDir + when {
 	else -> "SDK-Tools/"
 }
 
-var remoteArgs = ""
 const val programVersion = "1.3.0-alpha5"
 var programVersionLatest = programVersion
 val appProp = Properties()
@@ -216,13 +215,6 @@ open class AndroidTool : Command() {
 					}
 					buttonIpConnect.isEnabled = true
 				}
-			}
-			buttonStartRemote.addActionListener {
-				if (Windows) {
-					Runtime.getRuntime()
-						.exec("${ProgramDir}\\scrcpy\\scrcpy.exe $remoteArgs", arrayOf("ADB=${SdkDir}adb.exe"))
-				} else if (MacOS || Linux)
-					Runtime.getRuntime().exec("scrcpy $remoteArgs", arrayOf("ADB=${SdkDir}adb"))
 			}
 			buttonStart.addActionListener {
 				buttonStop.isEnabled = true

@@ -39,7 +39,6 @@ open class AndroidToolUI {
 	val labelUSB = JLabel("USB:")
 	val labelTCP = JLabel("TCP/IP:")
 	val logsPanel = JPanel()
-	val remotePanel = JPanel()
 	val consolePanel = JPanel()
 	val tabbedpane = JTabbedPane()
 	var textFieldIP = JTextField("")
@@ -220,12 +219,10 @@ open class AndroidToolUI {
 	val forceStopButton = JButton("Force stop")
 	val openButton = JButton("Open")
 	val buttonInstallOne = JButton("Install")
-	val buttonStartRemote = JButton("Start")
 	val buttonChoseAll = JButton("Select Folder")
 	val buttonRunCommand = JButton("Run")
 	val openConsole = JButton("Open system terminal")
 	val labelErase = JLabel("Erase partition")
-	val buttonPowered = JButton("<html>Powered by <b>scrcpy</b></html>")
 	val labelInstallRecovery = JLabel("Install or boot recovery")
 	val checkBoxPartitionBoot = JCheckBox("Boot")
 	val checkBoxPartitionRadio = JCheckBox("Radio")
@@ -246,17 +243,10 @@ open class AndroidToolUI {
 	val buttonGetLogs = JButton("Save logs")
 	val menuBar = JMenuBar()
 	val fileMenu = JMenu("Program")
-
-	//    val settingsMenu = JMenuItem("Settings")
 	val aboutItem = JMenuItem("About")
 	val exitItem = JMenuItem("Exit")
 
 	init {
-//        settingsMenu.addActionListener {
-//
-//        }
-//        fileMenu.add(settingsMenu)
-
 
 		fileMenu.add(aboutItem)
 
@@ -269,8 +259,6 @@ open class AndroidToolUI {
 			Command().exec("adb", "kill-server")
 			exitProcess(0)
 		}
-
-//        menuBar.add(fileMenu)
 
 		frame.jMenuBar = menuBar
 		buttonInstallZip.bounds = Rectangle(5, 25, 285, 50)
@@ -343,9 +331,6 @@ open class AndroidToolUI {
 		buttonInstallOne.bounds = Rectangle(5, 200, 285, 50)
 		buttonInstallOne.isFocusable = false
 		adbPanel.add(buttonInstallOne)
-		buttonStartRemote.bounds = Rectangle(5, 500, 170, 40)
-		buttonStartRemote.isFocusable = false
-		remotePanel.add(buttonStartRemote)
 		disableButton.bounds = Rectangle(328, 500, 180, 40)
 		disableButton.isFocusable = false
 		adbPanel.add(disableButton)
@@ -378,10 +363,6 @@ open class AndroidToolUI {
 		buttonStart.isFocusable = false
 		logsPanel.add(buttonStart)
 		linksPanel.layout = null
-
-		////////LinksPanel////////
-
-		////ROMs////
 
 		labelRoms.bounds = Rectangle(220, 5, 140, 30)
 		labelRoms.font = labelRoms.font.deriveFont(22.0f)
@@ -686,9 +667,7 @@ open class AndroidToolUI {
 		buttonMiGlobeDownload.bounds = Rectangle(370, 490, 110, 25)
 		buttonMiGlobeDownload.isEnabled = false
 		linksPanel.add(buttonMiGlobeDownload)
-		////ROMs////
 
-		////GoogleApps////
 		labelGapps.bounds = Rectangle(620, 5, 140, 30)
 		labelGapps.font = labelGapps.font.deriveFont(22.0f)
 		linksPanel.add(labelGapps)
@@ -742,9 +721,7 @@ open class AndroidToolUI {
 		buttonNikGAppsDownload.isFocusable = false
 		linksPanel.add(buttonNikGAppsDownload)
 		buttonNikGAppsDownload.addActionListener { runUrl("https://sourceforge.net/projects/nikgapps/files/Releases/") }
-		////GoogleApps////
 
-		////Recovery////
 		labelRecovery.bounds = Rectangle(508, 5, 140, 30)
 		labelRecovery.font = labelGapps.font.deriveFont(22.0f)
 		linksPanel.add(labelRecovery)
@@ -799,9 +776,7 @@ open class AndroidToolUI {
 		buttonPitchBlackDownload.isFocusable = false
 		linksPanel.add(buttonPitchBlackDownload)
 		buttonPitchBlackDownload.addActionListener { runUrl("https://sourceforge.net/projects/pbrp/files/") }
-		////Recovery////
 
-		////Other////
 		labelOther.bounds = Rectangle(780, 5, 140, 30)
 		labelOther.font = labelGapps.font.deriveFont(22.0f)
 		linksPanel.add(labelOther)
@@ -869,11 +844,6 @@ open class AndroidToolUI {
 		radioButtonThird.bounds = Rectangle(778, 35, 120, 20)
 		adbPanel.add(radioButtonThird)
 		groupApps.add(radioButtonThird)
-
-		////CheckBox////
-
-		////Button////
-
 
 		buttonInstallAll.bounds = Rectangle(5, 25, 285, 50)
 		buttonInstallAll.isFocusable = false
@@ -1052,7 +1022,6 @@ open class AndroidToolUI {
 		scrollPaneLogs.setBounds(5, 5, 870, 425)
 		scrollPaneLogs.setViewportView(listLogs)
 		logsPanel.add(scrollPaneLogs)
-		////ScrollPane////
 
 
 		scrollPane.setViewportView(list)
@@ -1090,12 +1059,6 @@ open class AndroidToolUI {
 		labelConnect.font = labelIP.font.deriveFont(13.0f)
 		deviceConnection.add(labelConnect)
 
-		buttonPowered.bounds = Rectangle(727, 510, 150, 30)
-		buttonPowered.font = labelIP.font.deriveFont(13.0f)
-		buttonPowered.isFocusable = false
-		buttonPowered.addActionListener { runUrl("https://github.com/Genymobile/scrcpy") }
-		remotePanel.add(buttonPowered)
-
 
 		buttonIpConnect.bounds = Rectangle(147, 65, 100, 25)
 		buttonIpConnect.isFocusable = false
@@ -1117,7 +1080,6 @@ open class AndroidToolUI {
 
 
 		logsPanel.layout = null
-		remotePanel.layout = null
 
 
 		buttonPowerOff.bounds = Rectangle(13, 45, 120, 25)
@@ -1155,7 +1117,6 @@ open class AndroidToolUI {
 
 		tabbedpane.add("App Manager", adbPanel)
 		tabbedpane.add("Logcat", logsPanel)
-		tabbedpane.add("Remote", remotePanel)
 		tabbedpane.add("Fastboot", fastbootPanel)
 		tabbedpane.add("Recovery", recoveryPanel)
 		tabbedpane.add("Console", consolePanel)
