@@ -83,6 +83,7 @@ val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
 val JarDir = System.getProperty("user.dir").toString()
 val userFolder = System.getProperty("user.home").toString()
+val armArch = "aarch64" == System.getProperty("os.arch").toString()
 val ProgramDir = userFolder + when {
 	Windows -> "\\.android_tool\\"
 	Linux -> "/.android_tool/"

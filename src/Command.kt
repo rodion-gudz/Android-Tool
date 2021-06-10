@@ -152,7 +152,8 @@ open class Command : AndroidToolUI() {
 			GetStateOutput = exec("adb", "get-state", output = true)
 			GetStateErrorOutput = exec("adb", "get-state", streamType = "Error", output = true)
 			AdbDevicesOutput = exec("adb", "devices", output = true)
-			FastbootDevicesOutput = exec("fastboot", "devices", output = true)
+			if (!armArch)
+				FastbootDevicesOutput = exec("fastboot", "devices", output = true)
 		}
 
 		ConnectedViaFastboot = "fastboot" in FastbootDevicesOutput
