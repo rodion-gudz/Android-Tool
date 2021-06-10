@@ -1125,7 +1125,8 @@ open class AndroidToolUI {
 		val components: Array<Component> =
 			fastbootPanel.components + adbPanel.components + logsPanel.components + recoveryPanel.components + consolePanel.components
 		for (component in components)
-			component.isEnabled = false
+			if (component != openConsole)
+				component.isEnabled = false
 
 		frame.add(tabbedpane)
 	}

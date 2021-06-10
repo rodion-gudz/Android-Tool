@@ -346,7 +346,7 @@ open class AndroidTool : Command() {
 						AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
 				} catch (e: Exception) {
 				}
-				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1 || tabbedpane.selectedIndex == 2) {
+				if (tabbedpane.selectedIndex == 0 || tabbedpane.selectedIndex == 1) {
 					contents.setBounds(5, 5, 310, 375)
 					deviceControlPanel.setBounds(5, 385, 310, 85)
 					deviceConnection.setBounds(5, 475, 310, 100)
@@ -356,6 +356,16 @@ open class AndroidTool : Command() {
 					textFieldIP.isVisible = true
 					labelConnect.isVisible = true
 					labelIP.isVisible = true
+				} else if (tabbedpane.selectedIndex == 2) {
+					contents.setBounds(5, 5, 310, 425)
+					deviceControlPanel.setBounds(5, 435, 310, 85)
+					deviceConnection.setBounds(5, 525, 310, 50)
+					labelTCP.isVisible = false
+					labelTCPConnection.isVisible = false
+					buttonIpConnect.isVisible = false
+					textFieldIP.isVisible = false
+					labelConnect.isVisible = false
+					labelIP.isVisible = false
 				} else if (tabbedpane.selectedIndex == 3) {
 					contents.setBounds(5, 5, 310, 425)
 					deviceControlPanel.setBounds(5, 435, 310, 85)
@@ -367,16 +377,6 @@ open class AndroidTool : Command() {
 					labelConnect.isVisible = false
 					labelIP.isVisible = false
 				} else if (tabbedpane.selectedIndex == 4) {
-					contents.setBounds(5, 5, 310, 425)
-					deviceControlPanel.setBounds(5, 435, 310, 85)
-					deviceConnection.setBounds(5, 525, 310, 50)
-					labelTCP.isVisible = false
-					labelTCPConnection.isVisible = false
-					buttonIpConnect.isVisible = false
-					textFieldIP.isVisible = false
-					labelConnect.isVisible = false
-					labelIP.isVisible = false
-				} else if (tabbedpane.selectedIndex == 6) {
 					contents.setBounds(5, 5, 310, 375)
 					deviceControlPanel.setBounds(5, 385, 310, 85)
 					deviceConnection.setBounds(5, 475, 310, 100)
@@ -411,6 +411,7 @@ open class AndroidTool : Command() {
 							exec("adb", "install \'$path\'")
 					}
 					buttonInstallAll.isEnabled = true
+					labelSelectedAll.text = "Selected: -"
 				}
 				getListOfPackages()
 			}
@@ -422,6 +423,7 @@ open class AndroidTool : Command() {
 					else
 						exec("adb", "install \'$selectedFileAbsolutePath\'")
 					buttonInstallOne.isEnabled = true
+					labelSelectedOne.text = "Selected: -"
 				}
 				getListOfPackages()
 			}
@@ -487,6 +489,7 @@ open class AndroidTool : Command() {
 						selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
 						selectedFilePath = choseFile.selectedFile.path
 						labelSelectedOne.text = "Selected: ${choseFile.selectedFile.name}"
+						buttonInstallOne.isEnabled = true
 					}
 					buttonChooseOne.isEnabled = true
 				}
@@ -500,6 +503,7 @@ open class AndroidTool : Command() {
 					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
 						selectedDirectoryPath = choseDirectory.selectedFile.path
 						labelSelectedAll.text = "Selected: ${choseDirectory.selectedFile.path}"
+						buttonInstallAll.isEnabled = true
 					}
 					buttonChoseAll.isEnabled = true
 				}

@@ -199,7 +199,7 @@ open class Command : AndroidToolUI() {
 					val enableComponents: Array<Component> =
 						adbPanel.components + consolePanel.components + logsPanel.components
 					for (component in enableComponents)
-						if (component != buttonStop && component != buttonSave)
+						if (component != buttonStop && component != buttonSave && component != buttonInstallOne && component != buttonInstallAll)
 							component.isEnabled = true
 				}
 				textAreaCommandOutput.isFocusable = true
@@ -570,7 +570,6 @@ open class Command : AndroidToolUI() {
 		for (component in components)
 			if (component != buttonStop && component != buttonSave && component != openConsole)
 				component.isEnabled = false
-
 		textAreaCommandOutput.isFocusable = false
 		textAreaCommandInput.isFocusable = false
 		listLogs.isFocusable = false
