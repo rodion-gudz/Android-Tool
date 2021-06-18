@@ -6,7 +6,7 @@
 
 #### Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. A dark theme, intuitive interface and other features
 
-### Latest Version: **1.2.3**
+### Latest Version: **1.3.0**
 
 ## Main Features:
 
@@ -23,7 +23,7 @@
 
 * #### Telegram channel - [@android_tooI](https://t.me/android_tooI)
 * #### Telegram chat - [@android_tooI_chat](https://t.me/android_tooI_chat)
-* #### 4PDA thread - [Android Tool](https://4pda.ru/forum/index.php?showtopic=1000362)
+* #### 4PDA thread - [Android Tool](https://4pda.to/forum/index.php?showtopic=1000362)
 
 ## Screenshots:
 
