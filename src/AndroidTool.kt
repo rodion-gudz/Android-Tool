@@ -95,7 +95,7 @@ var SdkDir = ProgramDir + when {
 	else -> "SDK-Tools/"
 }
 
-const val programVersion = "1.3.0-alpha5"
+const val programVersion = "1.3.0"
 var programVersionLatest = programVersion
 val appProp = Properties()
 
@@ -559,20 +559,20 @@ open class AndroidTool : Command() {
 			buttonInstallRecovery.addActionListener {
 				buttonInstallRecovery.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows)
+					if (Windows or MacOS)
 						exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
 					else
-						exec("fastboot", "flash recovery $selectedFileAbsolutePath")
+						exec("fastboot", "flash recovery \'$selectedFileAbsolutePath\'")
 					buttonInstallRecovery.isEnabled = true
 				}
 			}
 			buttonBootToRecovery.addActionListener {
 				buttonBootToRecovery.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows)
+					if (Windows or MacOS)
 						exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
 					else
-						exec("fastboot", "boot $selectedFileAbsolutePath")
+						exec("fastboot", "boot \'$selectedFileAbsolutePath\'")
 					buttonBootToRecovery.isEnabled = true
 				}
 			}
@@ -593,13 +593,13 @@ open class AndroidTool : Command() {
 			buttonInstallZip.addActionListener {
 				buttonInstallZip.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows) {
-						exec("adb", "push \"${selectedZipPath}\" /sdcard/")
+					if (Windows or MacOS) {
+						exec("adb", "push \"$selectedZipPath\" /sdcard/")
 					} else {
-						exec("adb", "push $selectedZipPath /sdcard/")
+						exec("adb", "push \'$selectedZipPath\' /sdcard/")
 					}
-					exec("adb", "shell twrp install $selectedZipName")
-					exec("adb", "shell rm $selectedZipName")
+					exec("adb", "shell twrp install \'$selectedZipName\'")
+					exec("adb", "shell rm \'$selectedZipName\'")
 					buttonInstallZip.isEnabled = true
 				}
 			}
@@ -611,7 +611,6 @@ open class AndroidTool : Command() {
 			textFieldIP.isVisible = true
 			labelConnect.isVisible = true
 			labelIP.isVisible = true
-
 			appProp.load(AndroidTool::class.java.getResource("applist.properties").openStream())
 
 			frame.isVisible = true
