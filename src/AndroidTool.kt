@@ -612,9 +612,10 @@ open class AndroidTool : Command() {
 			labelConnect.isVisible = true
 			labelIP.isVisible = true
 
+			appProp.load(AndroidTool::class.java.getResource("applist.properties").openStream())
+
 			frame.isVisible = true
 
-			appProp.load(AndroidTool::class.java.getResource("applist.properties").openStream())
 
 			DatagramSocket().use { socket ->
 				socket.connect(InetAddress.getByName("8.8.8.8"), 10002)

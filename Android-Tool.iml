@@ -21,8 +21,6 @@
     <orderEntry type="library" exported="" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" exported="" name="FlatLaf-library" level="project" />
     <orderEntry type="library" exported="" name="Maven-Artifact" level="project" />
-    <orderEntry type="library" name="org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.5.0-native-mt" level="project" />
-    <orderEntry type="library" name="org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0" level="project" />
-    <orderEntry type="library" name="Kotlinx-Coroutines-Swing" level="project" />
+    <orderEntry type="library" exported="" name="Kotlinx-Coroutines-Swing" level="project" />
   </component>
 </module>

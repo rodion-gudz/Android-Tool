@@ -964,7 +964,7 @@ open class AndroidToolUI {
 		radioButtonSilent.bounds = Rectangle(765, 436, 80, 20)
 		logsPanel.add(radioButtonSilent)
 		group.add(radioButtonSilent)
-		frame.setSize(1205, 615)
+		frame.setSize(1215, 615)
 		frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 		frame.layout = null
 		frame.isResizable = false
@@ -1076,7 +1076,7 @@ open class AndroidToolUI {
 		})
 		deviceConnection.add(textFieldIP)
 
-		tabbedpane.setBounds(320, 0, 895, 580)
+		tabbedpane.setBounds(320, 0, 905, 580)
 
 
 		logsPanel.layout = null
