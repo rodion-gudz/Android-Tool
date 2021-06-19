@@ -5,3 +5,4 @@ out/
 .sync/
 libs/
 build/
+*.DS_Store
