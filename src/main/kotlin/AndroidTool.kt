@@ -19,7 +19,6 @@ import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.DefaultTableModel
 import kotlin.system.exitProcess
-import com.apple.eawt.Application;
 
 
 var arrayList = ArrayList<String>()
@@ -84,6 +83,7 @@ var functionButtonStart = true
 var ifStopSelected = false
 var logsWorking: Boolean = false
 var iconYes = ImageIcon(AndroidTool()::class.java.getResource("connectionSuccess.png"))
+val appIcon = ImageIcon(AndroidTool::class.java.getResource("appIcon.png")).image
 val Windows = "Windows" in System.getProperty("os.name")
 val Linux = "Linux" in System.getProperty("os.name")
 val MacOS = "Mac" in System.getProperty("os.name")
@@ -102,9 +102,15 @@ var SdkDir = ProgramDir + when {
 }
 val model = DefaultTableModel()
 
-const val programVersion = "2.0-alpha6"
+const val programVersion = "2.0-alpha7"
 var programVersionLatest = programVersion
 val appProp = Properties()
+
+val menuBar = JMenuBar()
+val fileMenu = JMenu("Program")
+val aboutItem = JMenuItem("About")
+val exitItem = JMenuItem("Exit")
+val settingsMenu = JMenuItem("Settings")
 
 open class AndroidTool{
 
@@ -113,6 +119,7 @@ open class AndroidTool{
 		FlatDarculaLaf.install()
 		JFrame.setDefaultLookAndFeelDecorated(true)
 		JDialog.setDefaultLookAndFeelDecorated(true)
+		System.setProperty("apple.laf.useScreenMenuBar", "true")
 	}
 
 	var a = ATForm()
@@ -265,24 +272,10 @@ open class AndroidTool{
 		MultipleDevicesConnected = "error: more than one device/emulator" in GetStateErrorOutput
 
 
-//		if (MultipleDevicesConnected) {
-//			dialogUnauthorizedDevice.dispose()
-//			if (!dialogMultipleDevice.isVisible) {
-//				if (model.rowCount != 0)
-//					for (i in model.rowCount - 1 downTo 0)
-//						model.removeRow(i)
-//				labelUSBConnection.text = "Not connected"
-//				labelUSBConnection.icon = iconNo
-//				labelTCPConnection.text = "Not connected"
-//				labelTCPConnection.icon = iconNo
-//				listModelLogs.removeAllElements()
-//				frame.isEnabled = false
-//				dialogMultipleDevice.isVisible = true
-//			}
-//		} else if (UnauthorizedDevice) {
-//			if (!dialogUnauthorizedDevice.isVisible)
-//				dialogUnauthorizedDevice.isVisible = true
-//		}
+		if (MultipleDevicesConnected)
+			MultipleDevices.main()
+		else if (UnauthorizedDevice)
+			UnathorizedDevice.main()
 
 		when {
 			ConnectedViaAdb -> {
@@ -290,7 +283,6 @@ open class AndroidTool{
 				a.rebootButton.isEnabled = true
 				a.rebootToRecoveryButton.isEnabled = true
 				a.rebootToFastbootButton.isEnabled = true
-//				dialogUnauthorizedDevice.dispose()
 				if (enabledAll) {
 					val disableComponents: Array<Component> = a.fastbootPanel.components + a.recoveryPanel.components
 					for (component in disableComponents)
@@ -368,7 +360,6 @@ open class AndroidTool{
 				a.rebootToFastbootButton.isEnabled = true
 				a.connectButton.isEnabled = false
 				a.buttonResetPort.isVisible = false
-//				dialogUnauthorizedDevice.dispose()
 				if (enabledAll) {
 					val disableComponents: Array<Component> = a.adbPanel.components + a.fastbootPanel.components
 					for (component in disableComponents)
@@ -404,10 +395,6 @@ open class AndroidTool{
 				a.connectButton.isEnabled = false
 				enabledAll = true
 				newPhone = true
-//				if (!UnauthorizedDevice) {
-//					frame.isEnabled = true
-//					dialogUnauthorizedDevice.dispose()
-//				}
 				noConnection()
 			}
 		}
@@ -1037,10 +1024,7 @@ open class AndroidTool{
 					}
 					paths = file.listFiles(fileNameFilter)
 					for (path in paths) {
-						if (Windows or MacOS)
-							exec("adb", "install \"$path\"")
-						else
-							exec("adb", "install \'$path\'")
+						exec("adb", "install \"$path\"")
 					}
 					a.installButton.isEnabled = true
 					a.selectedLabel.text = "Selected: -"
@@ -1050,10 +1034,7 @@ open class AndroidTool{
 			a.installButton1.addActionListener {
 				a.installButton1.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows or MacOS)
-						exec("adb", "install \"$selectedFileAbsolutePath\"")
-					else
-						exec("adb", "install \'$selectedFileAbsolutePath\'")
+					exec("adb", "install \"$selectedFileAbsolutePath\"")
 					a.installButton1.isEnabled = true
 					a.selectedLabel1.text = "Selected: -"
 				}
@@ -1110,7 +1091,7 @@ open class AndroidTool{
 				}
 			}
 
-			a.selectButton.addActionListener {
+			a.selectFileButton.addActionListener {
 				a.selectButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
 					val choseFile = JFileChooser()
@@ -1121,7 +1102,7 @@ open class AndroidTool{
 						selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
 						selectedFilePath = choseFile.selectedFile.path
 						a.selectedLabel.text = "Selected: ${choseFile.selectedFile.name}"
-						a.installButton.isEnabled = true
+						a.installButton1.isEnabled = true
 					}
 					a.selectButton.isEnabled = true
 				}
@@ -1135,7 +1116,7 @@ open class AndroidTool{
 					if (chooseDialog == JFileChooser.APPROVE_OPTION) {
 						selectedDirectoryPath = choseDirectory.selectedFile.path
 						a.selectedLabel1.text = "Selected: ${choseDirectory.selectedFile.path}"
-						a.installButton1.isEnabled = true
+						a.installButton.isEnabled = true
 					}
 					a.selectFolderButton.isEnabled = true
 				}
@@ -1190,20 +1171,14 @@ open class AndroidTool{
 			a.installButton2.addActionListener {
 				a.installButton2.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows or MacOS)
-						exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
-					else
-						exec("fastboot", "flash recovery \'$selectedFileAbsolutePath\'")
+					exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
 					a.installButton2.isEnabled = true
 				}
 			}
 			a.bootButton.addActionListener {
 				a.bootButton.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows or MacOS)
-						exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
-					else
-						exec("fastboot", "boot \'$selectedFileAbsolutePath\'")
+					exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
 					a.bootButton.isEnabled = true
 				}
 			}
@@ -1224,36 +1199,46 @@ open class AndroidTool{
 			a.installButton3.addActionListener {
 				a.installButton3.isEnabled = false
 				GlobalScope.launch(Dispatchers.Swing) {
-					if (Windows or MacOS) {
-						exec("adb", "push \"$selectedZipPath\" /sdcard/")
-					} else {
-						exec("adb", "push \'$selectedZipPath\' /sdcard/")
-					}
-					exec("adb", "shell twrp install \'$selectedZipName\'")
-					exec("adb", "shell rm \'$selectedZipName\'")
+					exec("adb", "push \"$selectedZipPath\" /sdcard/")
+					exec("adb", "shell twrp install \"$selectedZipName\"")
+					exec("adb", "shell rm \"$selectedZipName\"")
 					a.installButton3.isEnabled = true
 				}
 			}
+//	        settingsMenu.addActionListener {
+//
+//            }
+            fileMenu.add(settingsMenu)
+			settingsMenu.addActionListener{
+				Settings.main()
+			}
+			fileMenu.add(aboutItem)
+			aboutItem.addActionListener{
+				AboutDialog.main()
+			}
+			fileMenu.addSeparator()
+			fileMenu.add(exitItem)
+			exitItem.addActionListener {
+				exec("adb", "kill-server")
+				exitProcess(0)
+			}
+            menuBar.add(fileMenu)
 
-//			val components: Array<Component> =
-//				a.fastbootPanel.components + a.adbPanel.components + a.logsPanel.components + a.consolePanel.components + a.recoveryPanel.components + a.devicePanel.components
-//			for (component in components)
-//				if (component != a.openSystemTerminalButton)
-//					component.isEnabled = false
-
-			Application.getApplication().dockIconImage = ImageIcon(AndroidTool::class.java.getResource("appIcon.png")).image
+			frame.jMenuBar = menuBar
+			appProp.load(AndroidTool::class.java.getResourceAsStream("applist.properties"))
+			val components: Array<Component> =
+				a.fastbootPanel.components + a.adbPanel.components + a.logsPanel.components + a.consolePanel.components + a.recoveryPanel.components + a.devicePanel.components
+			for (component in components)
+				if (component != a.openSystemTerminalButton)
+					component.isEnabled = false
+			frame.iconImage = appIcon
 			frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 			frame.contentPane = a.ATPanel
 			frame.setSize(1100, 650)
 			frame.setLocationRelativeTo(null)
-			frame.iconImage = ImageIcon(AndroidTool::class.java.getResource("appIcon.png")).image
-			appProp.load(AndroidTool::class.java.getResourceAsStream("applist.properties"))
-
-
-
 			frame.isVisible = true
 
-			GlobalScope.launch() {
+			GlobalScope.launch {
 				systemIP = InetAddress.getLocalHost().hostAddress.substringBeforeLast('.') + "."
 				try {
 					a.textField2.text = systemIP
@@ -1261,16 +1246,13 @@ open class AndroidTool{
 				}
 			}
 			sdkCheck()
-			GlobalScope.launch() {
+			GlobalScope.launch {
 				while (true) {
 					connectionCheck()
 					delay(1000)
 				}
 			}
-
 			versionCheck()
 		}
-
 	}
-
 }

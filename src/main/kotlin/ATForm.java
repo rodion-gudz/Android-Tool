@@ -371,4 +371,5 @@ public class ATForm {
     public JComponent $$$getRootComponent$$$() {
         return ATPanel;
     }
+
 }
