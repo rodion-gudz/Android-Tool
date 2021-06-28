@@ -19,6 +19,7 @@ import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.DefaultTableModel
 import kotlin.system.exitProcess
+import com.apple.eawt.Application;
 
 
 var arrayList = ArrayList<String>()
@@ -1240,6 +1241,7 @@ open class AndroidTool{
 //				if (component != a.openSystemTerminalButton)
 //					component.isEnabled = false
 
+			Application.getApplication().dockIconImage = ImageIcon(AndroidTool::class.java.getResource("appIcon.png")).image
 			frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 			frame.contentPane = a.ATPanel
 			frame.setSize(1100, 650)
