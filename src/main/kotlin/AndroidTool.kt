@@ -1,4 +1,5 @@
 import com.formdev.flatlaf.FlatDarculaLaf
+import com.formdev.flatlaf.FlatIntelliJLaf
 import kotlinx.coroutines.*
 import kotlinx.coroutines.swing.Swing
 import org.apache.maven.artifact.versioning.ComparableVersion
@@ -11,10 +12,11 @@ import java.awt.event.WindowEvent
 import java.io.*
 import java.net.InetAddress
 import java.net.URI
+import java.net.URISyntaxException
 import java.net.URL
 import java.util.*
+import java.util.jar.JarFile
 import java.util.zip.ZipFile
-import javax.crypto.Mac
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
 import javax.swing.table.DefaultTableModel
@@ -101,9 +103,12 @@ var SdkDir = ProgramDir + when {
 	else -> "SDK-Tools/"
 }
 val model = DefaultTableModel()
+val frame = JFrame()
+
 
 const val programVersion = "2.0-alpha7"
 var programVersionLatest = programVersion
+val programBuild = "CUM"
 val appProp = Properties()
 
 val menuBar = JMenuBar()
@@ -112,14 +117,24 @@ val aboutItem = JMenuItem("About")
 val exitItem = JMenuItem("Exit")
 val settingsMenu = JMenuItem("Settings")
 
+
 open class AndroidTool{
 
 	init {
-		System.setProperty("apple.awt.application.appearance", "system")
-		FlatDarculaLaf.install()
+		UIManager.put( "Button.arc", 6 )
+		UIManager.put( "Component.arc", 6 )
+		UIManager.put( "CheckBox.arc", 6 )
+		UIManager.put( "ProgressBar.arc", 6 )
+		UIManager.put( "TextComponent.arc", 6 )
 		JFrame.setDefaultLookAndFeelDecorated(true)
 		JDialog.setDefaultLookAndFeelDecorated(true)
+		System.setProperty("apple.awt.application.appearance", "system")
 		System.setProperty("apple.laf.useScreenMenuBar", "true")
+		val theme = settingsValues().cum()
+		if (theme== "dark")
+			UIManager.setLookAndFeel(FlatDarculaLaf())
+		else if (theme == "white")
+			UIManager.setLookAndFeel(FlatIntelliJLaf())
 	}
 
 	var a = ATForm()
@@ -757,12 +772,48 @@ open class AndroidTool{
 		}
 	}
 
+	fun getProgramBuildTime(): String {
+		var d: Date? = null
+		val currentClass = object : Any() {}.javaClass.enclosingClass
+		val resource = currentClass.getResource(currentClass.simpleName + ".class")
+		if (resource != null) {
+			when (resource.protocol) {
+				"file" -> {
+					try {
+						d = Date(File(resource.toURI()).lastModified())
+					} catch (ignored: URISyntaxException) {
+					}
+				}
+				"jar" -> {
+					val path = resource.path
+					d = Date(File(path.substring(5, path.indexOf("!"))).lastModified())
+				}
+				"zip" -> {
+					val path = resource.path
+					val jarFileOnDisk = File(path.substring(0, path.indexOf("!")))
+					try {
+						JarFile(jarFileOnDisk).use { jf ->
+							val ze = jf.getEntry(path.substring(path.indexOf("!") + 2))
+							val zeTimeLong = ze.time
+							val zeTimeDate = Date(zeTimeLong)
+							d = zeTimeDate
+						}
+					} catch (ignored: IOException) {
+					} catch (ignored: RuntimeException) {
+					}
+				}
+			}
+		}
+		return d.toString()
+	}
+	fun updateUI(){
+		SwingUtilities.updateComponentTreeUI(frame)
+	}
 
 	companion object : AndroidTool() {
 		@OptIn(DelicateCoroutinesApi::class)
 		@JvmStatic
 		fun main(args: Array<String>) {
-			val frame = JFrame()
 			a.list2.model = listModelLogs
 			a.textField1.addKeyListener(object : KeyAdapter() {
 				override fun keyReleased(evt: KeyEvent) {
@@ -1205,9 +1256,6 @@ open class AndroidTool{
 					a.installButton3.isEnabled = true
 				}
 			}
-//	        settingsMenu.addActionListener {
-//
-//            }
             fileMenu.add(settingsMenu)
 			settingsMenu.addActionListener{
 				Settings.main()
@@ -1238,13 +1286,13 @@ open class AndroidTool{
 			frame.setLocationRelativeTo(null)
 			frame.isVisible = true
 
-			GlobalScope.launch {
-				systemIP = InetAddress.getLocalHost().hostAddress.substringBeforeLast('.') + "."
-				try {
-					a.textField2.text = systemIP
-				} catch (e: Exception) {
-				}
+			when {
+				Windows -> systemIP = InetAddress.getLocalHost().hostAddress
+				MacOS -> systemIP = Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
+				Linux -> systemIP = Runtime.getRuntime().exec("hostname -I").inputStream.bufferedReader().readLine()
 			}
+			systemIP = systemIP.substringBeforeLast('.') + "."
+			a.textField2.text = systemIP
 			sdkCheck()
 			GlobalScope.launch {
 				while (true) {
