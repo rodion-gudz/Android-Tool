@@ -1,8 +1,15 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Android-Tool:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Android_Tool_Jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/Android-Tool.Jar</output-path>
     <root id="archive" name="Android-Tool.jar">
       <element id="module-output" name="Android-Tool" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.3/flatlaf-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/intellij/forms_rt/7.0.3/forms_rt-7.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm-commons/3.0/asm-commons-3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm-tree/3.0/asm-tree-3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm/3.0/asm-3.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/jgoodies/forms/1.1-preview/forms-1.1-preview.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/jdom/jdom/1.0/jdom-1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-stdlib.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-reflect.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$KOTLIN_BUNDLED$/lib/kotlin-test.jar" path-in-jar="/" />
@@ -13,16 +20,9 @@
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.5.0/kotlin-stdlib-1.5.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/13.0/annotations-13.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.0/kotlin-stdlib-jdk7-1.5.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/intellij/forms_rt/7.0.3/forms_rt-7.0.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm-commons/3.0/asm-commons-3.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm-tree/3.0/asm-tree-3.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/asm/asm/3.0/asm-3.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/jgoodies/forms/1.1-preview/forms-1.1-preview.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/jdom/jdom/1.0/jdom-1.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.8.1/maven-artifact-3.8.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.2.1/plexus-utils-3.2.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.2/flatlaf-1.2.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

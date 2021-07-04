@@ -12,10 +12,8 @@ import java.awt.event.WindowEvent
 import java.io.*
 import java.net.InetAddress
 import java.net.URI
-import java.net.URISyntaxException
 import java.net.URL
 import java.util.*
-import java.util.jar.JarFile
 import java.util.zip.ZipFile
 import javax.swing.*
 import javax.swing.filechooser.FileNameExtensionFilter
@@ -92,23 +90,14 @@ val MacOS = "Mac" in System.getProperty("os.name")
 val JarDir = System.getProperty("user.dir").toString()
 val userFolder = System.getProperty("user.home").toString()
 val armArch = "aarch64" == System.getProperty("os.arch").toString()
-val ProgramDir = userFolder + when {
-	Windows -> "\\.android_tool\\"
-	Linux -> "/.android_tool/"
-	else -> "/.android_tool/"
-}
-var SdkDir = ProgramDir + when {
-	Windows -> "SDK-Tools\\"
-	Linux -> "SDK-Tools/"
-	else -> "SDK-Tools/"
-}
+val ProgramDir = userFolder + if (Windows) "\\.android_tool\\" else "/.android_tool/"
+var SdkDir = ProgramDir + if (Windows) "SDK-Tools\\" else "SDK-Tools/"
 val model = DefaultTableModel()
 val frame = JFrame()
 
 
 const val programVersion = "2.0-alpha7"
 var programVersionLatest = programVersion
-val programBuild = "CUM"
 val appProp = Properties()
 
 val menuBar = JMenuBar()
@@ -121,6 +110,7 @@ val settingsMenu = JMenuItem("Settings")
 open class AndroidTool{
 
 	init {
+		createFolder()
 		UIManager.put( "Button.arc", 6 )
 		UIManager.put( "Component.arc", 6 )
 		UIManager.put( "CheckBox.arc", 6 )
@@ -130,7 +120,7 @@ open class AndroidTool{
 		JDialog.setDefaultLookAndFeelDecorated(true)
 		System.setProperty("apple.awt.application.appearance", "system")
 		System.setProperty("apple.laf.useScreenMenuBar", "true")
-		val theme = settingsValues().cum()
+		val theme = SettingsValues().getSettings()
 		if (theme== "dark")
 			UIManager.setLookAndFeel(FlatDarculaLaf())
 		else if (theme == "white")
@@ -141,10 +131,12 @@ open class AndroidTool{
 
 
 	fun createFolder() {
-		when {
-			Windows -> File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
-			Linux -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
-			else -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
+		if (ProgramDir != null) {
+			when {
+				Windows -> File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
+				else -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
+			}
+			if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
 		}
 	}
 
@@ -186,13 +178,7 @@ open class AndroidTool{
 					return
 				}
 			}
-			Linux -> {
-				if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
-					SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-					return
-				}
-			}
-			MacOS -> {
+			else -> {
 				if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
 					SdkDir = "$userFolder/.android_tool/SDK-Tools/"
 					return
@@ -215,16 +201,7 @@ open class AndroidTool{
 					return
 				}
 			}
-			Linux -> {
-				if (File("adb").exists() && File("fastboot").exists()) {
-					SdkDir = "$JarDir/"
-					return
-				} else if (File("$JarDir/SDK-Tools/adb").exists() && File("$JarDir/SDK-Tools/fastboot").exists()) {
-					SdkDir = "$JarDir/SDK-Tools/"
-					return
-				}
-			}
-			MacOS -> {
+			else -> {
 				if (File("adb").exists() && File("fastboot").exists()) {
 					SdkDir = "$JarDir/"
 					return
@@ -645,7 +622,7 @@ open class AndroidTool{
 		Desktop.getDesktop().browse(urlString)
 	}
 	fun runUpdate() {
-		GlobalScope.launch() {
+		GlobalScope.launch {
 			runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
 		}
 		Runtime.getRuntime().exec("${SdkDir}adb kill-server")
@@ -691,11 +668,9 @@ open class AndroidTool{
 				Linux -> unZipFile("$SdkDir/Linux.zip")
 				MacOS -> unZipFile("$SdkDir/MacOS.zip")
 			}
-			if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
 			when {
 				Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
-				Linux -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-				MacOS -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+				else -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
 			}
 			progress.isIndeterminate = false
 			label.text = "Completed!"
@@ -772,40 +747,6 @@ open class AndroidTool{
 		}
 	}
 
-	fun getProgramBuildTime(): String {
-		var d: Date? = null
-		val currentClass = object : Any() {}.javaClass.enclosingClass
-		val resource = currentClass.getResource(currentClass.simpleName + ".class")
-		if (resource != null) {
-			when (resource.protocol) {
-				"file" -> {
-					try {
-						d = Date(File(resource.toURI()).lastModified())
-					} catch (ignored: URISyntaxException) {
-					}
-				}
-				"jar" -> {
-					val path = resource.path
-					d = Date(File(path.substring(5, path.indexOf("!"))).lastModified())
-				}
-				"zip" -> {
-					val path = resource.path
-					val jarFileOnDisk = File(path.substring(0, path.indexOf("!")))
-					try {
-						JarFile(jarFileOnDisk).use { jf ->
-							val ze = jf.getEntry(path.substring(path.indexOf("!") + 2))
-							val zeTimeLong = ze.time
-							val zeTimeDate = Date(zeTimeLong)
-							d = zeTimeDate
-						}
-					} catch (ignored: IOException) {
-					} catch (ignored: RuntimeException) {
-					}
-				}
-			}
-		}
-		return d.toString()
-	}
 	fun updateUI(){
 		SwingUtilities.updateComponentTreeUI(frame)
 	}

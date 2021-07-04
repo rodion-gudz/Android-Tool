@@ -9,7 +9,7 @@ import javax.swing.JList
 @OptIn(DelicateCoroutinesApi::class)
 class AppsControl(func: Any, button: JButton, list : JList<Any?>) : AndroidTool() {
 	private val app = list.selectedValue.toString().substringBefore("(")
-	val command = when (func) {
+	private val command = when (func) {
 		"Open" -> "shell monkey -p $app 1"
 		"Stop" -> "shell am force-stop $app"
 		"Clear" -> "shell pm clear $app"

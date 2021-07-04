@@ -24,7 +24,6 @@ public class AboutDialog extends JDialog {
     public static void main() {
         AboutDialog dialog = new AboutDialog();
         dialog.version.setText(AndroidToolKt.programVersion);
-        dialog.build.setText(AndroidToolKt.getProgramBuild());
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setResizable(false);
@@ -49,39 +48,28 @@ public class AboutDialog extends JDialog {
         contentPane = new JPanel();
         contentPane.setLayout(new GridLayoutManager(1, 1, new Insets(10, 10, 10, 10), -1, -1));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(4, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         label1.setIcon(new ImageIcon(getClass().getResource("/appIcon.png")));
         label1.setText("");
-        panel1.add(label1, new GridConstraints(0, 0, 4, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label1, new GridConstraints(0, 0, 2, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
         Font label2Font = this.$$$getFont$$$(null, -1, 26, label2.getFont());
         if (label2Font != null) label2.setFont(label2Font);
         label2.setText("Android-Tool");
-        panel1.add(label2, new GridConstraints(0, 1, 2, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label2, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
         label3.setEnabled(true);
         Font label3Font = this.$$$getFont$$$(null, Font.BOLD, 16, label3.getFont());
         if (label3Font != null) label3.setFont(label3Font);
         label3.setText("Version");
-        panel1.add(label3, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label4 = new JLabel();
-        label4.setEnabled(true);
-        Font label4Font = this.$$$getFont$$$(null, Font.BOLD, 16, label4.getFont());
-        if (label4Font != null) label4.setFont(label4Font);
-        label4.setText("Build");
-        panel1.add(label4, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(label3, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         version = new JLabel();
         Font versionFont = this.$$$getFont$$$(null, -1, 14, version.getFont());
         if (versionFont != null) version.setFont(versionFont);
         version.setText("");
-        panel1.add(version, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        build = new JLabel();
-        Font buildFont = this.$$$getFont$$$(null, -1, 14, build.getFont());
-        if (buildFont != null) build.setFont(buildFont);
-        build.setText("");
-        panel1.add(build, new GridConstraints(3, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(version, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
