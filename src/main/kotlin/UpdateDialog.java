@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Locale;
 
+
 public class UpdateDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
@@ -51,7 +52,7 @@ public class UpdateDialog extends JDialog {
     }
 
     private void onOK() {
-        AndroidTool.Companion.runUpdate();
+        UtilsKt.runUpdate();
     }
 
     private void onCancel() {

@@ -52,7 +52,7 @@ public class SDKDialog extends JDialog {
     private void onOk() {
         buttonOK.setVisible(false);
         progressBar1.setVisible(true);
-        AndroidTool.Companion.runSDK(progressBar1, label);
+        UtilsKt.runSDK(progressBar1, label);
     }
 
     public static void main() {

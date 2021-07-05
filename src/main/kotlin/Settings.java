@@ -17,6 +17,7 @@ import java.util.Properties;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import jdk.jfr.internal.Utils;
 
 public class Settings extends JDialog {
     private JPanel contentPane;
@@ -78,7 +79,7 @@ public class Settings extends JDialog {
             io.printStackTrace();
         }
         SwingUtilities.updateComponentTreeUI(dialog);
-        AndroidTool.Companion.updateUI();
+        UtilsKt.updateUI();
         dialog.dispose();
         Settings.main();
     }
