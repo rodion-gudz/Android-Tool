@@ -1,17 +1,17 @@
+import AndroidTool.Companion.a
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
 import kotlinx.coroutines.withContext
-import java.io.*
-import javax.swing.JFileChooser
-import javax.swing.filechooser.FileNameExtensionFilter
-import AndroidTool.Companion.a
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
+import java.io.*
 import java.net.InetAddress
+import javax.swing.JFileChooser
+import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
 fun createUI() {

@@ -1,5 +1,5 @@
-import java.awt.Component
 import AndroidTool.Companion.a
+import java.awt.Component
 
 private fun noConnection() {
 	val components: Array<Component> =

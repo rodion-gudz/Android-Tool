@@ -1,3 +1,5 @@
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -14,10 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Locale;
 import java.util.Properties;
-
-import com.formdev.flatlaf.FlatDarculaLaf;
-import com.formdev.flatlaf.FlatIntelliJLaf;
-import jdk.jfr.internal.Utils;
 
 public class Settings extends JDialog {
     private JPanel contentPane;

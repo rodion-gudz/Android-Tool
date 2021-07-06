@@ -1,18 +1,18 @@
+import AndroidTool.Companion.a
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.apache.maven.artifact.versioning.ComparableVersion
+import java.awt.Component
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
 import java.net.URL
 import java.util.*
 import javax.swing.DefaultListModel
-import kotlin.system.exitProcess
-import AndroidTool.Companion.a
-import java.awt.Component
 import javax.swing.JLabel
 import javax.swing.JProgressBar
 import javax.swing.SwingUtilities
+import kotlin.system.exitProcess
 
 
 fun sdkCheck() {

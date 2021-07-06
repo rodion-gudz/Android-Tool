@@ -1,9 +1,9 @@
+import AndroidTool.Companion.a
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
 import javax.swing.DefaultListModel
-import AndroidTool.Companion.a
 
 fun getListOfPackages(button: Boolean = false) {
 	if (button)
