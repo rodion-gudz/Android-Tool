@@ -67,7 +67,7 @@ fun runUrl(url: String) {
 
 fun runUpdate() {
 	GlobalScope.launch {
-		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest")
+		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest/Android-Tool.jar")
 	}
 	Runtime.getRuntime().exec("${SdkDir}adb kill-server")
 	exitProcess(0)
@@ -107,40 +107,37 @@ fun runSDK(progress: JProgressBar, label: JLabel) {
 	progress.isIndeterminate = true
 	label.text = "Installing..."
 	GlobalScope.launch {
-		createFolder()
 		when {
 			Windows -> downloadFile(
-				"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Windows.zip",
-				"$SdkDir\\Windows.zip"
+				"https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
+				"$ProgramDir\\Windows.zip"
 			)
 			Linux -> downloadFile(
-				"https://github.com/fast-geek/SDK-Platform-Tools/raw/main/Linux.zip",
-				"$SdkDir/Linux.zip"
+				"https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
+				"$ProgramDir/Linux.zip"
 			)
 			MacOS -> downloadFile(
-				"https://github.com/fast-geek/SDK-Platform-Tools/blob/68198653d62b008fcb9c4bb01c31a9f5bfcea857/MacOS.zip?raw=true",
-				"$SdkDir/MacOS.zip"
+				"https://dl.google.com/android/repository/platform-tools-latest-darwin.zip",
+				"$ProgramDir/MacOS.zip"
 			)
 		}
 		when {
-			Windows -> unZipFile("$SdkDir\\Windows.zip")
-			Linux -> unZipFile("$SdkDir/Linux.zip")
-			MacOS -> unZipFile("$SdkDir/MacOS.zip")
+			Windows -> unZipFile("$ProgramDir\\Windows.zip")
+			Linux -> unZipFile("$ProgramDir/Linux.zip")
+			MacOS -> unZipFile("$ProgramDir/MacOS.zip")
 		}
-		when {
-			Windows -> SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
-			else -> SdkDir = "$userFolder/.android_tool/SDK-Tools/"
-		}
+		File("${ProgramDir}platform-tools").renameTo(File("${ProgramDir}SDK-Tools"))
+		SdkDir = ProgramDir + if (Windows) "SDK-Tools\\" else "SDK-Tools/"
 		progress.isIndeterminate = false
 		label.text = "Completed!"
 	}
 }
 
-fun updateUI(){
+fun updateUI() {
 	SwingUtilities.updateComponentTreeUI(AndroidTool.frame)
 }
 
-fun desableCompoments(){
+fun desableCompoments() {
 	val components: Array<Component> =
 		a.fastbootPanel.components + a.adbPanel.components + a.logsPanel.components + a.consolePanel.components + a.recoveryPanel.components + a.devicePanel.components
 	for (component in components)

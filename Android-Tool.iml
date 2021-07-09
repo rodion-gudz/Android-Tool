@@ -17,6 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/images" type="java-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/forms" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/libs" />
       <excludeFolder url="file://$MODULE_DIR$/.sync" />
     </content>

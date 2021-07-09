@@ -8,9 +8,9 @@ fun unZipFile(urlStr: String) {
 	ZipFile(File(urlStr)).use { zip ->
 		zip.stream().forEach { entry ->
 			if (entry.isDirectory)
-				File(SdkDir, entry.name).mkdirs()
+				File(ProgramDir, entry.name).mkdirs()
 			else zip.getInputStream(entry).use { input ->
-				File(SdkDir, entry.name).apply {
+				File(ProgramDir, entry.name).apply {
 					outputStream().use { output ->
 						input.copyTo(output)
 					}
@@ -19,7 +19,7 @@ fun unZipFile(urlStr: String) {
 			}
 		}
 	}
-	File(ProgramDir + if (Windows) "\\SDK-Tools\\Windows.zip" else if (Linux) "/SDK-Tools/Linux.zip" else "/SDK-Tools/MacOS.zip").delete()
+	File(ProgramDir + if (Windows) "\\Windows.zip" else if (Linux) "/Linux.zip" else "/MacOS.zip").delete()
 }
 
 fun downloadFile(urlStr: String, file: String) {
@@ -37,10 +37,7 @@ fun downloadFile(urlStr: String, file: String) {
 
 fun createFolder() {
 	if (ProgramDir != null) {
-		when {
-			Windows -> File("$userFolder\\.android_tool", "SDK-Tools").mkdirs()
-			else -> File("$userFolder/.android_tool", "SDK-Tools").mkdirs()
-		}
+		File(userFolder, ".android_tool").mkdirs()
 		if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
 	}
 }

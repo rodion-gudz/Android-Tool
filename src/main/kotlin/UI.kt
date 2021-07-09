@@ -38,8 +38,8 @@ fun createUI() {
 			searchFilter(a.textField1.text)
 		}
 	})
-	a.saveButton1.addActionListener {
-		a.saveButton1.isEnabled = false
+	a.saveButton.addActionListener {
+		a.saveButton.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save logs file"
@@ -62,7 +62,7 @@ fun createUI() {
 				}
 				bw.close()
 			}
-			a.saveButton1.isEnabled = true
+			a.saveButton.isEnabled = true
 		}
 	}
 	a.allRadioButton.addActionListener {
@@ -249,31 +249,31 @@ fun createUI() {
 		getListOfPackages()
 	}
 	a.disableButton.addActionListener {
-		AppsControl("Disable", a.disableButton, a.list1)
+		app("Disable", a.disableButton, a.list1)
 		getListOfPackages()
 	}
 	a.uninstallButton.addActionListener {
-		AppsControl("Uninstall", a.uninstallButton, a.list1)
+		app("Uninstall", a.uninstallButton, a.list1)
 		getListOfPackages()
 	}
 	a.enableButton.addActionListener {
-		AppsControl("Enable", a.enableButton, a.list1)
+		app("Enable", a.enableButton, a.list1)
 		getListOfPackages()
 	}
 	a.clearDataButton.addActionListener {
-		AppsControl("Clear", a.clearDataButton, a.list1)
+		app("Clear", a.clearDataButton, a.list1)
 	}
 	a.openButton.addActionListener {
-		AppsControl("Open", a.openButton, a.list1)
+		app("Open", a.openButton, a.list1)
 	}
 	a.forceStopButton.addActionListener {
-		AppsControl("Stop", a.forceStopButton, a.list1)
+		app("Stop", a.forceStopButton, a.list1)
 	}
 	a.refreshButton.addActionListener {
 		getListOfPackages(true)
 	}
-	a.saveButton.addActionListener {
-		a.saveButton.isEnabled = false
+	a.saveButton1.addActionListener {
+		a.saveButton1.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save app list"
@@ -295,7 +295,7 @@ fun createUI() {
 				}
 				bw.close()
 			}
-			a.saveButton.isEnabled = true
+			a.saveButton1.isEnabled = true
 		}
 	}
 	a.selectFileButton.addActionListener {
@@ -423,11 +423,15 @@ fun createUI() {
 		exitProcess(0)
 	}
 	desableCompoments()
-	when {
-		Windows -> systemIP = InetAddress.getLocalHost().hostAddress
-		MacOS -> systemIP = Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
-		Linux -> systemIP = Runtime.getRuntime().exec("hostname -I").inputStream.bufferedReader().readLine()
-	}
-	systemIP = systemIP.substringBeforeLast('.') + "."
+	if (getLastConnectIP() == "") {
+		systemIP = when {
+			Windows -> InetAddress.getLocalHost().hostAddress
+			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
+			Linux -> Runtime.getRuntime().exec("hostname -I").inputStream.bufferedReader().readLine()
+			else -> ""
+		}
+		systemIP = systemIP.substringBeforeLast('.') + "."
+	} else
+		systemIP = getLastConnectIP()
 	a.textField2.text = systemIP
 }

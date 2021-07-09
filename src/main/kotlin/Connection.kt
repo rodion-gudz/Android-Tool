@@ -13,9 +13,9 @@ private fun noConnection() {
 	a.list1.isFocusable = false
 	listModel.removeAllElements()
 	listModelLogs.removeAllElements()
-//		if (a.table1.model.rowCount != 0)
-//			for (i in a.table1.model.rowCount - 1 downTo 0)
-//				a.table1.model.removeRow(i)
+	if (model.rowCount != 0)
+		for (i in model.rowCount - 1 downTo 0)
+			model.removeRow(i)
 	a.textField1.text = ""
 	a.textField1.isEnabled = false
 	a.connectButton.isEnabled = true
@@ -61,7 +61,7 @@ fun connectionCheck() {
 				val enableComponents: Array<Component> =
 					a.adbPanel.components + a.consolePanel.components + a.logsPanel.components
 				for (component in enableComponents)
-					if (component != a.stopButton && component != a.saveButton1 && component != a.installButton && component != a.installButton1)
+					if (component != a.stopButton && component != a.saveButton && component != a.installButton && component != a.installButton1)
 						component.isEnabled = true
 			}
 			a.textArea1.isFocusable = true
@@ -106,8 +106,7 @@ fun connectionCheck() {
 						component.isEnabled = false
 				val enableComponents: Array<Component> = a.fastbootPanel.components + a.consolePanel.components
 				for (component in enableComponents)
-					if (component != a.stopButton && component != a.saveButton1)
-						component.isEnabled = true
+					component.isEnabled = true
 			}
 			a.textArea1.isFocusable = false
 			a.textArea2.isFocusable = false
@@ -115,7 +114,7 @@ fun connectionCheck() {
 			a.list1.isFocusable = false
 
 			if (newPhone) {
-				a.tabbedPane1.selectedIndex = 3
+				a.tabbedPane1.selectedIndex = 2
 				a.notConnectedLabel1.text = "Connected via Fastboot"
 				a.notConnectedLabel1.icon = iconYes
 				getPropFastboot()
@@ -138,8 +137,7 @@ fun connectionCheck() {
 				val enableComponents: Array<Component> =
 					a.recoveryPanel.components + a.consolePanel.components + a.logsPanel.components
 				for (component in enableComponents)
-					if (component != a.stopButton && component != a.saveButton1)
-						component.isEnabled = true
+					component.isEnabled = true
 			}
 			a.textArea2.isFocusable = false
 			a.textArea1.isFocusable = false
@@ -147,7 +145,7 @@ fun connectionCheck() {
 			a.list2.isFocusable = false
 
 			if (newPhone) {
-				a.tabbedPane1.selectedIndex = 4
+				a.tabbedPane1.selectedIndex = 3
 				a.notConnectedLabel1.text = "Connected via Adb"
 				a.notConnectedLabel1.icon = iconYes
 				getPropRecovery()

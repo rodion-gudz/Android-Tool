@@ -10,7 +10,6 @@ import java.util.Locale;
 public class AboutDialog extends JDialog {
     private JPanel contentPane;
     public JLabel version;
-    public JLabel build;
 
     public AboutDialog() {
         setContentPane(contentPane);

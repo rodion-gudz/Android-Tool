@@ -103,7 +103,7 @@ open class AndroidTool{
 		JDialog.setDefaultLookAndFeelDecorated(true)
 		System.setProperty("apple.awt.application.appearance", "system")
 		System.setProperty("apple.laf.useScreenMenuBar", "true")
-		val theme = SettingsValues().getSettings()
+		val theme = getSettings()
 		if (theme== "dark")
 			UIManager.setLookAndFeel(FlatDarculaLaf())
 		else if (theme == "white")
