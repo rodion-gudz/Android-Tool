@@ -15,6 +15,7 @@ fun exec(app: String, command: String, output: Boolean = false, streamType: Stri
 	}
 	return ""
 }
+
 fun execLines(command: String): List<String> {
 	val process = Runtime.getRuntime().exec("$SdkDir$command")
 	return process.inputStream.bufferedReader().readLines()

@@ -5,7 +5,7 @@ import kotlinx.coroutines.swing.Swing
 import javax.swing.JButton
 import javax.swing.JList
 
-fun app(func: Any, button: JButton, list : JList<Any?>) {
+fun app(func: Any, button: JButton, list: JList<Any?>) {
 	val app = list.selectedValue.toString().substringBefore("(")
 	val command = when (func) {
 		"Open" -> "shell monkey -p $app 1"

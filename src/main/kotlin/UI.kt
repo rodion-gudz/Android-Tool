@@ -43,7 +43,7 @@ fun createUI() {
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save logs file"
-			choseFile.selectedFile = File("ATLog");
+			choseFile.selectedFile = File("ATLog")
 			choseFile.addChoosableFileFilter(FileNameExtensionFilter("Logs File (.log)", "log"))
 			choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
 			choseFile.fileFilter = choseFile.choosableFileFilters[1]
@@ -277,7 +277,7 @@ fun createUI() {
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save app list"
-			choseFile.selectedFile = File("ATAppList");
+			choseFile.selectedFile = File("ATAppList")
 			choseFile.addChoosableFileFilter(FileNameExtensionFilter("Text File (.txt)", "txt"))
 			choseFile.fileFilter = choseFile.choosableFileFilters[1]
 			val chooseDialog = choseFile.showSaveDialog(AndroidTool.frame)
@@ -412,10 +412,10 @@ fun createUI() {
 			a.installButton3.isEnabled = true
 		}
 	}
-	settingsMenu.addActionListener{
+	settingsMenu.addActionListener {
 		Settings.main()
 	}
-	aboutItem.addActionListener{
+	aboutItem.addActionListener {
 		AboutDialog.main()
 	}
 	exitItem.addActionListener {

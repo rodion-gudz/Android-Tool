@@ -90,21 +90,21 @@ val exitItem = JMenuItem("Exit")
 val settingsMenu = JMenuItem("Settings")
 
 
-open class AndroidTool{
+open class AndroidTool {
 
 	init {
 		createFolder()
-		UIManager.put( "Button.arc", 6 )
-		UIManager.put( "Component.arc", 6 )
-		UIManager.put( "CheckBox.arc", 6 )
-		UIManager.put( "ProgressBar.arc", 6 )
-		UIManager.put( "TextComponent.arc", 6 )
+		UIManager.put("Button.arc", 6)
+		UIManager.put("Component.arc", 6)
+		UIManager.put("CheckBox.arc", 6)
+		UIManager.put("ProgressBar.arc", 6)
+		UIManager.put("TextComponent.arc", 6)
 		JFrame.setDefaultLookAndFeelDecorated(true)
 		JDialog.setDefaultLookAndFeelDecorated(true)
 		System.setProperty("apple.awt.application.appearance", "system")
 		System.setProperty("apple.laf.useScreenMenuBar", "true")
 		val theme = getSettings()
-		if (theme== "dark")
+		if (theme == "dark")
 			UIManager.setLookAndFeel(FlatDarculaLaf())
 		else if (theme == "white")
 			UIManager.setLookAndFeel(FlatIntelliJLaf())

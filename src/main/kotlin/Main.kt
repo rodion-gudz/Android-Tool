@@ -4,7 +4,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(DelicateCoroutinesApi::class)
-fun main(args: Array<String>){
+fun main(args: Array<String>) {
 	createUI()
 	AndroidTool.main()
 	appProp.load(AndroidTool::class.java.getResourceAsStream("applist.properties"))

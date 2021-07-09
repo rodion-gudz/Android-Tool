@@ -1,6 +1,5 @@
 import java.io.File
 import java.io.FileInputStream
-import java.lang.NullPointerException
 import java.util.*
 
 fun getSettings(): String? {
@@ -30,6 +29,6 @@ fun getLastConnectIP(): String {
 	}
 }
 
-fun setLastConnectIP(IP: String){
+fun setLastConnectIP(IP: String) {
 
 }

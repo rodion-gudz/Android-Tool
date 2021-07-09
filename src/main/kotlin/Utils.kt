@@ -77,8 +77,8 @@ fun searchFilter(searchTerm: String) {
 	val filteredItems: DefaultListModel<Any?> = DefaultListModel()
 	val apps = apps
 	apps.stream().forEach { app: Any ->
-		val starName = app.toString().toLowerCase()
-		if (starName.contains(searchTerm.toLowerCase())) {
+		val starName = app.toString().lowercase(Locale.getDefault())
+		if (starName.contains(searchTerm.lowercase(Locale.getDefault()))) {
 			if (!filteredItems.contains(app)) {
 				filteredItems.addElement(app)
 			}
