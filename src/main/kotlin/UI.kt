@@ -22,17 +22,17 @@ fun createUI() {
 	a.table1.setDefaultEditor(Any::class.java, null)
 	model.addColumn("Property")
 	model.addColumn("Value")
-	fileMenu.add(settingsMenu)
-	fileMenu.add(aboutItem)
-	fileMenu.addSeparator()
-	fileMenu.add(exitItem)
-	menuBar.add(fileMenu)
 	AndroidTool.frame.jMenuBar = menuBar
 	AndroidTool.frame.addWindowListener(object : WindowAdapter() {
 		override fun windowClosing(e: WindowEvent) {
 			exec("adb", "kill-server")
 		}
 	})
+	fileMenu.add(settingsMenu)
+	fileMenu.add(aboutItem)
+	fileMenu.addSeparator()
+	fileMenu.add(exitItem)
+	menuBar.add(fileMenu)
 	a.textField1.addKeyListener(object : KeyAdapter() {
 		override fun keyReleased(evt: KeyEvent) {
 			searchFilter(a.textField1.text)
@@ -87,6 +87,7 @@ fun createUI() {
 			val output = exec("adb", "connect ${a.textField2.text}", output = true)
 			if ("connected to" in output || "failed to authenticate to" in output) {
 				a.notConnectedLabel1.text = "Connected to ${a.textField2.text}"
+				setSettings("lastIP", a.textField2.text)
 			}
 			a.connectButton.isEnabled = true
 		}
@@ -189,10 +190,11 @@ fun createUI() {
 		}
 	}
 	a.openSystemTerminalButton.addActionListener {
-		if (Windows)
-			Runtime.getRuntime().exec("cmd /c start cd $SdkDir")
-		else
-			Runtime.getRuntime().exec("open -a Terminal $SdkDir")
+		when {
+			Windows -> Runtime.getRuntime().exec("cmd /c start cd $SdkDir")
+			MacOS -> Runtime.getRuntime().exec("open -a Terminal $SdkDir")
+			else -> Runtime.getRuntime().exec("gnome-terminal --working-directory=$SdkDir")
+		}
 	}
 	a.rebootToFastbootButton.addActionListener {
 		a.rebootToFastbootButton.isEnabled = false
@@ -423,7 +425,7 @@ fun createUI() {
 		exitProcess(0)
 	}
 	desableCompoments()
-	if (getLastConnectIP() == "") {
+	if (getSettings("lastIP") == "") {
 		systemIP = when {
 			Windows -> InetAddress.getLocalHost().hostAddress
 			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
@@ -432,6 +434,6 @@ fun createUI() {
 		}
 		systemIP = systemIP.substringBeforeLast('.') + "."
 	} else
-		systemIP = getLastConnectIP()
+		systemIP = getSettings("lastIP")
 	a.textField2.text = systemIP
 }
