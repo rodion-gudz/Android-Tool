@@ -2,23 +2,10 @@ import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
-import java.util.zip.ZipFile
+import net.lingala.zip4j.ZipFile
 
 fun unZipFile(urlStr: String) {
-	ZipFile(File(urlStr)).use { zip ->
-		zip.stream().forEach { entry ->
-			if (entry.isDirectory)
-				File(ProgramDir, entry.name).mkdirs()
-			else zip.getInputStream(entry).use { input ->
-				File(ProgramDir, entry.name).apply {
-					outputStream().use { output ->
-						input.copyTo(output)
-					}
-					setExecutable(true, false)
-				}
-			}
-		}
-	}
+	ZipFile(urlStr).extractAll(ProgramDir)
 	File(ProgramDir + if (Windows) "\\Windows.zip" else if (Linux) "/Linux.zip" else "/MacOS.zip").delete()
 }
 

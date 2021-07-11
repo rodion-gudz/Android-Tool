@@ -2,13 +2,13 @@
   <library name="Kotlinx-Coroutines" type="repository">
     <properties maven-id="org.jetbrains.kotlinx:kotlinx-coroutines-swing:LATEST" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx/kotlinx-coroutines-swing/1.5.0-native-mt/kotlinx-coroutines-swing-1.5.0-native-mt.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.0-native-mt/kotlinx-coroutines-core-jvm-1.5.0-native-mt.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.0/kotlin-stdlib-common-1.5.0.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.0/kotlin-stdlib-jdk8-1.5.0.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.5.0/kotlin-stdlib-1.5.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx/kotlinx-coroutines-swing/1.5.1/kotlinx-coroutines-swing-1.5.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.1/kotlinx-coroutines-core-jvm-1.5.1.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.20/kotlin-stdlib-common-1.5.20.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.20/kotlin-stdlib-jdk8-1.5.20.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.5.20/kotlin-stdlib-1.5.20.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/13.0/annotations-13.0.jar!/" />
-      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.0/kotlin-stdlib-jdk7-1.5.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.20/kotlin-stdlib-jdk7-1.5.20.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
