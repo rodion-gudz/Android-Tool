@@ -429,7 +429,7 @@ fun createUI() {
 		systemIP = when {
 			Windows -> InetAddress.getLocalHost().hostAddress
 			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
-			Linux -> Runtime.getRuntime().exec("hostname -I").inputStream.bufferedReader().readLine()
+			Linux -> Runtime.getRuntime().exec("ip n").inputStream.bufferedReader().readLine().substringBefore(" ")
 			else -> ""
 		}
 		systemIP = systemIP.substringBeforeLast('.') + "."
