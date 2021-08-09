@@ -1,4 +1,5 @@
-import AndroidTool.Companion.a
+import AndroidTool.Companion.atForm
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.apache.maven.artifact.versioning.ComparableVersion
@@ -65,6 +66,7 @@ fun runUrl(url: String) {
 	Desktop.getDesktop().browse(urlString)
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun runUpdate() {
 	GlobalScope.launch {
 		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest/Android-Tool.jar")
@@ -85,7 +87,7 @@ fun searchFilter(searchTerm: String) {
 		}
 	}
 	listModel = filteredItems
-	a.list1.model = listModel
+	atForm.list1.model = listModel
 }
 
 fun versionCheck() {
@@ -103,6 +105,7 @@ fun versionCheck() {
 	}
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 fun runSDK(progress: JProgressBar, label: JLabel) {
 	progress.isIndeterminate = true
 	label.text = "Installing..."
@@ -139,8 +142,8 @@ fun updateUI() {
 
 fun desableCompoments() {
 	val components: Array<Component> =
-		a.fastbootPanel.components + a.adbPanel.components + a.logsPanel.components + a.consolePanel.components + a.recoveryPanel.components + a.devicePanel.components
+		atForm.fastbootPanel.components + atForm.adbPanel.components + atForm.logsPanel.components + atForm.consolePanel.components + atForm.recoveryPanel.components + atForm.devicePanel.components
 	for (component in components)
-		if (component != a.openSystemTerminalButton)
+		if (component != atForm.openSystemTerminalButton)
 			component.isEnabled = false
 }

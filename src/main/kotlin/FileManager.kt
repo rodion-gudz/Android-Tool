@@ -14,7 +14,7 @@ fun downloadFile(urlStr: String, file: String) {
 	val bis = BufferedInputStream(url.openStream())
 	val fis = FileOutputStream(file)
 	val buffer = ByteArray(1024)
-	var count = 0
+	var count: Int
 	while (bis.read(buffer, 0, 1024).also { count = it } != -1) {
 		fis.write(buffer, 0, count)
 	}

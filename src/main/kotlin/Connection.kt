@@ -1,27 +1,27 @@
-import AndroidTool.Companion.a
+import AndroidTool.Companion.atForm
 import java.awt.Component
 
 private fun noConnection() {
 	val components: Array<Component> =
-		a.fastbootPanel.components + a.adbPanel.components + a.logsPanel.components + a.consolePanel.components + a.recoveryPanel.components
+		atForm.fastbootPanel.components + atForm.adbPanel.components + atForm.logsPanel.components + atForm.consolePanel.components + atForm.recoveryPanel.components
 	for (component in components)
-		if (component != a.openSystemTerminalButton)
+		if (component != atForm.openSystemTerminalButton)
 			component.isEnabled = false
-	a.textArea1.isFocusable = false
-	a.textArea2.isFocusable = false
-	a.list2.isFocusable = false
-	a.list1.isFocusable = false
+	atForm.textArea1.isFocusable = false
+	atForm.textArea2.isFocusable = false
+	atForm.list2.isFocusable = false
+	atForm.list1.isFocusable = false
 	listModel.removeAllElements()
 	listModelLogs.removeAllElements()
 	if (model.rowCount != 0)
 		for (i in model.rowCount - 1 downTo 0)
 			model.removeRow(i)
-	a.textField1.text = ""
-	a.textField1.isEnabled = false
-	a.connectButton.isEnabled = true
-	a.textField2.isEnabled = true
-	a.notConnectedLabel1.text = "Not connected"
-	a.notConnectedLabel1.icon = null
+	atForm.textField1.text = ""
+	atForm.textField1.isEnabled = false
+	atForm.connectButton.isEnabled = true
+	atForm.textField2.isEnabled = true
+	atForm.notConnectedLabel1.text = "Not connected"
+	atForm.notConnectedLabel1.icon = null
 }
 
 fun connectionCheck() {
@@ -49,42 +49,42 @@ fun connectionCheck() {
 
 	when {
 		ConnectedViaAdb -> {
-			a.shutdownButton.isEnabled = true
-			a.rebootButton.isEnabled = true
-			a.rebootToRecoveryButton.isEnabled = true
-			a.rebootToFastbootButton.isEnabled = true
+			atForm.shutdownButton.isEnabled = true
+			atForm.rebootButton.isEnabled = true
+			atForm.rebootToRecoveryButton.isEnabled = true
+			atForm.rebootToFastbootButton.isEnabled = true
 			if (enabledAll) {
-				val disableComponents: Array<Component> = a.fastbootPanel.components + a.recoveryPanel.components
+				val disableComponents: Array<Component> = atForm.fastbootPanel.components + atForm.recoveryPanel.components
 				for (component in disableComponents)
-					if (component != a.openSystemTerminalButton)
+					if (component != atForm.openSystemTerminalButton)
 						component.isEnabled = false
 				val enableComponents: Array<Component> =
-					a.adbPanel.components + a.consolePanel.components + a.logsPanel.components
+					atForm.adbPanel.components + atForm.consolePanel.components + atForm.logsPanel.components
 				for (component in enableComponents)
-					if (component != a.stopButton && component != a.saveButton && component != a.installButton && component != a.installButton1)
+					if (component != atForm.stopButton && component != atForm.saveButton && component != atForm.installButton && component != atForm.installButton1)
 						component.isEnabled = true
 			}
-			a.textArea1.isFocusable = true
-			a.textArea2.isFocusable = true
-			a.list2.isFocusable = true
-			a.list1.isFocusable = true
+			atForm.textArea1.isFocusable = true
+			atForm.textArea2.isFocusable = true
+			atForm.list2.isFocusable = true
+			atForm.list1.isFocusable = true
 
 			if (ConnectedAdbUsb) {
-				a.notConnectedLabel1.text = "Connected via Adb"
-				a.notConnectedLabel1.icon = iconYes
-				a.connectButton.isEnabled = false
-				a.textField2.isEnabled = false
-				a.buttonResetPort.isVisible = true
+				atForm.notConnectedLabel1.text = "Connected via Adb"
+				atForm.notConnectedLabel1.icon = iconYes
+				atForm.connectButton.isEnabled = false
+				atForm.textField2.isEnabled = false
+				atForm.buttonResetPort.isVisible = true
 			} else {
 				if (ConnectedAdbWifi) {
-					a.notConnectedLabel1.text = "Connected to ${
+					atForm.notConnectedLabel1.text = "Connected to ${
 						AdbDevicesOutput.substring(AdbDevicesOutput.indexOf("192.168")).substringBefore(':')
 					}"
-					a.notConnectedLabel1.icon = iconYes
+					atForm.notConnectedLabel1.icon = iconYes
 				}
 			}
 			if (newPhone) {
-				a.tabbedPane1.selectedIndex = 0
+				atForm.tabbedPane1.selectedIndex = 0
 				getProp()
 				getListOfPackages()
 			}
@@ -92,62 +92,62 @@ fun connectionCheck() {
 			enabledAll = false
 		}
 		ConnectedViaFastboot -> {
-			a.shutdownButton.isEnabled = false
-			a.rebootButton.isEnabled = true
-			a.rebootToRecoveryButton.isEnabled = true
-			a.rebootToFastbootButton.isEnabled = true
-			a.connectButton.isEnabled = false
-			a.buttonResetPort.isVisible = false
+			atForm.shutdownButton.isEnabled = false
+			atForm.rebootButton.isEnabled = true
+			atForm.rebootToRecoveryButton.isEnabled = true
+			atForm.rebootToFastbootButton.isEnabled = true
+			atForm.connectButton.isEnabled = false
+			atForm.buttonResetPort.isVisible = false
 			if (enabledAll) {
 				val disableComponents: Array<Component> =
-					a.adbPanel.components + a.logsPanel.components + a.recoveryPanel.components
+					atForm.adbPanel.components + atForm.logsPanel.components + atForm.recoveryPanel.components
 				for (component in disableComponents)
-					if (component != a.openSystemTerminalButton)
+					if (component != atForm.openSystemTerminalButton)
 						component.isEnabled = false
-				val enableComponents: Array<Component> = a.fastbootPanel.components + a.consolePanel.components
+				val enableComponents: Array<Component> = atForm.fastbootPanel.components + atForm.consolePanel.components
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			a.textArea1.isFocusable = false
-			a.textArea2.isFocusable = false
-			a.list2.isFocusable = false
-			a.list1.isFocusable = false
+			atForm.textArea1.isFocusable = false
+			atForm.textArea2.isFocusable = false
+			atForm.list2.isFocusable = false
+			atForm.list1.isFocusable = false
 
 			if (newPhone) {
-				a.tabbedPane1.selectedIndex = 2
-				a.notConnectedLabel1.text = "Connected via Fastboot"
-				a.notConnectedLabel1.icon = iconYes
+				atForm.tabbedPane1.selectedIndex = 2
+				atForm.notConnectedLabel1.text = "Connected via Fastboot"
+				atForm.notConnectedLabel1.icon = iconYes
 				getPropFastboot()
 			}
 			newPhone = false
 			enabledAll = false
 		}
 		ConnectedViaRecovery -> {
-			a.shutdownButton.isEnabled = true
-			a.rebootButton.isEnabled = true
-			a.rebootToRecoveryButton.isEnabled = true
-			a.rebootToFastbootButton.isEnabled = true
-			a.connectButton.isEnabled = false
-			a.buttonResetPort.isVisible = false
+			atForm.shutdownButton.isEnabled = true
+			atForm.rebootButton.isEnabled = true
+			atForm.rebootToRecoveryButton.isEnabled = true
+			atForm.rebootToFastbootButton.isEnabled = true
+			atForm.connectButton.isEnabled = false
+			atForm.buttonResetPort.isVisible = false
 			if (enabledAll) {
-				val disableComponents: Array<Component> = a.adbPanel.components + a.fastbootPanel.components
+				val disableComponents: Array<Component> = atForm.adbPanel.components + atForm.fastbootPanel.components
 				for (component in disableComponents)
-					if (component != a.openSystemTerminalButton)
+					if (component != atForm.openSystemTerminalButton)
 						component.isEnabled = false
 				val enableComponents: Array<Component> =
-					a.recoveryPanel.components + a.consolePanel.components + a.logsPanel.components
+					atForm.recoveryPanel.components + atForm.consolePanel.components + atForm.logsPanel.components
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			a.textArea2.isFocusable = false
-			a.textArea1.isFocusable = false
-			a.list1.isFocusable = false
-			a.list2.isFocusable = false
+			atForm.textArea2.isFocusable = false
+			atForm.textArea1.isFocusable = false
+			atForm.list1.isFocusable = false
+			atForm.list2.isFocusable = false
 
 			if (newPhone) {
-				a.tabbedPane1.selectedIndex = 3
-				a.notConnectedLabel1.text = "Connected via Adb"
-				a.notConnectedLabel1.icon = iconYes
+				atForm.tabbedPane1.selectedIndex = 3
+				atForm.notConnectedLabel1.text = "Connected via Adb"
+				atForm.notConnectedLabel1.icon = iconYes
 				getPropRecovery()
 			}
 
@@ -155,12 +155,12 @@ fun connectionCheck() {
 			enabledAll = false
 		}
 		else -> {
-			a.buttonResetPort.isVisible = false
-			a.shutdownButton.isEnabled = false
-			a.rebootButton.isEnabled = false
-			a.rebootToRecoveryButton.isEnabled = false
-			a.rebootToFastbootButton.isEnabled = false
-			a.connectButton.isEnabled = false
+			atForm.buttonResetPort.isVisible = false
+			atForm.shutdownButton.isEnabled = false
+			atForm.rebootButton.isEnabled = false
+			atForm.rebootToRecoveryButton.isEnabled = false
+			atForm.rebootToFastbootButton.isEnabled = false
+			atForm.connectButton.isEnabled = false
 			enabledAll = true
 			newPhone = true
 			noConnection()

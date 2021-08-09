@@ -1,23 +1,25 @@
-import AndroidTool.Companion.a
+import AndroidTool.Companion.atForm
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.swing.Swing
 import javax.swing.DefaultListModel
 
+@OptIn(DelicateCoroutinesApi::class)
 fun getListOfPackages(button: Boolean = false) {
 	if (button)
-		a.refreshButton.isEnabled = false
+		atForm.refreshButton.isEnabled = false
 	GlobalScope.launch(Dispatchers.Swing) {
 		val items: DefaultListModel<Any?> = DefaultListModel()
-		a.textField1.isFocusable = true
+		atForm.textField1.isFocusable = true
 		arrayList.clear()
 		apps.clear()
 		val reader = when {
-			a.disabledRadioButton.isSelected -> execLines("adb shell pm list packages -d")
-			a.systemRadioButton.isSelected -> execLines("adb shell pm list packages -s")
-			a.enabledRadioButton.isSelected -> execLines("adb shell pm list packages -e")
-			a.thirdRadioButton.isSelected -> execLines("adb shell pm list packages -3")
+			atForm.disabledRadioButton.isSelected -> execLines("adb shell pm list packages -d")
+			atForm.systemRadioButton.isSelected -> execLines("adb shell pm list packages -s")
+			atForm.enabledRadioButton.isSelected -> execLines("adb shell pm list packages -e")
+			atForm.thirdRadioButton.isSelected -> execLines("adb shell pm list packages -3")
 			else -> execLines("adb shell pm list packages")
 		}
 		for (element in reader) {
@@ -34,16 +36,16 @@ fun getListOfPackages(button: Boolean = false) {
 		}
 		arrayList.sort()
 		if (button)
-			a.refreshButton.isEnabled = true
+			atForm.refreshButton.isEnabled = true
 		listModel.removeAllElements()
 		for (element in arrayList) {
-			if (a.textField1.text == "")
+			if (atForm.textField1.text == "")
 				items.addElement(element)
 			apps.add(element)
 		}
 		listModel = items
-		a.list1.model = listModel
-		a.refreshButton.isEnabled = true
-		searchFilter(a.textField1.text)
+		atForm.list1.model = listModel
+		atForm.refreshButton.isEnabled = true
+		searchFilter(atForm.textField1.text)
 	}
 }
