@@ -544,7 +544,13 @@
             <constraints>
               <tabbedpane title="Console"/>
             </constraints>
-            <properties/>
+            <properties>
+              <background color="-14605013"/>
+              <doubleBuffered value="true"/>
+              <enabled value="true"/>
+              <focusable value="true"/>
+              <visible value="true"/>
+            </properties>
             <border type="none"/>
             <children>
               <component id="9491f" class="javax.swing.JButton" binding="runButton" default-binding="true">
