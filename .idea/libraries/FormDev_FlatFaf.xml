@@ -2,7 +2,7 @@
   <library name="FormDev FlatFaf" type="repository">
     <properties maven-id="com.formdev:flatlaf:LATEST" />
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.4/flatlaf-1.4.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/formdev/flatlaf/1.5/flatlaf-1.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
