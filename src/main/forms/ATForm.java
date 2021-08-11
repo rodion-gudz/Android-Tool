@@ -306,11 +306,6 @@ public class ATForm {
         recoveryPanel.add(spacer9, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         consolePanel = new JPanel();
         consolePanel.setLayout(new GridLayoutManager(4, 3, new Insets(5, 5, 5, 5), -1, -1));
-        consolePanel.setBackground(new Color(-14605013));
-        consolePanel.setDoubleBuffered(true);
-        consolePanel.setEnabled(true);
-        consolePanel.setFocusable(true);
-        consolePanel.setVisible(true);
         tabbedPane1.addTab("Console", consolePanel);
         runButton = new JButton();
         runButton.setFocusable(false);
