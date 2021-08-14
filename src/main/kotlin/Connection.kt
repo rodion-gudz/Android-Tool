@@ -7,8 +7,8 @@ private fun noConnection() {
 	for (component in components)
 		if (component != atForm.openSystemTerminalButton)
 			component.isEnabled = false
-	atForm.textArea1.isFocusable = false
-	atForm.textArea2.isFocusable = false
+	atForm.inputArea.isFocusable = false
+	atForm.outputArea.isFocusable = false
 	atForm.list2.isFocusable = false
 	atForm.list1.isFocusable = false
 	listModel.removeAllElements()
@@ -64,8 +64,8 @@ fun connectionCheck() {
 					if (component != atForm.stopButton && component != atForm.saveButton && component != atForm.installButton && component != atForm.installButton1)
 						component.isEnabled = true
 			}
-			atForm.textArea1.isFocusable = true
-			atForm.textArea2.isFocusable = true
+			atForm.inputArea.isFocusable = true
+			atForm.outputArea.isFocusable = true
 			atForm.list2.isFocusable = true
 			atForm.list1.isFocusable = true
 
@@ -108,8 +108,8 @@ fun connectionCheck() {
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			atForm.textArea1.isFocusable = false
-			atForm.textArea2.isFocusable = false
+			atForm.inputArea.isFocusable = true
+			atForm.outputArea.isFocusable = true
 			atForm.list2.isFocusable = false
 			atForm.list1.isFocusable = false
 
@@ -139,8 +139,8 @@ fun connectionCheck() {
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			atForm.textArea2.isFocusable = false
-			atForm.textArea1.isFocusable = false
+			atForm.outputArea.isFocusable = true
+			atForm.inputArea.isFocusable = true
 			atForm.list1.isFocusable = false
 			atForm.list2.isFocusable = false
 

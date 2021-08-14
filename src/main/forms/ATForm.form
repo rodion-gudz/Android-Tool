@@ -582,7 +582,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7f56" class="javax.swing.JTextArea" binding="textArea1" default-binding="true">
+                  <component id="7f56" class="javax.swing.JTextArea" binding="inputArea">
                     <constraints/>
                     <properties/>
                   </component>
@@ -595,7 +595,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="46307" class="javax.swing.JTextArea" binding="textArea2" default-binding="true">
+                  <component id="46307" class="javax.swing.JTextArea" binding="outputArea">
                     <constraints/>
                     <properties/>
                   </component>

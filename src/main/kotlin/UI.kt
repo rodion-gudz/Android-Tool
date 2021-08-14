@@ -334,13 +334,13 @@ fun createUI() {
 		atForm.runButton.isEnabled = false
 
 		GlobalScope.launch(Dispatchers.Swing) {
-			val command = atForm.textArea1.text
+			val command = atForm.inputArea.text
 			when {
-				"adb" in command -> atForm.textArea2.text =
-					exec("adb", atForm.textArea1.text.substring(4), output = true)
-				"fastboot" in command -> atForm.textArea2.text =
-					exec("fastboot", atForm.textArea1.text.substring(9), output = true)
-				else -> atForm.textArea2.text = exec("adb", atForm.textArea1.text, output = true)
+				"adb" in command -> atForm.outputArea.text =
+					exec("adb", atForm.inputArea.text.substring(4), output = true)
+				"fastboot" in command -> atForm.outputArea.text =
+					exec("fastboot", atForm.inputArea.text.substring(9), output = true)
+				else -> atForm.outputArea.text = exec("adb", atForm.inputArea.text, output = true)
 			}
 			atForm.runButton.isEnabled = true
 		}

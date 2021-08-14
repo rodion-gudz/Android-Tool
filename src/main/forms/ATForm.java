@@ -43,8 +43,8 @@ public class ATForm {
     public JButton selectRecoveryButton;
     public JButton installButton2;
     public JButton bootButton;
-    public JTextArea textArea1;
-    public JTextArea textArea2;
+    public JTextArea inputArea;
+    public JTextArea outputArea;
     public JButton runButton;
     public JButton openSystemTerminalButton;
     public JCheckBox systemCheckBox;
@@ -321,12 +321,12 @@ public class ATForm {
         consolePanel.add(spacer11, new GridConstraints(3, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JScrollPane scrollPane4 = new JScrollPane();
         consolePanel.add(scrollPane4, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        textArea1 = new JTextArea();
-        scrollPane4.setViewportView(textArea1);
+        inputArea = new JTextArea();
+        scrollPane4.setViewportView(inputArea);
         final JScrollPane scrollPane5 = new JScrollPane();
         consolePanel.add(scrollPane5, new GridConstraints(0, 2, 3, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
-        textArea2 = new JTextArea();
-        scrollPane5.setViewportView(textArea2);
+        outputArea = new JTextArea();
+        scrollPane5.setViewportView(outputArea);
         devicePanel = new JPanel();
         devicePanel.setLayout(new GridLayoutManager(3, 1, new Insets(5, 5, 5, 5), -1, -1));
         ATPanel.add(devicePanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(350, -1), null, 0, false));
