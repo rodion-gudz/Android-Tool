@@ -10,6 +10,8 @@ import javax.swing.table.DefaultTableModel
 var arrayList = ArrayList<String>()
 var selectedDirectoryPath = ""
 var selectedFileAbsolutePath = ""
+var selectedImgAbsolutePath = ""
+var selectedImgPath = ""
 var selectedFilePath = ""
 var selectedZipPath = ""
 var selectedZipName = ""

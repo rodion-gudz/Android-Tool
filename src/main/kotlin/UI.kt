@@ -363,6 +363,24 @@ fun createUI() {
 			atForm.eraseButton.isEnabled = true
 		}
 	}
+	atForm.flashButton.addActionListener {
+		atForm.flashButton.isEnabled = false
+		GlobalScope.launch(Dispatchers.Swing) {
+			if (atForm.bootRadioButton.isSelected)
+				exec("fastboot", "flash boot \"$selectedImgAbsolutePath\"")
+			if (atForm.systemRadioButton1.isSelected)
+				exec("fastboot", "flash system \"$selectedImgAbsolutePath\"")
+			if (atForm.dataRadioButton.isSelected)
+				exec("fastboot", "flash userdata \"$selectedImgAbsolutePath\"")
+			if (atForm.cacheRadioButton.isSelected)
+				exec("fastboot", "flash cache \"$selectedImgAbsolutePath\"")
+			if (atForm.recoveryRadioButton.isSelected)
+				exec("fastboot", "flash recovery \"$selectedImgAbsolutePath\"")
+			if (atForm.radioRadioButton.isSelected)
+				exec("fastboot", "flash radio \"$selectedImgAbsolutePath\"")
+			atForm.flashButton.isEnabled = true
+		}
+	}
 	atForm.selectRecoveryButton.addActionListener {
 		atForm.selectRecoveryButton.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
@@ -375,6 +393,20 @@ fun createUI() {
 				selectedFilePath = choseFile.selectedFile.path
 			}
 			atForm.selectRecoveryButton.isEnabled = true
+		}
+	}
+	atForm.selectImgFileButton.addActionListener {
+		atForm.selectImgFileButton.isEnabled = false
+		GlobalScope.launch(Dispatchers.Swing) {
+			val choseFile = JFileChooser()
+			val filter = FileNameExtensionFilter("IMG Files", "img")
+			choseFile.fileFilter = filter
+			val chooseDialog = choseFile.showDialog(null, "Select partition img")
+			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
+				selectedImgAbsolutePath = choseFile.selectedFile.absolutePath
+				selectedImgPath = choseFile.selectedFile.path
+			}
+			atForm.selectImgFileButton.isEnabled = true
 		}
 	}
 	atForm.installButton2.addActionListener {

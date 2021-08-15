@@ -372,7 +372,7 @@
               </scrollpane>
             </children>
           </grid>
-          <grid id="2c5df" binding="fastbootPanel" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="2c5df" binding="fastbootPanel" layout-manager="GridLayoutManager" row-count="12" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="Fastboot"/>
@@ -390,7 +390,7 @@
               </component>
               <vspacer id="3118f">
                 <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="90b80" class="javax.swing.JButton" binding="selectRecoveryButton" default-binding="true">
@@ -411,11 +411,6 @@
                   <text value="Install"/>
                 </properties>
               </component>
-              <hspacer id="1cf3e">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-              </hspacer>
               <component id="ed92b" class="javax.swing.JButton" binding="bootButton" default-binding="true">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -425,49 +420,49 @@
                   <text value="Boot"/>
                 </properties>
               </component>
-              <component id="9ed8a" class="javax.swing.JCheckBox" binding="systemCheckBox" default-binding="true">
+              <component id="3b8db" class="javax.swing.JCheckBox" binding="recoveryCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="System"/>
-                </properties>
-              </component>
-              <component id="c1c4f" class="javax.swing.JCheckBox" binding="recoveryCheckBox" default-binding="true">
-                <constraints>
-                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Recovery"/>
                 </properties>
               </component>
-              <component id="8fdba" class="javax.swing.JCheckBox" binding="cacheCheckBox" default-binding="true">
+              <component id="8e975" class="javax.swing.JCheckBox" binding="systemCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Cache"/>
+                  <text value="System"/>
                 </properties>
               </component>
-              <component id="efa80" class="javax.swing.JCheckBox" binding="dataCheckBox" default-binding="true">
+              <component id="5d7c" class="javax.swing.JCheckBox" binding="dataCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Data"/>
                 </properties>
               </component>
-              <component id="a5703" class="javax.swing.JCheckBox" binding="bootCheckBox" default-binding="true">
+              <component id="42260" class="javax.swing.JCheckBox" binding="bootCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Boot"/>
                 </properties>
               </component>
-              <component id="21807" class="javax.swing.JCheckBox" binding="radioCheckBox" default-binding="true">
+              <component id="bc58a" class="javax.swing.JCheckBox" binding="cacheCheckBox" default-binding="true">
                 <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Cache"/>
+                </properties>
+              </component>
+              <component id="67d25" class="javax.swing.JCheckBox" binding="radioCheckBox" default-binding="true">
+                <constraints>
+                  <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Radio"/>
@@ -475,11 +470,91 @@
               </component>
               <component id="55f62" class="javax.swing.JButton" binding="eraseButton" default-binding="true">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="4" column="2" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <focusable value="false"/>
                   <text value="Erase"/>
+                </properties>
+              </component>
+              <component id="6846" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Erase storage partitions"/>
+                </properties>
+              </component>
+              <component id="38760" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Install img to partition"/>
+                </properties>
+              </component>
+              <component id="fa316" class="javax.swing.JButton" binding="selectImgFileButton" default-binding="true">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Select img"/>
+                </properties>
+              </component>
+              <component id="803e1" class="javax.swing.JButton" binding="flashButton" default-binding="true">
+                <constraints>
+                  <grid row="10" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Flash"/>
+                </properties>
+              </component>
+              <component id="8b554" class="javax.swing.JRadioButton" binding="recoveryRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Recovery"/>
+                </properties>
+              </component>
+              <component id="3f699" class="javax.swing.JRadioButton" binding="cacheRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Cache"/>
+                </properties>
+              </component>
+              <component id="7cb75" class="javax.swing.JRadioButton" binding="systemRadioButton1" default-binding="true">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="System"/>
+                </properties>
+              </component>
+              <component id="6a907" class="javax.swing.JRadioButton" binding="dataRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Data"/>
+                </properties>
+              </component>
+              <component id="48336" class="javax.swing.JRadioButton" binding="bootRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Boot"/>
+                </properties>
+              </component>
+              <component id="65f99" class="javax.swing.JRadioButton" binding="radioRadioButton" default-binding="true">
+                <constraints>
+                  <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Radio"/>
                 </properties>
               </component>
             </children>
@@ -742,13 +817,21 @@
       <member id="6e160"/>
     </group>
     <group name="buttonGroup2">
-      <member id="48f52"/>
       <member id="68586"/>
       <member id="7eefe"/>
       <member id="65bb6"/>
       <member id="6cfd7"/>
       <member id="5c19c"/>
       <member id="2fd6b"/>
+      <member id="48f52"/>
+    </group>
+    <group name="buttonGroup3">
+      <member id="48336"/>
+      <member id="7cb75"/>
+      <member id="6a907"/>
+      <member id="8b554"/>
+      <member id="65f99"/>
+      <member id="3f699"/>
     </group>
   </buttonGroups>
 </form>
