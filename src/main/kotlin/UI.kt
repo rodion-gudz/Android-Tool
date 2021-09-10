@@ -94,12 +94,12 @@ fun createUI() {
 	}
 	atForm.startButton.addActionListener {
 		atForm.stopButton.isEnabled = true
-		atForm.saveButton1.isEnabled = false
+		atForm.saveButton.isEnabled = false
 		if (ifStopSelected) {
 			functionButtonStart = true
 		}
 		if (functionButtonStart) {
-			atForm.saveButton1.isEnabled = false
+			atForm.saveButton.isEnabled = false
 			logsWorking = true
 			atForm.startButton.text = "Pause"
 			if (ifStopSelected) {
@@ -150,7 +150,7 @@ fun createUI() {
 		atForm.startButton.text = "Start"
 		logsWorking = false
 		ifStopSelected = true
-		atForm.saveButton1.isEnabled = true
+		atForm.saveButton.isEnabled = true
 		functionButtonStart = true
 	}
 	atForm.rebootButton.addActionListener {
