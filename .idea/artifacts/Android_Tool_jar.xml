@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="Android-Tool:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Android-Tool-Jar</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/Release</output-path>
     <root id="archive" name="Android-Tool.jar">
       <element id="module-output" name="Android-Tool" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.8.1/maven-artifact-3.8.1.jar" path-in-jar="/" />

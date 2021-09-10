@@ -69,7 +69,7 @@ fun runUrl(url: String) {
 @OptIn(DelicateCoroutinesApi::class)
 fun runUpdate() {
 	GlobalScope.launch {
-		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest/Android-Tool.jar")
+		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest/download/Android-Tool.jar")
 	}
 	Runtime.getRuntime().exec("${SdkDir}adb kill-server")
 	exitProcess(0)

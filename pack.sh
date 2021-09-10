@@ -1,6 +1,7 @@
 #!/bin/bash
-jarDir="/Users/lavender/Android-Tool/out/artifacts/Android-Tool-Jar"
-cd ./out/artifacts/Android-Tool-Jar
+jarDir="$(pwd)/out/artifacts/Release"
+repoDir="/Users/lavender/Android-Tool"
+cd $jarDir
 rm -rf ./*.zip
 wget -O Windows.zip -q --show-progress https://dl.google.com/android/repository/platform-tools-latest-windows.zip
 wget -O MacOS.zip -q --show-progress https://dl.google.com/android/repository/platform-tools-latest-darwin.zip
@@ -23,6 +24,12 @@ cd ./Linux/platform-tools && zip -q -r Android-Tool.Portable-Linux.zip . -X && m
 cd ./MacOS/platform-tools && zip -q -r Android-Tool.Portable-MacOS.zip . -X && mv Android-Tool.Portable-MacOS.zip $jarDir/Android-Tool.Portable-MacOS.zip && cd -
 rm -rf Windows MacOS Linux
 zip -q Android-Tool.jar.zip Android-Tool.jar
-echo "Uploading to x0.at..."
-curl -F "file=@$jarDir/Android-Tool.jar" https://x0.at/
+# echo "Uploading to x0.at..."
+# curl -F "file=@$jarDir/Android-Tool.jar" https://x0.at/
 echo "Completed!"
+echo "Creating a release"
+echo "Enter version"
+read version
+echo "latestVersion=$version" > $jarDir/values.properties
+cd $repoDir
+gh release create $version -F $(pwd)/changelog.md -t "Android-Tool v$version" $jarDir/Android-Tool.jar $jarDir/Android-Tool.Portable-Linux.zip $jarDir/Android-Tool.Portable-MacOS.zip  $jarDir/Android-Tool.Portable-Windows.zip $jarDir/values.properties
