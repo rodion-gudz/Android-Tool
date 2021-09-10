@@ -94,7 +94,7 @@ fun versionCheck() {
 	try {
 		val properties = Properties()
 		val inputStream =
-			URL("https://raw.githubusercontent.com/fast-geek/Android-Tool/master/values.properties").openStream()
+			URL("https://github.com/fast-geek/Android-Tool/releases/latest/download/values.properties").openStream()
 		properties.load(inputStream)
 		if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)) {
 			programVersionLatest = properties.getProperty("latestVersion")

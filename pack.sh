@@ -18,9 +18,9 @@ cp Android-Tool.jar ./Windows/platform-tools
 cp Android-Tool.jar ./Linux/platform-tools
 cp Android-Tool.jar ./MacOS/platform-tools
 echo "Creating archives..."
-cd ./Windows/platform-tools && zip -q -r Android-Tool.Windows.zip . -X && mv Android-Tool.Windows.zip $jarDir/Android-Tool.Windows.zip && cd -
-cd ./Linux/platform-tools && zip -q -r Android-Tool.Linux.zip . -X && mv Android-Tool.Linux.zip $jarDir/Android-Tool.Linux.zip && cd -
-cd ./MacOS/platform-tools && zip -q -r Android-Tool.MacOS.zip . -X && mv Android-Tool.MacOS.zip $jarDir/Android-Tool.MacOS.zip && cd -
+cd ./Windows/platform-tools && zip -q -r Android-Tool.Portable-Windows.zip . -X && mv Android-Tool.Portable-Windows.zip $jarDir/Android-Tool.Portable-Windows.zip && cd -
+cd ./Linux/platform-tools && zip -q -r Android-Tool.Portable-Linux.zip . -X && mv Android-Tool.Portable-Linux.zip $jarDir/Android-Tool.Portable-Linux.zip && cd -
+cd ./MacOS/platform-tools && zip -q -r Android-Tool.Portable-MacOS.zip . -X && mv Android-Tool.Portable-MacOS.zip $jarDir/Android-Tool.Portable-MacOS.zip && cd -
 rm -rf Windows MacOS Linux
 zip -q Android-Tool.jar.zip Android-Tool.jar
 echo "Uploading to x0.at..."
