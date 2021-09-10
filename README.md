@@ -67,4 +67,3 @@
 
 * ##### OS (Windows (10, 8.1, 8), Linux, MacOS)
 * ##### JRE (Java Runtime Environment)
-  
