@@ -19,7 +19,7 @@ fun getSettings(): String? {
 	}
 }
 
-fun getSettings(key: String) : String {
+fun getSettings(key: String): String {
 	val prop = Properties()
 	prop.load(FileInputStream(ProgramDir + "config.properties"))
 	return try {

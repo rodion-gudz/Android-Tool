@@ -54,7 +54,8 @@ fun connectionCheck() {
 			atForm.rebootToRecoveryButton.isEnabled = true
 			atForm.rebootToFastbootButton.isEnabled = true
 			if (enabledAll) {
-				val disableComponents: Array<Component> = atForm.fastbootPanel.components + atForm.recoveryPanel.components
+				val disableComponents: Array<Component> =
+					atForm.fastbootPanel.components + atForm.recoveryPanel.components
 				for (component in disableComponents)
 					if (component != atForm.openSystemTerminalButton)
 						component.isEnabled = false
@@ -104,7 +105,8 @@ fun connectionCheck() {
 				for (component in disableComponents)
 					if (component != atForm.openSystemTerminalButton)
 						component.isEnabled = false
-				val enableComponents: Array<Component> = atForm.fastbootPanel.components + atForm.consolePanel.components
+				val enableComponents: Array<Component> =
+					atForm.fastbootPanel.components + atForm.consolePanel.components
 				for (component in enableComponents)
 					component.isEnabled = true
 			}

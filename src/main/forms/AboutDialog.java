@@ -5,8 +5,6 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +12,6 @@ import java.util.Locale;
 
 public class AboutDialog extends JDialog {
     public JLabel version;
-    private JPanel contentPane;
     public JButton adbDriversWinButton;
     public JButton githubButton;
     public JButton telegramButton;
@@ -22,6 +19,7 @@ public class AboutDialog extends JDialog {
     public JButton alphaBuildButton;
     public JButton buyMeACoffeButton;
     public JButton byLavenderButton;
+    private JPanel contentPane;
 
     public AboutDialog() {
         setContentPane(contentPane);

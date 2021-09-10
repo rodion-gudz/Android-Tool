@@ -1,8 +1,8 @@
+import net.lingala.zip4j.ZipFile
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.net.URL
-import net.lingala.zip4j.ZipFile
 
 fun unZipFile(urlStr: String) {
 	ZipFile(urlStr).extractAll(ProgramDir)
