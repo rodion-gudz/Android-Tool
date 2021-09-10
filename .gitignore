@@ -1,5 +1,6 @@
 *.class
 *.log
+*.zip
 out/
 .idea/dictionaries/
 .sync/

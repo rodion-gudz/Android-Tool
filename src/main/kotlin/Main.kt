@@ -47,7 +47,7 @@ val armArch = "aarch64" == System.getProperty("os.arch").toString()
 val ProgramDir: String = userFolder + if (Windows) "\\.android_tool\\" else "/.android_tool/"
 var SdkDir = ProgramDir + if (Windows) "SDK-Tools\\" else "SDK-Tools/"
 val model = DefaultTableModel()
-const val programVersion = "2.0-beta"
+const val programVersion = "2.0"
 var programVersionLatest = programVersion
 val appProp = Properties()
 val menuBar = JMenuBar()
