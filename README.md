@@ -1,6 +1,6 @@
 # Android Tool
 
-![Logo](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Tools/Images/logo.png)
+![Logo](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/logo.png)
 
 ## What is it?
 
