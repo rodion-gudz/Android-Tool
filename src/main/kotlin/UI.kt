@@ -460,7 +460,7 @@ fun createUI() {
 	if (getSettings("lastIP") == "") {
 		systemIP = when {
 			Windows -> InetAddress.getLocalHost().hostAddress
-			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readLine()
+			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readText() + Runtime.getRuntime().exec("ipconfig getifaddr en1").inputStream.bufferedReader().readText()
 			Linux -> Runtime.getRuntime().exec("ip n").inputStream.bufferedReader().readLine().substringBefore(" ")
 			else -> ""
 		}
