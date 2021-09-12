@@ -1,6 +1,6 @@
 # Android Tool
 
-![Logo](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Tools/Images/logo.png)
+![Logo](https://github.com/fast-geek/Android-Tool/raw/master/Images/logo.png)
 
 ## What is it?
 
@@ -27,23 +27,23 @@
 
 * ##### App Manager
 
-![Adb Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/app_manager.png)
+![Adb Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/app_manager.png)
 
 * ##### Logcat
 
-![Logcat Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/logs.png)
+![Logcat Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/logs.png)
 
 * ##### Fastboot
 
-![Fastboot Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/fastboot.png)
+![Fastboot Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/fastboot.png)
 
 * ##### Recovery
 
-![Recovery Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/recovery.png)
+![Recovery Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/recovery.png)
 
 * ##### Console
 
-![Console Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Tools/Images/console.png)
+![Console Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/console.png)
 
 ## The Latest Version And Updates
 
