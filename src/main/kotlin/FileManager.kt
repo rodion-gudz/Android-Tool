@@ -5,8 +5,8 @@ import java.io.FileOutputStream
 import java.net.URL
 
 fun unZipFile(urlStr: String) {
-	ZipFile(urlStr).extractAll(ProgramDir)
-	File(ProgramDir + if (Windows) "\\Windows.zip" else if (Linux) "/Linux.zip" else "/MacOS.zip").delete()
+	ZipFile(urlStr).extractAll(program_folder)
+	File(program_folder + if (windows) "\\Windows.zip" else if (linux) "/Linux.zip" else "/MacOS.zip").delete()
 }
 
 fun downloadFile(urlStr: String, file: String) {
@@ -23,8 +23,8 @@ fun downloadFile(urlStr: String, file: String) {
 }
 
 fun createFolder() {
-	if (ProgramDir != null) {
-		File(userFolder, ".android_tool").mkdirs()
-		if (Windows) Runtime.getRuntime().exec("attrib +h $userFolder\\.android_tool")
+	if (program_folder != null) {
+		File(user_folder, ".android_tool").mkdirs()
+		if (windows) Runtime.getRuntime().exec("attrib +h $user_folder\\.android_tool")
 	}
 }

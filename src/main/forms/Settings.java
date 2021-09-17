@@ -23,14 +23,14 @@ public class Settings extends JDialog {
     public Settings() {
         setContentPane(contentPane);
         setModal(true);
-        setIconImage(MainKt.getAppIcon());
+        setIconImage(MainKt.getApp_icon());
     }
 
     public static void main() {
         Settings dialog = new Settings();
         Properties settingsP = new Properties();
         try {
-            settingsP.load(new FileInputStream(MainKt.getProgramDir() + "config.properties"));
+            settingsP.load(new FileInputStream(MainKt.getProgram_folder() + "config.properties"));
         } catch (IOException ioException) {
             ioException.printStackTrace();
         }
@@ -63,7 +63,7 @@ public class Settings extends JDialog {
     }
 
     private static void saveProps(Properties settingsP, Settings dialog) {
-        try (OutputStream output = new FileOutputStream(MainKt.getProgramDir() + "config.properties")) {
+        try (OutputStream output = new FileOutputStream(MainKt.getProgram_folder() + "config.properties")) {
             settingsP.store(output, null);
         } catch (IOException io) {
             io.printStackTrace();

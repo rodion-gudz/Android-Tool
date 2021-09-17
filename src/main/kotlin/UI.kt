@@ -1,4 +1,4 @@
-import AndroidTool.Companion.atForm
+import AndroidTool.Companion.at_form
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -15,31 +15,31 @@ import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
 fun createUI() {
-	atForm.list2.model = listModelLogs
-	atForm.table1.model = model
-	atForm.table1.showHorizontalLines = true
-	atForm.table1.showVerticalLines = true
-	atForm.table1.setDefaultEditor(Any::class.java, null)
-	model.addColumn("Property")
-	model.addColumn("Value")
-	AndroidTool.frame.jMenuBar = menuBar
+	at_form.logsList.model = logs_list_model
+	at_form.device_properties_table.model = device_properties_model
+	at_form.device_properties_table.showHorizontalLines = true
+	at_form.device_properties_table.showVerticalLines = true
+	at_form.device_properties_table.setDefaultEditor(Any::class.java, null)
+	device_properties_model.addColumn("Property")
+	device_properties_model.addColumn("Value")
+	AndroidTool.frame.jMenuBar = menu_bar
 	AndroidTool.frame.addWindowListener(object : WindowAdapter() {
 		override fun windowClosing(e: WindowEvent) {
 			exec("adb", "kill-server")
 		}
 	})
-	fileMenu.add(settingsMenu)
-	fileMenu.add(aboutItem)
-	fileMenu.addSeparator()
-	fileMenu.add(exitItem)
-	menuBar.add(fileMenu)
-	atForm.textField1.addKeyListener(object : KeyAdapter() {
+	menu_bar_main.add(menu_bar_settings)
+	menu_bar_main.add(menu_bar_about)
+	menu_bar_main.addSeparator()
+	menu_bar_main.add(menu_bar_exit)
+	menu_bar.add(menu_bar_main)
+	at_form.apps_filter_textfield.addKeyListener(object : KeyAdapter() {
 		override fun keyReleased(evt: KeyEvent) {
-			searchFilter(atForm.textField1.text)
+			searchFilter(at_form.apps_filter_textfield.text)
 		}
 	})
-	atForm.saveButton.addActionListener {
-		atForm.saveButton.isEnabled = false
+	at_form.save_logs_button.addActionListener {
+		at_form.save_logs_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save logs file"
@@ -56,68 +56,68 @@ fun createUI() {
 				}
 				val fw = FileWriter(file.absoluteFile)
 				val bw = BufferedWriter(fw)
-				for (element in 0 until listModelLogs.size()) {
-					bw.write(listModelLogs[element].toString())
+				for (element in 0 until logs_list_model.size()) {
+					bw.write(logs_list_model[element].toString())
 					bw.write("\n")
 				}
 				bw.close()
 			}
-			atForm.saveButton.isEnabled = true
+			at_form.save_logs_button.isEnabled = true
 		}
 	}
-	atForm.allRadioButton.addActionListener {
+	at_form.all_apps_radiobutton.addActionListener {
 		getListOfPackages()
 	}
-	atForm.disabledRadioButton.addActionListener {
+	at_form.disable_apps_radiobutton.addActionListener {
 		getListOfPackages()
 	}
-	atForm.enabledRadioButton.addActionListener {
+	at_form.enabled_apps_radiobutton.addActionListener {
 		getListOfPackages()
 	}
-	atForm.systemRadioButton.addActionListener {
+	at_form.system_apps_radiobutton.addActionListener {
 		getListOfPackages()
 	}
-	atForm.thirdRadioButton.addActionListener {
+	at_form.user_apps_radiobutton.addActionListener {
 		getListOfPackages()
 	}
-	atForm.connectButton.addActionListener {
-		atForm.connectButton.isEnabled = false
+	at_form.connect_to_device_button.addActionListener {
+		at_form.connect_to_device_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			exec("adb", "kill-server")
-			val output = exec("adb", "connect ${atForm.textField2.text}", output = true)
+			val output = exec("adb", "connect ${at_form.system_ip_address_field.text}", output = true)
 			if ("connected to" in output || "failed to authenticate to" in output) {
-				atForm.notConnectedLabel1.text = "Connected to ${atForm.textField2.text}"
-				setSettings("lastIP", atForm.textField2.text)
+				at_form.notConnectedLabel1.text = "Connected to ${at_form.system_ip_address_field.text}"
+				setSettings("lastIP", at_form.system_ip_address_field.text)
 			}
-			atForm.connectButton.isEnabled = true
+			at_form.connect_to_device_button.isEnabled = true
 		}
 	}
-	atForm.startButton.addActionListener {
-		atForm.stopButton.isEnabled = true
-		atForm.saveButton.isEnabled = false
+	at_form.start_logs_button.addActionListener {
+		at_form.stop_logs_button.isEnabled = true
+		at_form.save_logs_button.isEnabled = false
 		if (ifStopSelected) {
 			functionButtonStart = true
 		}
 		if (functionButtonStart) {
-			atForm.saveButton.isEnabled = false
+			at_form.save_logs_button.isEnabled = false
 			logsWorking = true
-			atForm.startButton.text = "Pause"
+			at_form.start_logs_button.text = "Pause"
 			if (ifStopSelected) {
-				listModelLogs.removeAllElements()
+				logs_list_model.removeAllElements()
 			}
 			GlobalScope.launch(Dispatchers.Swing) {
-				arrayList.clear()
+				apps_list.clear()
 				withContext(Dispatchers.Default) {
-					Runtime.getRuntime().exec("${SdkDir}adb logcat -c").waitFor()
+					Runtime.getRuntime().exec("${SDK_folder}adb logcat -c").waitFor()
 					val builderList = when {
-						atForm.verboseRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:V")
-						atForm.debugRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:D")
-						atForm.infoRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:I")
-						atForm.warningRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:W")
-						atForm.errorRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:E")
-						atForm.fatalRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:F")
-						atForm.slentRadioButton.isSelected -> Runtime.getRuntime().exec("${SdkDir}adb logcat *:S")
-						else -> Runtime.getRuntime().exec("${SdkDir}adb logcat -c")
+						at_form.verboseRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:V")
+						at_form.debugRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:D")
+						at_form.infoRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:I")
+						at_form.warningRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:W")
+						at_form.errorRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:E")
+						at_form.fatalRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:F")
+						at_form.slentRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:S")
+						else -> Runtime.getRuntime().exec("${SDK_folder}adb logcat -c")
 					}
 
 					val input = builderList.inputStream
@@ -126,8 +126,8 @@ fun createUI() {
 					while (reader.readLine().also { line = it } != null) {
 						if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
 							if (logsWorking) {
-								listModelLogs.addElement(line)
-								atForm.list2.ensureIndexIsVisible(atForm.list2.model.size - 1)
+								logs_list_model.addElement(line)
+								at_form.logsList.ensureIndexIsVisible(at_form.logsList.model.size - 1)
 							}
 						}
 					}
@@ -137,91 +137,91 @@ fun createUI() {
 			ifStopSelected = false
 		} else {
 			if (ifStopSelected) {
-				listModelLogs.removeAllElements()
+				logs_list_model.removeAllElements()
 			} else {
 				logsWorking = false
 				functionButtonStart = true
-				atForm.startButton.text = "Continue"
+				at_form.start_logs_button.text = "Continue"
 			}
 		}
 	}
-	atForm.stopButton.addActionListener {
-		atForm.stopButton.isEnabled = false
-		atForm.startButton.text = "Start"
+	at_form.stop_logs_button.addActionListener {
+		at_form.stop_logs_button.isEnabled = false
+		at_form.start_logs_button.text = "Start"
 		logsWorking = false
 		ifStopSelected = true
-		atForm.saveButton.isEnabled = true
+		at_form.save_logs_button.isEnabled = true
 		functionButtonStart = true
 	}
-	atForm.rebootButton.addActionListener {
-		atForm.rebootButton.isEnabled = false
+	at_form.reboot_to_system_button.addActionListener {
+		at_form.reboot_to_system_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			when {
-				ConnectedViaAdb -> exec("adb", "reboot")
-				ConnectedViaFastboot -> exec("fastboot", "reboot")
-				ConnectedViaRecovery -> exec("adb", "shell twrp reboot")
+				connected_via_adb -> exec("adb", "reboot")
+				connected_via_fastboot -> exec("fastboot", "reboot")
+				connected_via_recovery -> exec("adb", "shell twrp reboot")
 			}
-			atForm.rebootButton.isEnabled = true
+			at_form.reboot_to_system_button.isEnabled = true
 		}
 	}
-	atForm.buttonResetPort.addActionListener {
-		atForm.buttonResetPort.isEnabled = false
+	at_form.change_wireless_port_button.addActionListener {
+		at_form.change_wireless_port_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			exec("adb", "tcpip 5555")
-			atForm.buttonResetPort.isEnabled = true
+			at_form.change_wireless_port_button.isEnabled = true
 		}
 	}
-	atForm.rebootToRecoveryButton.addActionListener {
-		atForm.rebootToRecoveryButton.isEnabled = false
+	at_form.reboot_to_recovery_device_button.addActionListener {
+		at_form.reboot_to_recovery_device_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			when {
-				ConnectedViaAdb -> exec("adb", "reboot recovery")
-				ConnectedViaFastboot -> exec("fastboot", "oem reboot-recovery")
-				ConnectedViaRecovery -> exec("adb", "shell twrp reboot recovery")
+				connected_via_adb -> exec("adb", "reboot recovery")
+				connected_via_fastboot -> exec("fastboot", "oem reboot-recovery")
+				connected_via_recovery -> exec("adb", "shell twrp reboot recovery")
 			}
-			atForm.rebootToRecoveryButton.isEnabled = true
+			at_form.reboot_to_recovery_device_button.isEnabled = true
 		}
 	}
-	atForm.saveRecoveryLogsButton.addActionListener {
-		atForm.saveRecoveryLogsButton.isEnabled = false
+	at_form.save_recovery_logs_button.addActionListener {
+		at_form.save_recovery_logs_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			exec("adb", "shell cp -f /tmp/recovery.log /sdcard")
-			atForm.saveRecoveryLogsButton.isEnabled = true
+			at_form.save_recovery_logs_button.isEnabled = true
 		}
 	}
-	atForm.openSystemTerminalButton.addActionListener {
+	at_form.open_system_terminal_button.addActionListener {
 		when {
-			Windows -> Runtime.getRuntime().exec("cmd /c start cd $SdkDir")
-			MacOS -> Runtime.getRuntime().exec("open -a Terminal $SdkDir")
-			else -> Runtime.getRuntime().exec("gnome-terminal --working-directory=$SdkDir")
+			windows -> Runtime.getRuntime().exec("cmd /c start cd $SDK_folder")
+			macos -> Runtime.getRuntime().exec("open -a Terminal $SDK_folder")
+			else -> Runtime.getRuntime().exec("gnome-terminal --working-directory=$SDK_folder")
 		}
 	}
-	atForm.rebootToFastbootButton.addActionListener {
-		atForm.rebootToFastbootButton.isEnabled = false
+	at_form.reboot_to_fastboot_device_button.addActionListener {
+		at_form.reboot_to_fastboot_device_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			when {
-				ConnectedViaAdb -> exec("adb", "reboot bootloader")
-				ConnectedViaFastboot -> exec("fastboot", "reboot-bootloader")
-				ConnectedViaRecovery -> exec("adb", "shell twrp reboot bootloader")
+				connected_via_adb -> exec("adb", "reboot bootloader")
+				connected_via_fastboot -> exec("fastboot", "reboot-bootloader")
+				connected_via_recovery -> exec("adb", "shell twrp reboot bootloader")
 			}
-			atForm.rebootToFastbootButton.isEnabled = true
+			at_form.reboot_to_fastboot_device_button.isEnabled = true
 		}
 	}
-	atForm.shutdownButton.addActionListener {
-		atForm.shutdownButton.isEnabled = false
+	at_form.shutdown_device_button.addActionListener {
+		at_form.shutdown_device_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			when {
-				ConnectedViaAdb -> exec("adb", "reboot -p")
-				ConnectedViaRecovery -> exec("adb", "shell twrp reboot poweroff")
+				connected_via_adb -> exec("adb", "reboot -p")
+				connected_via_recovery -> exec("adb", "shell twrp reboot poweroff")
 			}
-			atForm.shutdownButton.isEnabled = true
+			at_form.shutdown_device_button.isEnabled = true
 		}
 	}
-	atForm.installButton.addActionListener {
-		atForm.installButton.isEnabled = false
+	at_form.install_multiple_apps_button.addActionListener {
+		at_form.install_multiple_apps_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val paths: Array<File>?
-			val file = File(selectedDirectoryPath)
+			val file = File(selected_directory_path)
 			val fileNameFilter = FilenameFilter { _, name ->
 				if (name.lastIndexOf('.') > 0) {
 					val lastIndex = name.lastIndexOf('.')
@@ -236,46 +236,46 @@ fun createUI() {
 			for (path in paths) {
 				exec("adb", "install \"$path\"")
 			}
-			atForm.installButton.isEnabled = true
-			atForm.selectedLabel1.text = "Selected: -"
+			at_form.install_multiple_apps_button.isEnabled = true
+			at_form.selectedLabel1.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
-	atForm.installButton1.addActionListener {
-		atForm.installButton1.isEnabled = false
+	at_form.install_one_app_button.addActionListener {
+		at_form.install_one_app_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			Runtime.getRuntime().exec("adb install \"$selectedFileAbsolutePath\"")
-			atForm.installButton1.isEnabled = true
-			atForm.selectedLabel.text = "Selected: -"
+			Runtime.getRuntime().exec("adb install \"$selected_file_path\"")
+			at_form.install_one_app_button.isEnabled = true
+			at_form.selectedLabel.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
-	atForm.disableButton.addActionListener {
-		app("Disable", atForm.disableButton, atForm.list1)
+	at_form.disable_app_button.addActionListener {
+		app("Disable", at_form.disable_app_button, at_form.list1)
 		getListOfPackages()
 	}
-	atForm.uninstallButton.addActionListener {
-		app("Uninstall", atForm.uninstallButton, atForm.list1)
+	at_form.uninstall_app_button.addActionListener {
+		app("Uninstall", at_form.uninstall_app_button, at_form.list1)
 		getListOfPackages()
 	}
-	atForm.enableButton.addActionListener {
-		app("Enable", atForm.enableButton, atForm.list1)
+	at_form.enable_app_button.addActionListener {
+		app("Enable", at_form.enable_app_button, at_form.list1)
 		getListOfPackages()
 	}
-	atForm.clearDataButton.addActionListener {
-		app("Clear", atForm.clearDataButton, atForm.list1)
+	at_form.clear_app_button.addActionListener {
+		app("Clear", at_form.clear_app_button, at_form.list1)
 	}
-	atForm.openButton.addActionListener {
-		app("Open", atForm.openButton, atForm.list1)
+	at_form.open_app_button.addActionListener {
+		app("Open", at_form.open_app_button, at_form.list1)
 	}
-	atForm.forceStopButton.addActionListener {
-		app("Stop", atForm.forceStopButton, atForm.list1)
+	at_form.forcestop_app_button.addActionListener {
+		app("Stop", at_form.forcestop_app_button, at_form.list1)
 	}
-	atForm.refreshButton.addActionListener {
+	at_form.refresh_app_list_button.addActionListener {
 		getListOfPackages(true)
 	}
-	atForm.saveButton1.addActionListener {
-		atForm.saveButton1.isEnabled = false
+	at_form.save_app_list_button.addActionListener {
+		at_form.save_app_list_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			choseFile.dialogTitle = "Save app list"
@@ -291,181 +291,177 @@ fun createUI() {
 				}
 				val fw = FileWriter(file.absoluteFile)
 				val bw = BufferedWriter(fw)
-				for (element in 0 until listModel.size()) {
-					bw.write(listModel[element].toString())
+				for (element in 0 until apps_list_model.size()) {
+					bw.write(apps_list_model[element].toString())
 					bw.write("\n")
 				}
 				bw.close()
 			}
-			atForm.saveButton1.isEnabled = true
+			at_form.save_app_list_button.isEnabled = true
 		}
 	}
-	atForm.selectFileButton.addActionListener {
-		atForm.selectButton.isEnabled = false
+	at_form.select_APK_file_Button.addActionListener {
+		at_form.select_recovery_ZIP_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			val filter = FileNameExtensionFilter("APK Files", "apk")
 			choseFile.fileFilter = filter
 			val chooseDialog = choseFile.showDialog(null, "Choose APK")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-				selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
-				selectedFilePath = choseFile.selectedFile.path
-				atForm.selectedLabel.text = "Selected: ${choseFile.selectedFile.name}"
-				atForm.installButton1.isEnabled = true
+				selected_file_path = choseFile.selectedFile.absolutePath
+				at_form.selectedLabel.text = "Selected: ${choseFile.selectedFile.name}"
+				at_form.install_one_app_button.isEnabled = true
 			}
-			atForm.selectButton.isEnabled = true
+			at_form.select_recovery_ZIP_button.isEnabled = true
 		}
 	}
-	atForm.selectFolderButton.addActionListener {
-		atForm.selectFolderButton.isEnabled = false
+	at_form.select_apps_folder_futton.addActionListener {
+		at_form.select_apps_folder_futton.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseDirectory = JFileChooser()
 			choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 			val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-				selectedDirectoryPath = choseDirectory.selectedFile.path
-				atForm.selectedLabel1.text = "Selected: ${choseDirectory.selectedFile.path}"
-				atForm.installButton.isEnabled = true
+				selected_directory_path = choseDirectory.selectedFile.path
+				at_form.selectedLabel1.text = "Selected: ${choseDirectory.selectedFile.path}"
+				at_form.install_multiple_apps_button.isEnabled = true
 			}
-			atForm.selectFolderButton.isEnabled = true
+			at_form.select_apps_folder_futton.isEnabled = true
 		}
 	}
-	atForm.runButton.addActionListener {
-		atForm.runButton.isEnabled = false
-
+	at_form.run_console_command_button.addActionListener {
+		at_form.run_console_command_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			val command = atForm.inputArea.text
+			val command = at_form.inputArea.text
 			when {
-				"adb" in command -> atForm.outputArea.text =
-					exec("adb", atForm.inputArea.text.substring(4), output = true)
-				"fastboot" in command -> atForm.outputArea.text =
-					exec("fastboot", atForm.inputArea.text.substring(9), output = true)
-				else -> atForm.outputArea.text = exec("adb", atForm.inputArea.text, output = true)
+				"adb" in command -> at_form.outputArea.text =
+					exec("adb", at_form.inputArea.text.substring(4), output = true)
+				"fastboot" in command -> at_form.outputArea.text =
+					exec("fastboot", at_form.inputArea.text.substring(9), output = true)
+				else -> at_form.outputArea.text = exec("adb", at_form.inputArea.text, output = true)
 			}
-			atForm.runButton.isEnabled = true
+			at_form.run_console_command_button.isEnabled = true
 		}
 	}
-	atForm.eraseButton.addActionListener {
-		atForm.eraseButton.isEnabled = false
+	at_form.wipe_partition_button.addActionListener {
+		at_form.wipe_partition_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			if (atForm.bootCheckBox.isSelected)
+			if (at_form.bootCheckBox.isSelected)
 				exec("fastboot", "erase boot")
-			if (atForm.systemCheckBox.isSelected)
+			if (at_form.systemCheckBox.isSelected)
 				exec("fastboot", "erase system")
-			if (atForm.dataCheckBox.isSelected)
+			if (at_form.dataCheckBox.isSelected)
 				exec("fastboot", "erase userdata")
-			if (atForm.cacheCheckBox.isSelected)
+			if (at_form.cacheCheckBox.isSelected)
 				exec("fastboot", "erase cache")
-			if (atForm.recoveryCheckBox.isSelected)
+			if (at_form.recoveryCheckBox.isSelected)
 				exec("fastboot", "erase recovery")
-			if (atForm.radioCheckBox.isSelected)
+			if (at_form.radioCheckBox.isSelected)
 				exec("fastboot", "erase radio")
-			atForm.eraseButton.isEnabled = true
+			at_form.wipe_partition_button.isEnabled = true
 		}
 	}
-	atForm.flashButton.addActionListener {
-		atForm.flashButton.isEnabled = false
+	at_form.install_partition_IMG_button.addActionListener {
+		at_form.install_partition_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			if (atForm.bootRadioButton.isSelected)
-				exec("fastboot", "flash boot \"$selectedImgAbsolutePath\"")
-			if (atForm.systemRadioButton1.isSelected)
-				exec("fastboot", "flash system \"$selectedImgAbsolutePath\"")
-			if (atForm.dataRadioButton.isSelected)
-				exec("fastboot", "flash userdata \"$selectedImgAbsolutePath\"")
-			if (atForm.cacheRadioButton.isSelected)
-				exec("fastboot", "flash cache \"$selectedImgAbsolutePath\"")
-			if (atForm.recoveryRadioButton.isSelected)
-				exec("fastboot", "flash recovery \"$selectedImgAbsolutePath\"")
-			if (atForm.radioRadioButton.isSelected)
-				exec("fastboot", "flash radio \"$selectedImgAbsolutePath\"")
-			atForm.flashButton.isEnabled = true
+			if (at_form.bootRadioButton.isSelected)
+				exec("fastboot", "flash boot \"$selected_IMG_path\"")
+			if (at_form.systemRadioButton1.isSelected)
+				exec("fastboot", "flash system \"$selected_IMG_path\"")
+			if (at_form.dataRadioButton.isSelected)
+				exec("fastboot", "flash userdata \"$selected_IMG_path\"")
+			if (at_form.cacheRadioButton.isSelected)
+				exec("fastboot", "flash cache \"$selected_IMG_path\"")
+			if (at_form.recoveryRadioButton.isSelected)
+				exec("fastboot", "flash recovery \"$selected_IMG_path\"")
+			if (at_form.radioRadioButton.isSelected)
+				exec("fastboot", "flash radio \"$selected_IMG_path\"")
+			at_form.install_partition_IMG_button.isEnabled = true
 		}
 	}
-	atForm.selectRecoveryButton.addActionListener {
-		atForm.selectRecoveryButton.isEnabled = false
+	at_form.select_recovery_IMG_button.addActionListener {
+		at_form.select_recovery_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			val filter = FileNameExtensionFilter("Recovery Files", "img")
 			choseFile.fileFilter = filter
 			val chooseDialog = choseFile.showDialog(null, "Select Recovery img")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-				selectedFileAbsolutePath = choseFile.selectedFile.absolutePath
-				selectedFilePath = choseFile.selectedFile.path
+				selected_file_path = choseFile.selectedFile.absolutePath
 			}
-			atForm.selectRecoveryButton.isEnabled = true
+			at_form.select_recovery_IMG_button.isEnabled = true
 		}
 	}
-	atForm.selectImgFileButton.addActionListener {
-		atForm.selectImgFileButton.isEnabled = false
+	at_form.select_partition_IMG_button.addActionListener {
+		at_form.select_partition_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			val filter = FileNameExtensionFilter("IMG Files", "img")
 			choseFile.fileFilter = filter
 			val chooseDialog = choseFile.showDialog(null, "Select partition img")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-				selectedImgAbsolutePath = choseFile.selectedFile.absolutePath
-				selectedImgPath = choseFile.selectedFile.path
+				selected_IMG_path = choseFile.selectedFile.absolutePath
 			}
-			atForm.selectImgFileButton.isEnabled = true
+			at_form.select_partition_IMG_button.isEnabled = true
 		}
 	}
-	atForm.installButton2.addActionListener {
-		atForm.installButton2.isEnabled = false
+	at_form.install_recovery_IMG_button.addActionListener {
+		at_form.install_recovery_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			exec("fastboot", "flash recovery \"$selectedFileAbsolutePath\"")
-			atForm.installButton2.isEnabled = true
+			exec("fastboot", "flash recovery \"$selected_file_path\"")
+			at_form.install_recovery_IMG_button.isEnabled = true
 		}
 	}
-	atForm.bootButton.addActionListener {
-		atForm.bootButton.isEnabled = false
+	at_form.boot_recovery_IMG_button.addActionListener {
+		at_form.boot_recovery_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			exec("fastboot", "boot \"$selectedFileAbsolutePath\"")
-			atForm.bootButton.isEnabled = true
+			exec("fastboot", "boot \"$selected_file_path\"")
+			at_form.boot_recovery_IMG_button.isEnabled = true
 		}
 	}
-	atForm.selectButton.addActionListener {
-		atForm.selectButton.isEnabled = false
+	at_form.select_recovery_ZIP_button.addActionListener {
+		at_form.select_recovery_ZIP_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseFile = JFileChooser()
 			val filter = FileNameExtensionFilter("Zip files", "zip")
 			choseFile.fileFilter = filter
 			val chooseDialog = choseFile.showDialog(null, "Select Zip")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
-				selectedZipPath = choseFile.selectedFile.absolutePath
-				selectedZipName = choseFile.selectedFile.name
+				selected_ZIP_path = choseFile.selectedFile.absolutePath
+				selected_ZIP_name = choseFile.selectedFile.name
 			}
-			atForm.selectButton.isEnabled = true
+			at_form.select_recovery_ZIP_button.isEnabled = true
 		}
 	}
-	atForm.installButton3.addActionListener {
-		atForm.installButton3.isEnabled = false
+	at_form.install_recovery_zip_button.addActionListener {
+		at_form.install_recovery_zip_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			exec("adb", "push \"$selectedZipPath\" /sdcard/")
-			exec("adb", "shell twrp install \"$selectedZipName\"")
-			exec("adb", "shell rm \"$selectedZipName\"")
-			atForm.installButton3.isEnabled = true
+			exec("adb", "push \"$selected_ZIP_path\" /sdcard/")
+			exec("adb", "shell twrp install \"$selected_ZIP_name\"")
+			exec("adb", "shell rm \"$selected_ZIP_name\"")
+			at_form.install_recovery_zip_button.isEnabled = true
 		}
 	}
-	settingsMenu.addActionListener {
+	menu_bar_settings.addActionListener {
 		Settings.main()
 	}
-	aboutItem.addActionListener {
+	menu_bar_about.addActionListener {
 		AboutDialog.main()
 	}
-	exitItem.addActionListener {
+	menu_bar_exit.addActionListener {
 		exec("adb", "kill-server")
 		exitProcess(0)
 	}
 	desableCompoments()
 	if (getSettings("lastIP") == "") {
-		systemIP = when {
-			Windows -> InetAddress.getLocalHost().hostAddress
-			MacOS -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readText() + Runtime.getRuntime().exec("ipconfig getifaddr en1").inputStream.bufferedReader().readText()
-			Linux -> Runtime.getRuntime().exec("ip n").inputStream.bufferedReader().readLine().substringBefore(" ")
+		system_IP_address = when {
+			windows -> InetAddress.getLocalHost().hostAddress
+			macos -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readText() + Runtime.getRuntime().exec("ipconfig getifaddr en1").inputStream.bufferedReader().readText()
+			linux -> Runtime.getRuntime().exec("ip n").inputStream.bufferedReader().readLine().substringBefore(" ")
 			else -> ""
 		}
-		systemIP = systemIP.substringBeforeLast('.') + "."
+		system_IP_address = system_IP_address.substringBeforeLast('.') + "."
 	} else
-		systemIP = getSettings("lastIP")
-	atForm.textField2.text = systemIP
+		system_IP_address = getSettings("lastIP")
+	at_form.system_ip_address_field.text = system_IP_address
 }

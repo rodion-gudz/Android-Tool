@@ -6,12 +6,12 @@ import java.util.*
 fun getSettings(): String? {
 	val prop = Properties()
 	return try {
-		prop.load(FileInputStream(ProgramDir + "config.properties"))
+		prop.load(FileInputStream(program_folder + "config.properties"))
 		val theme = prop.getProperty("theme")
 		theme
 	} catch (e: Exception) {
-		if (ProgramDir != null) {
-			val settingsFile: File = File(ProgramDir + "config.properties")
+		if (program_folder != null) {
+			val settingsFile: File = File(program_folder + "config.properties")
 			settingsFile.createNewFile()
 			settingsFile.writeText("theme=dark")
 		}
@@ -21,7 +21,7 @@ fun getSettings(): String? {
 
 fun getSettings(key: String): String {
 	val prop = Properties()
-	prop.load(FileInputStream(ProgramDir + "config.properties"))
+	prop.load(FileInputStream(program_folder + "config.properties"))
 	return try {
 		val IP = prop.getProperty(key)
 		IP
@@ -32,7 +32,7 @@ fun getSettings(key: String): String {
 
 fun setSettings(key: String, value: String) {
 	val prop = Properties()
-	prop.load(FileInputStream(ProgramDir + "config.properties"))
+	prop.load(FileInputStream(program_folder + "config.properties"))
 	prop.setProperty(key, value)
-	FileOutputStream(ProgramDir + "config.properties").use { output -> prop.store(output, null) }
+	FileOutputStream(program_folder + "config.properties").use { output -> prop.store(output, null) }
 }

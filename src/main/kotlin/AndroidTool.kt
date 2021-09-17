@@ -7,7 +7,9 @@ import kotlinx.coroutines.launch
 fun main(args: Array<String>) {
 	createUI()
 	AndroidTool.main()
-	appProp.load(AndroidTool::class.java.getResourceAsStream("applist.properties"))
+	app_names_list.load(AndroidTool::class.java.getResourceAsStream("applist.properties"))
+	values_properties.load(AndroidTool::class.java.getResourceAsStream("values.properties"))
+	program_version = values_properties.getProperty("version")
 	sdkCheck()
 	GlobalScope.launch {
 		while (true) {

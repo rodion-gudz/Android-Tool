@@ -24,7 +24,7 @@ public class AboutDialog extends JDialog {
     public AboutDialog() {
         setContentPane(contentPane);
         setModal(true);
-        setIconImage(MainKt.getAppIcon());
+        setIconImage(MainKt.getApp_icon());
         adbDriversWinButton.addActionListener(e -> {
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/koush/adb.clockworkmod.com/releases/latest/download/UniversalAdbDriverSetup.msi"));
@@ -78,7 +78,7 @@ public class AboutDialog extends JDialog {
 
     public static void main() {
         AboutDialog dialog = new AboutDialog();
-        dialog.version.setText(MainKt.programVersion);
+        dialog.version.setText(MainKt.getProgram_version());
         dialog.pack();
         dialog.setLocationRelativeTo(null);
         dialog.setResizable(false);

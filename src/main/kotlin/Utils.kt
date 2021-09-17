@@ -1,4 +1,4 @@
-import AndroidTool.Companion.atForm
+import AndroidTool.Companion.at_form
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -18,41 +18,41 @@ import kotlin.system.exitProcess
 
 fun sdkCheck() {
 	when {
-		Windows -> {
-			if (File("$userFolder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$userFolder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
-				SdkDir = "$userFolder\\.android_tool\\SDK-Tools\\"
+		windows -> {
+			if (File("$user_folder\\.android_tool\\SDK-Tools\\adb.exe").exists() && File("$user_folder\\.android_tool\\SDK-Tools\\fastboot.exe").exists()) {
+				SDK_folder = "$user_folder\\.android_tool\\SDK-Tools\\"
 				return
 			}
 		}
 		else -> {
-			if (File("$userFolder/.android_tool/SDK-Tools/adb").exists() && File("$userFolder/.android_tool/SDK-Tools/fastboot").exists()) {
-				SdkDir = "$userFolder/.android_tool/SDK-Tools/"
+			if (File("$user_folder/.android_tool/SDK-Tools/adb").exists() && File("$user_folder/.android_tool/SDK-Tools/fastboot").exists()) {
+				SDK_folder = "$user_folder/.android_tool/SDK-Tools/"
 				return
 			}
 		}
 	}
 	when {
-		Windows -> {
+		windows -> {
 			if (File("adb.exe").exists() && File("fastboot.exe").exists() && File("AdbWinApi.dll").exists() && File(
 					"AdbWinUsbApi.dll"
 				).exists()
 			) {
-				SdkDir = "$JarDir\\"
+				SDK_folder = "$jar_folder\\"
 				return
-			} else if (File("$JarDir\\SDK-Tools\\adb.exe").exists() && File("$JarDir\\SDK-Tools\\fastboot.exe").exists() && File(
-					"$JarDir\\SDK-Tools\\AdbWinApi.dll"
-				).exists() && File("$JarDir\\SDK-Tools\\AdbWinUsbApi.dll").exists()
+			} else if (File("$jar_folder\\SDK-Tools\\adb.exe").exists() && File("$jar_folder\\SDK-Tools\\fastboot.exe").exists() && File(
+					"$jar_folder\\SDK-Tools\\AdbWinApi.dll"
+				).exists() && File("$jar_folder\\SDK-Tools\\AdbWinUsbApi.dll").exists()
 			) {
-				SdkDir = "$JarDir\\SDK-Tools\\"
+				SDK_folder = "$jar_folder\\SDK-Tools\\"
 				return
 			}
 		}
 		else -> {
 			if (File("adb").exists() && File("fastboot").exists()) {
-				SdkDir = "$JarDir/"
+				SDK_folder = "$jar_folder/"
 				return
-			} else if (File("$JarDir/SDK-Tools/adb").exists() && File("$JarDir/SDK-Tools/fastboot").exists()) {
-				SdkDir = "$JarDir/SDK-Tools/"
+			} else if (File("$jar_folder/SDK-Tools/adb").exists() && File("$jar_folder/SDK-Tools/fastboot").exists()) {
+				SDK_folder = "$jar_folder/SDK-Tools/"
 				return
 			}
 		}
@@ -71,13 +71,13 @@ fun runUpdate() {
 	GlobalScope.launch {
 		runUrl("https://github.com/fast-geek/Android-Tool/releases/latest/download/Android-Tool.jar")
 	}
-	Runtime.getRuntime().exec("${SdkDir}adb kill-server")
+	Runtime.getRuntime().exec("${SDK_folder}adb kill-server")
 	exitProcess(0)
 }
 
 fun searchFilter(searchTerm: String) {
 	val filteredItems: DefaultListModel<Any?> = DefaultListModel()
-	val apps = apps
+	val apps = filtered_apps_list
 	apps.stream().forEach { app: Any ->
 		val starName = app.toString().lowercase(Locale.getDefault())
 		if (starName.contains(searchTerm.lowercase(Locale.getDefault()))) {
@@ -86,8 +86,8 @@ fun searchFilter(searchTerm: String) {
 			}
 		}
 	}
-	listModel = filteredItems
-	atForm.list1.model = listModel
+	apps_list_model = filteredItems
+	at_form.list1.model = apps_list_model
 }
 
 fun versionCheck() {
@@ -96,9 +96,9 @@ fun versionCheck() {
 		val inputStream =
 			URL("https://github.com/fast-geek/Android-Tool/releases/latest/download/values.properties").openStream()
 		properties.load(inputStream)
-		if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(programVersion)) {
-			programVersionLatest = properties.getProperty("latestVersion")
-			UpdateDialog.main(programVersion, programVersionLatest)
+		if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(program_version)) {
+			latest_program_version = properties.getProperty("latestVersion")
+			UpdateDialog.main(program_version, latest_program_version)
 		}
 	} catch (e: Exception) {
 		print(e)
@@ -111,26 +111,26 @@ fun runSDK(progress: JProgressBar, label: JLabel) {
 	label.text = "Installing..."
 	GlobalScope.launch {
 		when {
-			Windows -> downloadFile(
+			windows -> downloadFile(
 				"https://dl.google.com/android/repository/platform-tools-latest-windows.zip",
-				"$ProgramDir\\Windows.zip"
+				"$program_folder\\Windows.zip"
 			)
-			Linux -> downloadFile(
+			linux -> downloadFile(
 				"https://dl.google.com/android/repository/platform-tools-latest-linux.zip",
-				"$ProgramDir/Linux.zip"
+				"$program_folder/Linux.zip"
 			)
-			MacOS -> downloadFile(
+			macos -> downloadFile(
 				"https://dl.google.com/android/repository/platform-tools-latest-darwin.zip",
-				"$ProgramDir/MacOS.zip"
+				"$program_folder/MacOS.zip"
 			)
 		}
 		when {
-			Windows -> unZipFile("$ProgramDir\\Windows.zip")
-			Linux -> unZipFile("$ProgramDir/Linux.zip")
-			MacOS -> unZipFile("$ProgramDir/MacOS.zip")
+			windows -> unZipFile("$program_folder\\Windows.zip")
+			linux -> unZipFile("$program_folder/Linux.zip")
+			macos -> unZipFile("$program_folder/MacOS.zip")
 		}
-		File("${ProgramDir}platform-tools").renameTo(File("${ProgramDir}SDK-Tools"))
-		SdkDir = ProgramDir + if (Windows) "SDK-Tools\\" else "SDK-Tools/"
+		File("${program_folder}platform-tools").renameTo(File("${program_folder}SDK-Tools"))
+		SDK_folder = program_folder + if (windows) "SDK-Tools\\" else "SDK-Tools/"
 		progress.isIndeterminate = false
 		label.text = "Completed!"
 	}
@@ -142,8 +142,8 @@ fun updateUI() {
 
 fun desableCompoments() {
 	val components: Array<Component> =
-		atForm.fastbootPanel.components + atForm.adbPanel.components + atForm.logsPanel.components + atForm.consolePanel.components + atForm.recoveryPanel.components + atForm.devicePanel.components
+		at_form.fastbootPanel.components + at_form.adbPanel.components + at_form.logsPanel.components + at_form.consolePanel.components + at_form.recoveryPanel.components + at_form.devicePanel.components
 	for (component in components)
-		if (component != atForm.openSystemTerminalButton)
+		if (component != at_form.open_system_terminal_button)
 			component.isEnabled = false
 }

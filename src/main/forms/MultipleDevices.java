@@ -17,7 +17,7 @@ public class MultipleDevices extends JDialog {
         setModal(true);
         setName("<html><font size='4'>Please <strong>disconnect one of the devices</strong></font></html>");
         getRootPane().setDefaultButton(buttonOK);
-        setIconImage(MainKt.getAppIcon());
+        setIconImage(MainKt.getApp_icon());
 
         buttonOK.addActionListener(e -> onOK());
     }

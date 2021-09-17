@@ -23,7 +23,7 @@ public class UpdateDialog extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        setIconImage(MainKt.getAppIcon());
+        setIconImage(MainKt.getApp_icon());
 
         buttonOK.addActionListener(e -> onOK());
 

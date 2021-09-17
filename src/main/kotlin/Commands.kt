@@ -2,7 +2,7 @@ import java.io.IOException
 
 fun exec(app: String, command: String, output: Boolean = false, streamType: String = "Input"): String {
 	try {
-		val process = Runtime.getRuntime().exec("$SdkDir$app $command")
+		val process = Runtime.getRuntime().exec("$SDK_folder$app $command")
 		if (output) {
 			return if (streamType == "Input")
 				process.inputStream.bufferedReader().readText()
@@ -17,6 +17,6 @@ fun exec(app: String, command: String, output: Boolean = false, streamType: Stri
 }
 
 fun execLines(command: String): List<String> {
-	val process = Runtime.getRuntime().exec("$SdkDir$command")
+	val process = Runtime.getRuntime().exec("$SDK_folder$command")
 	return process.inputStream.bufferedReader().readLines()
 }
