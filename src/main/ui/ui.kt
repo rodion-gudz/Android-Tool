@@ -22,17 +22,6 @@ fun createUI() {
 	at_form.device_properties_table.setDefaultEditor(Any::class.java, null)
 	device_properties_model.addColumn("Property")
 	device_properties_model.addColumn("Value")
-	AndroidTool.frame.jMenuBar = menu_bar
-	AndroidTool.frame.addWindowListener(object : WindowAdapter() {
-		override fun windowClosing(e: WindowEvent) {
-			exec("adb", "kill-server")
-		}
-	})
-	menu_bar_main.add(menu_bar_settings)
-	menu_bar_main.add(menu_bar_about)
-	menu_bar_main.addSeparator()
-	menu_bar_main.add(menu_bar_exit)
-	menu_bar.add(menu_bar_main)
 	at_form.apps_filter_textfield.addKeyListener(object : KeyAdapter() {
 		override fun keyReleased(evt: KeyEvent) {
 			searchFilter(at_form.apps_filter_textfield.text)
@@ -442,16 +431,7 @@ fun createUI() {
 			at_form.install_recovery_zip_button.isEnabled = true
 		}
 	}
-	menu_bar_settings.addActionListener {
-		Settings.main()
-	}
-	menu_bar_about.addActionListener {
-		AboutDialog.main()
-	}
-	menu_bar_exit.addActionListener {
-		exec("adb", "kill-server")
-		exitProcess(0)
-	}
+	createMenuBar()
 	desableCompoments()
 	if (getSettings("lastIP") == "") {
 		system_IP_address = when {
