@@ -237,16 +237,16 @@ fun createUI() {
 				exec("adb", "install \"$path\"")
 			}
 			atForm.installButton.isEnabled = true
-			atForm.selectedLabel.text = "Selected: -"
+			atForm.selectedLabel1.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
 	atForm.installButton1.addActionListener {
 		atForm.installButton1.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			exec("adb", "install \"$selectedFileAbsolutePath\"")
+			Runtime.getRuntime().exec("adb install \"$selectedFileAbsolutePath\"")
 			atForm.installButton1.isEnabled = true
-			atForm.selectedLabel1.text = "Selected: -"
+			atForm.selectedLabel.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
