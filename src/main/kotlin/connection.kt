@@ -43,9 +43,9 @@ fun connectionCheck() {
 
 
 	if (multiple_devices_connected)
-		MultipleDevices.main()
+		multiple_devices_dialog.main()
 	else if (unauthorized_device)
-		UnathorizedDevice.main()
+		unauthorized_device_dialog.main()
 
 	when {
 		connected_via_adb -> {

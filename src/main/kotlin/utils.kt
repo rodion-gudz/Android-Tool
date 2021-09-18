@@ -57,7 +57,7 @@ fun sdkCheck() {
 			}
 		}
 	}
-	SDKDialog.main()
+	SDK_installation_dialog.main()
 	return
 }
 
@@ -98,7 +98,7 @@ fun versionCheck() {
 		properties.load(inputStream)
 		if (ComparableVersion(properties.getProperty("latestVersion")) > ComparableVersion(program_version)) {
 			latest_program_version = properties.getProperty("latestVersion")
-			UpdateDialog.main(program_version, latest_program_version)
+			update_dialog.main(program_version, latest_program_version)
 		}
 	} catch (e: Exception) {
 		print(e)

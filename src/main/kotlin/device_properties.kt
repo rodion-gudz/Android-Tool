@@ -93,6 +93,11 @@ fun getFastPropCaps(deviceProps: String, properties: Map<String, String>) {
 		if (deviceProps.indexOf(i.value) != -1) {
 			val property =
 				deviceProps.substringAfter("(bootloader) ${i.value}").substringBefore("(bootloader) ").trimMargin()
-			device_properties_model.addRow(arrayOf(i.key, ((java.lang.Long.parseLong(property, 16) / 1048576).toString().trimMargin())))
+			device_properties_model.addRow(
+				arrayOf(
+					i.key,
+					((java.lang.Long.parseLong(property, 16) / 1048576).toString().trimMargin())
+				)
+			)
 		}
 }

@@ -15,10 +15,10 @@ fun createMenuBar() {
 	menu_bar_main.add(menu_bar_exit)
 	menu_bar.add(menu_bar_main)
 	menu_bar_settings.addActionListener {
-		Settings.main()
+		settings_dialog.main()
 	}
 	menu_bar_about.addActionListener {
-		AboutDialog.main()
+		about_dialog.main()
 	}
 	menu_bar_exit.addActionListener {
 		exec("adb", "kill-server")

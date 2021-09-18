@@ -6,13 +6,10 @@ import kotlinx.coroutines.swing.Swing
 import kotlinx.coroutines.withContext
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import java.awt.event.WindowAdapter
-import java.awt.event.WindowEvent
 import java.io.*
 import java.net.InetAddress
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
-import kotlin.system.exitProcess
 
 fun createUI() {
 	at_form.logsList.model = logs_list_model
@@ -99,10 +96,12 @@ fun createUI() {
 				withContext(Dispatchers.Default) {
 					Runtime.getRuntime().exec("${SDK_folder}adb logcat -c").waitFor()
 					val builderList = when {
-						at_form.verboseRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:V")
+						at_form.verboseRadioButton.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:V")
 						at_form.debugRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:D")
 						at_form.infoRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:I")
-						at_form.warningRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:W")
+						at_form.warningRadioButton.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:W")
 						at_form.errorRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:E")
 						at_form.fatalRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:F")
 						at_form.slentRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:S")
@@ -436,7 +435,9 @@ fun createUI() {
 	if (getSettings("lastIP") == "") {
 		system_IP_address = when {
 			windows -> InetAddress.getLocalHost().hostAddress
-			macos -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader().readText() + Runtime.getRuntime().exec("ipconfig getifaddr en1").inputStream.bufferedReader().readText()
+			macos -> Runtime.getRuntime().exec("ipconfig getifaddr en0").inputStream.bufferedReader()
+				.readText() + Runtime.getRuntime().exec("ipconfig getifaddr en1").inputStream.bufferedReader()
+				.readText()
 			linux -> Runtime.getRuntime().exec("ip n").inputStream.bufferedReader().readLine().substringBefore(" ")
 			else -> ""
 		}

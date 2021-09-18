@@ -78,7 +78,7 @@ open class AndroidTool {
 			UIManager.setLookAndFeel(FlatIntelliJLaf())
 	}
 
-	var at_form = ATForm()
+	var at_form = main_form()
 	val frame = JFrame()
 
 	companion object : AndroidTool() {
@@ -89,7 +89,7 @@ open class AndroidTool {
 				val application = com.apple.eawt.Application.getApplication()
 				val image = ImageIO.read(AndroidTool()::class.java.getResource("appIcon.png"))
 				application.dockIconImage = image
-				application.setAboutHandler { AboutDialog.main() }
+				application.setAboutHandler { about_dialog.main() }
 			}
 			frame.iconImage = app_icon
 			frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE

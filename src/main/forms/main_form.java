@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-public class ATForm {
+public class main_form {
     public JPanel ATPanel;
     public JTabbedPane tabbedPane1;
     public JTable device_properties_table;
