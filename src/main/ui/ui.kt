@@ -12,7 +12,7 @@ import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
 
 fun createUI() {
-	at_form.logsList.model = logs_list_model
+	at_form.logs_list.model = logs_list_model
 	at_form.device_properties_table.model = device_properties_model
 	at_form.device_properties_table.showHorizontalLines = true
 	at_form.device_properties_table.showVerticalLines = true
@@ -72,7 +72,7 @@ fun createUI() {
 			exec("adb", "kill-server")
 			val output = exec("adb", "connect ${at_form.system_ip_address_field.text}", output = true)
 			if ("connected to" in output || "failed to authenticate to" in output) {
-				at_form.notConnectedLabel1.text = "Connected to ${at_form.system_ip_address_field.text}"
+				at_form.connection_label.text = "Connected to ${at_form.system_ip_address_field.text}"
 				setSettings("lastIP", at_form.system_ip_address_field.text)
 			}
 			at_form.connect_to_device_button.isEnabled = true
@@ -96,15 +96,15 @@ fun createUI() {
 				withContext(Dispatchers.Default) {
 					Runtime.getRuntime().exec("${SDK_folder}adb logcat -c").waitFor()
 					val builderList = when {
-						at_form.verboseRadioButton.isSelected -> Runtime.getRuntime()
+						at_form.verbose_radio_button.isSelected -> Runtime.getRuntime()
 							.exec("${SDK_folder}adb logcat *:V")
-						at_form.debugRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:D")
-						at_form.infoRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:I")
-						at_form.warningRadioButton.isSelected -> Runtime.getRuntime()
+						at_form.debug_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:D")
+						at_form.info_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:I")
+						at_form.warning_radio_button.isSelected -> Runtime.getRuntime()
 							.exec("${SDK_folder}adb logcat *:W")
-						at_form.errorRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:E")
-						at_form.fatalRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:F")
-						at_form.slentRadioButton.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:S")
+						at_form.error_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:E")
+						at_form.fatal_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:F")
+						at_form.silent_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:S")
 						else -> Runtime.getRuntime().exec("${SDK_folder}adb logcat -c")
 					}
 
@@ -115,7 +115,7 @@ fun createUI() {
 						if (line != "* daemon not running; starting now at tcp:5037" && line != "* daemon started successfully" && line != "--------- beginning of main" && line != "--------- beginning of system") {
 							if (logsWorking) {
 								logs_list_model.addElement(line)
-								at_form.logsList.ensureIndexIsVisible(at_form.logsList.model.size - 1)
+								at_form.logs_list.ensureIndexIsVisible(at_form.logs_list.model.size - 1)
 							}
 						}
 					}
@@ -225,7 +225,7 @@ fun createUI() {
 				exec("adb", "install \"$path\"")
 			}
 			at_form.install_multiple_apps_button.isEnabled = true
-			at_form.selectedLabel1.text = "Selected: -"
+			at_form.selected_folder_label.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
@@ -234,30 +234,30 @@ fun createUI() {
 		GlobalScope.launch(Dispatchers.Swing) {
 			Runtime.getRuntime().exec("adb install \"$selected_file_path\"")
 			at_form.install_one_app_button.isEnabled = true
-			at_form.selectedLabel.text = "Selected: -"
+			at_form.selected_file_label.text = "Selected: -"
 		}
 		getListOfPackages()
 	}
 	at_form.disable_app_button.addActionListener {
-		app("Disable", at_form.disable_app_button, at_form.list1)
+		app("Disable", at_form.disable_app_button, at_form.apps_list)
 		getListOfPackages()
 	}
 	at_form.uninstall_app_button.addActionListener {
-		app("Uninstall", at_form.uninstall_app_button, at_form.list1)
+		app("Uninstall", at_form.uninstall_app_button, at_form.apps_list)
 		getListOfPackages()
 	}
 	at_form.enable_app_button.addActionListener {
-		app("Enable", at_form.enable_app_button, at_form.list1)
+		app("Enable", at_form.enable_app_button, at_form.apps_list)
 		getListOfPackages()
 	}
 	at_form.clear_app_button.addActionListener {
-		app("Clear", at_form.clear_app_button, at_form.list1)
+		app("Clear", at_form.clear_app_button, at_form.apps_list)
 	}
 	at_form.open_app_button.addActionListener {
-		app("Open", at_form.open_app_button, at_form.list1)
+		app("Open", at_form.open_app_button, at_form.apps_list)
 	}
-	at_form.forcestop_app_button.addActionListener {
-		app("Stop", at_form.forcestop_app_button, at_form.list1)
+	at_form.force_stop_app_button.addActionListener {
+		app("Stop", at_form.force_stop_app_button, at_form.apps_list)
 	}
 	at_form.refresh_app_list_button.addActionListener {
 		getListOfPackages(true)
@@ -297,36 +297,36 @@ fun createUI() {
 			val chooseDialog = choseFile.showDialog(null, "Choose APK")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
 				selected_file_path = choseFile.selectedFile.absolutePath
-				at_form.selectedLabel.text = "Selected: ${choseFile.selectedFile.name}"
+				at_form.selected_file_label.text = "Selected: ${choseFile.selectedFile.name}"
 				at_form.install_one_app_button.isEnabled = true
 			}
 			at_form.select_recovery_ZIP_button.isEnabled = true
 		}
 	}
-	at_form.select_apps_folder_futton.addActionListener {
-		at_form.select_apps_folder_futton.isEnabled = false
+	at_form.select_apps_folder_button.addActionListener {
+		at_form.select_apps_folder_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
 			val choseDirectory = JFileChooser()
 			choseDirectory.fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
 			val chooseDialog = choseDirectory.showDialog(null, "Choose folder")
 			if (chooseDialog == JFileChooser.APPROVE_OPTION) {
 				selected_directory_path = choseDirectory.selectedFile.path
-				at_form.selectedLabel1.text = "Selected: ${choseDirectory.selectedFile.path}"
+				at_form.selected_folder_label.text = "Selected: ${choseDirectory.selectedFile.path}"
 				at_form.install_multiple_apps_button.isEnabled = true
 			}
-			at_form.select_apps_folder_futton.isEnabled = true
+			at_form.select_apps_folder_button.isEnabled = true
 		}
 	}
 	at_form.run_console_command_button.addActionListener {
 		at_form.run_console_command_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			val command = at_form.inputArea.text
+			val command = at_form.command_input.text
 			when {
-				"adb" in command -> at_form.outputArea.text =
-					exec("adb", at_form.inputArea.text.substring(4), output = true)
-				"fastboot" in command -> at_form.outputArea.text =
-					exec("fastboot", at_form.inputArea.text.substring(9), output = true)
-				else -> at_form.outputArea.text = exec("adb", at_form.inputArea.text, output = true)
+				"adb" in command -> at_form.command_output.text =
+					exec("adb", at_form.command_input.text.substring(4), output = true)
+				"fastboot" in command -> at_form.command_output.text =
+					exec("fastboot", at_form.command_input.text.substring(9), output = true)
+				else -> at_form.command_output.text = exec("adb", at_form.command_input.text, output = true)
 			}
 			at_form.run_console_command_button.isEnabled = true
 		}
@@ -334,17 +334,17 @@ fun createUI() {
 	at_form.wipe_partition_button.addActionListener {
 		at_form.wipe_partition_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			if (at_form.bootCheckBox.isSelected)
+			if (at_form.boot_checkbox.isSelected)
 				exec("fastboot", "erase boot")
-			if (at_form.systemCheckBox.isSelected)
+			if (at_form.system_checkbox.isSelected)
 				exec("fastboot", "erase system")
-			if (at_form.dataCheckBox.isSelected)
+			if (at_form.data_checkbox.isSelected)
 				exec("fastboot", "erase userdata")
-			if (at_form.cacheCheckBox.isSelected)
+			if (at_form.cache_checkbox.isSelected)
 				exec("fastboot", "erase cache")
-			if (at_form.recoveryCheckBox.isSelected)
+			if (at_form.recovery_checkbox.isSelected)
 				exec("fastboot", "erase recovery")
-			if (at_form.radioCheckBox.isSelected)
+			if (at_form.radio_checkbox.isSelected)
 				exec("fastboot", "erase radio")
 			at_form.wipe_partition_button.isEnabled = true
 		}
@@ -352,17 +352,17 @@ fun createUI() {
 	at_form.install_partition_IMG_button.addActionListener {
 		at_form.install_partition_IMG_button.isEnabled = false
 		GlobalScope.launch(Dispatchers.Swing) {
-			if (at_form.bootRadioButton.isSelected)
+			if (at_form.boot_radio_button.isSelected)
 				exec("fastboot", "flash boot \"$selected_IMG_path\"")
-			if (at_form.systemRadioButton1.isSelected)
+			if (at_form.system_radio_button.isSelected)
 				exec("fastboot", "flash system \"$selected_IMG_path\"")
-			if (at_form.dataRadioButton.isSelected)
+			if (at_form.data_radio_button.isSelected)
 				exec("fastboot", "flash userdata \"$selected_IMG_path\"")
-			if (at_form.cacheRadioButton.isSelected)
+			if (at_form.cache_radio_button.isSelected)
 				exec("fastboot", "flash cache \"$selected_IMG_path\"")
-			if (at_form.recoveryRadioButton.isSelected)
+			if (at_form.recovery_radio_button.isSelected)
 				exec("fastboot", "flash recovery \"$selected_IMG_path\"")
-			if (at_form.radioRadioButton.isSelected)
+			if (at_form.radio_radio_button.isSelected)
 				exec("fastboot", "flash radio \"$selected_IMG_path\"")
 			at_form.install_partition_IMG_button.isEnabled = true
 		}

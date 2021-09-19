@@ -44,7 +44,7 @@ fun getListOfPackages(button: Boolean = false) {
 			filtered_apps_list.add(element)
 		}
 		apps_list_model = items
-		at_form.list1.model = apps_list_model
+		at_form.apps_list.model = apps_list_model
 		at_form.refresh_app_list_button.isEnabled = true
 		searchFilter(at_form.apps_filter_textfield.text)
 	}

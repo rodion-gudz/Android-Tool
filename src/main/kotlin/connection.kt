@@ -3,14 +3,14 @@ import java.awt.Component
 
 private fun noConnection() {
 	val components: Array<Component> =
-		at_form.fastbootPanel.components + at_form.adbPanel.components + at_form.logsPanel.components + at_form.consolePanel.components + at_form.recoveryPanel.components
+		at_form.fastboot_panel.components + at_form.adb_panel.components + at_form.logs_panel.components + at_form.console_panel.components + at_form.recovery_panel.components
 	for (component in components)
 		if (component != at_form.open_system_terminal_button)
 			component.isEnabled = false
-	at_form.inputArea.isFocusable = false
-	at_form.outputArea.isFocusable = false
-	at_form.logsList.isFocusable = false
-	at_form.list1.isFocusable = false
+	at_form.command_input.isFocusable = false
+	at_form.command_output.isFocusable = false
+	at_form.logs_list.isFocusable = false
+	at_form.apps_list.isFocusable = false
 	apps_list_model.removeAllElements()
 	logs_list_model.removeAllElements()
 	if (device_properties_model.rowCount != 0)
@@ -20,8 +20,8 @@ private fun noConnection() {
 	at_form.apps_filter_textfield.isEnabled = false
 	at_form.connect_to_device_button.isEnabled = true
 	at_form.system_ip_address_field.isEnabled = true
-	at_form.notConnectedLabel1.text = "Not connected"
-	at_form.notConnectedLabel1.icon = null
+	at_form.connection_label.text = "Not connected"
+	at_form.connection_label.icon = null
 }
 
 fun connectionCheck() {
@@ -55,37 +55,37 @@ fun connectionCheck() {
 			at_form.reboot_to_fastboot_device_button.isEnabled = true
 			if (enabledAll) {
 				val disableComponents: Array<Component> =
-					at_form.fastbootPanel.components + at_form.recoveryPanel.components
+					at_form.fastboot_panel.components + at_form.recovery_panel.components
 				for (component in disableComponents)
 					if (component != at_form.open_system_terminal_button)
 						component.isEnabled = false
 				val enableComponents: Array<Component> =
-					at_form.adbPanel.components + at_form.consolePanel.components + at_form.logsPanel.components
+					at_form.adb_panel.components + at_form.console_panel.components + at_form.logs_panel.components
 				for (component in enableComponents)
 					if (component != at_form.stop_logs_button && component != at_form.save_logs_button && component != at_form.install_multiple_apps_button && component != at_form.install_one_app_button)
 						component.isEnabled = true
 			}
-			at_form.inputArea.isFocusable = true
-			at_form.outputArea.isFocusable = true
-			at_form.logsList.isFocusable = true
-			at_form.list1.isFocusable = true
+			at_form.command_input.isFocusable = true
+			at_form.command_output.isFocusable = true
+			at_form.logs_list.isFocusable = true
+			at_form.apps_list.isFocusable = true
 
 			if (connected_via_USB) {
-				at_form.notConnectedLabel1.text = "Connected via Adb"
-				at_form.notConnectedLabel1.icon = success_icon
+				at_form.connection_label.text = "Connected via Adb"
+				at_form.connection_label.icon = success_icon
 				at_form.connect_to_device_button.isEnabled = false
 				at_form.system_ip_address_field.isEnabled = false
 				at_form.change_wireless_port_button.isVisible = true
 			} else {
 				if (connected_via_WiFi) {
-					at_form.notConnectedLabel1.text = "Connected to ${
+					at_form.connection_label.text = "Connected to ${
 						adb_devices.substring(adb_devices.indexOf("192.168")).substringBefore(':')
 					}"
-					at_form.notConnectedLabel1.icon = success_icon
+					at_form.connection_label.icon = success_icon
 				}
 			}
 			if (newPhone) {
-				at_form.tabbedPane1.selectedIndex = 0
+				at_form.tabbed_pane.selectedIndex = 0
 				getProp()
 				getListOfPackages()
 			}
@@ -101,24 +101,24 @@ fun connectionCheck() {
 			at_form.change_wireless_port_button.isVisible = false
 			if (enabledAll) {
 				val disableComponents: Array<Component> =
-					at_form.adbPanel.components + at_form.logsPanel.components + at_form.recoveryPanel.components
+					at_form.adb_panel.components + at_form.logs_panel.components + at_form.recovery_panel.components
 				for (component in disableComponents)
 					if (component != at_form.open_system_terminal_button)
 						component.isEnabled = false
 				val enableComponents: Array<Component> =
-					at_form.fastbootPanel.components + at_form.consolePanel.components
+					at_form.fastboot_panel.components + at_form.console_panel.components
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			at_form.inputArea.isFocusable = true
-			at_form.outputArea.isFocusable = true
-			at_form.logsList.isFocusable = false
-			at_form.list1.isFocusable = false
+			at_form.command_input.isFocusable = true
+			at_form.command_output.isFocusable = true
+			at_form.logs_list.isFocusable = false
+			at_form.apps_list.isFocusable = false
 
 			if (newPhone) {
-				at_form.tabbedPane1.selectedIndex = 2
-				at_form.notConnectedLabel1.text = "Connected via Fastboot"
-				at_form.notConnectedLabel1.icon = success_icon
+				at_form.tabbed_pane.selectedIndex = 2
+				at_form.connection_label.text = "Connected via Fastboot"
+				at_form.connection_label.icon = success_icon
 				getPropFastboot()
 			}
 			newPhone = false
@@ -132,24 +132,24 @@ fun connectionCheck() {
 			at_form.connect_to_device_button.isEnabled = false
 			at_form.change_wireless_port_button.isVisible = false
 			if (enabledAll) {
-				val disableComponents: Array<Component> = at_form.adbPanel.components + at_form.fastbootPanel.components
+				val disableComponents: Array<Component> = at_form.adb_panel.components + at_form.fastboot_panel.components
 				for (component in disableComponents)
 					if (component != at_form.open_system_terminal_button)
 						component.isEnabled = false
 				val enableComponents: Array<Component> =
-					at_form.recoveryPanel.components + at_form.consolePanel.components + at_form.logsPanel.components
+					at_form.recovery_panel.components + at_form.console_panel.components + at_form.logs_panel.components
 				for (component in enableComponents)
 					component.isEnabled = true
 			}
-			at_form.outputArea.isFocusable = true
-			at_form.inputArea.isFocusable = true
-			at_form.list1.isFocusable = false
-			at_form.logsList.isFocusable = false
+			at_form.command_output.isFocusable = true
+			at_form.command_input.isFocusable = true
+			at_form.apps_list.isFocusable = false
+			at_form.logs_list.isFocusable = false
 
 			if (newPhone) {
-				at_form.tabbedPane1.selectedIndex = 3
-				at_form.notConnectedLabel1.text = "Connected via Adb"
-				at_form.notConnectedLabel1.icon = success_icon
+				at_form.tabbed_pane.selectedIndex = 3
+				at_form.connection_label.text = "Connected via Adb"
+				at_form.connection_label.icon = success_icon
 				getPropRecovery()
 			}
 

@@ -93,7 +93,7 @@ open class AndroidTool {
 			}
 			frame.iconImage = app_icon
 			frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-			frame.contentPane = at_form.ATPanel
+			frame.contentPane = at_form.panel
 			frame.setSize(1100, 650)
 			frame.setLocationRelativeTo(null)
 			frame.isVisible = true

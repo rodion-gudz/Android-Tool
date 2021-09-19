@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="main_form">
-  <grid id="27dc6" binding="ATPanel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+  <grid id="27dc6" binding="panel" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
     <margin top="0" left="0" bottom="0" right="0"/>
     <constraints>
       <xy x="20" y="20" width="1263" height="704"/>
@@ -8,7 +8,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="c1df5" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="c1df5" binding="tabbed_pane" default-binding="true">
         <constraints>
           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
             <preferred-size width="200" height="200"/>
@@ -20,7 +20,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="fe855" binding="adbPanel" layout-manager="GridLayoutManager" row-count="14" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="fe855" binding="adb_panel" layout-manager="GridLayoutManager" row-count="14" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="App Manager"/>
@@ -42,7 +42,7 @@
                   <grid row="11" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
-              <component id="207ce" class="javax.swing.JButton" binding="select_apps_folder_futton" default-binding="true">
+              <component id="207ce" class="javax.swing.JButton" binding="select_apps_folder_button" default-binding="true">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -83,7 +83,7 @@
                   <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
-              <component id="a98cf" class="javax.swing.JLabel" binding="selectedLabel1">
+              <component id="a98cf" class="javax.swing.JLabel" binding="selected_folder_label">
                 <constraints>
                   <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -99,7 +99,7 @@
                   <text value="Apk installation"/>
                 </properties>
               </component>
-              <component id="6b6fe" class="javax.swing.JLabel" binding="selectedLabel">
+              <component id="6b6fe" class="javax.swing.JLabel" binding="selected_file_label">
                 <constraints>
                   <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -152,7 +152,7 @@
                   <text value="Open"/>
                 </properties>
               </component>
-              <component id="461cc" class="javax.swing.JButton" binding="forcestop_app_button" default-binding="true">
+              <component id="461cc" class="javax.swing.JButton" binding="force_stop_app_button" default-binding="true">
                 <constraints>
                   <grid row="12" column="3" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -237,7 +237,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="175c7" class="javax.swing.JList" binding="list1" default-binding="true">
+                  <component id="175c7" class="javax.swing.JList" binding="apps_list" default-binding="true">
                     <constraints/>
                     <properties>
                       <focusable value="true"/>
@@ -258,7 +258,7 @@
               </vspacer>
             </children>
           </grid>
-          <grid id="a90b4" binding="logsPanel" layout-manager="GridLayoutManager" row-count="4" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="a90b4" binding="logs_panel" layout-manager="GridLayoutManager" row-count="4" column-count="8" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="Logs"/>
@@ -298,7 +298,7 @@
                   <text value="Start"/>
                 </properties>
               </component>
-              <component id="48f52" class="javax.swing.JRadioButton" binding="verboseRadioButton" default-binding="true">
+              <component id="48f52" class="javax.swing.JRadioButton" binding="verbose_radio_button" default-binding="true">
                 <constraints>
                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -306,7 +306,7 @@
                   <text value="Verbose"/>
                 </properties>
               </component>
-              <component id="2fd6b" class="javax.swing.JRadioButton" binding="slentRadioButton">
+              <component id="2fd6b" class="javax.swing.JRadioButton" binding="silent_radio_button">
                 <constraints>
                   <grid row="1" column="7" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -314,7 +314,7 @@
                   <text value="Slent"/>
                 </properties>
               </component>
-              <component id="6cfd7" class="javax.swing.JRadioButton" binding="errorRadioButton">
+              <component id="6cfd7" class="javax.swing.JRadioButton" binding="error_radio_button">
                 <constraints>
                   <grid row="1" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -322,7 +322,7 @@
                   <text value="Error"/>
                 </properties>
               </component>
-              <component id="65bb6" class="javax.swing.JRadioButton" binding="warningRadioButton">
+              <component id="65bb6" class="javax.swing.JRadioButton" binding="warning_radio_button">
                 <constraints>
                   <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -330,7 +330,7 @@
                   <text value="Warning"/>
                 </properties>
               </component>
-              <component id="5c19c" class="javax.swing.JRadioButton" binding="fatalRadioButton">
+              <component id="5c19c" class="javax.swing.JRadioButton" binding="fatal_radio_button">
                 <constraints>
                   <grid row="1" column="6" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -338,7 +338,7 @@
                   <text value="Fatal"/>
                 </properties>
               </component>
-              <component id="68586" class="javax.swing.JRadioButton" binding="debugRadioButton">
+              <component id="68586" class="javax.swing.JRadioButton" binding="debug_radio_button">
                 <constraints>
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -346,7 +346,7 @@
                   <text value="Debug"/>
                 </properties>
               </component>
-              <component id="7eefe" class="javax.swing.JRadioButton" binding="infoRadioButton">
+              <component id="7eefe" class="javax.swing.JRadioButton" binding="info_radio_button">
                 <constraints>
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -362,7 +362,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="4c716" class="javax.swing.JList" binding="logsList" default-binding="true">
+                  <component id="4c716" class="javax.swing.JList" binding="logs_list" default-binding="true">
                     <constraints/>
                     <properties>
                       <focusable value="true"/>
@@ -372,7 +372,7 @@
               </scrollpane>
             </children>
           </grid>
-          <grid id="2c5df" binding="fastbootPanel" layout-manager="GridLayoutManager" row-count="12" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="2c5df" binding="fastboot_panel" layout-manager="GridLayoutManager" row-count="12" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="Fastboot"/>
@@ -420,7 +420,7 @@
                   <text value="Boot"/>
                 </properties>
               </component>
-              <component id="3b8db" class="javax.swing.JCheckBox" binding="recoveryCheckBox" default-binding="true">
+              <component id="3b8db" class="javax.swing.JCheckBox" binding="recovery_checkbox" default-binding="true">
                 <constraints>
                   <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -428,7 +428,7 @@
                   <text value="Recovery"/>
                 </properties>
               </component>
-              <component id="8e975" class="javax.swing.JCheckBox" binding="systemCheckBox" default-binding="true">
+              <component id="8e975" class="javax.swing.JCheckBox" binding="system_checkbox" default-binding="true">
                 <constraints>
                   <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -436,7 +436,7 @@
                   <text value="System"/>
                 </properties>
               </component>
-              <component id="5d7c" class="javax.swing.JCheckBox" binding="dataCheckBox" default-binding="true">
+              <component id="5d7c" class="javax.swing.JCheckBox" binding="data_checkbox" default-binding="true">
                 <constraints>
                   <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -444,7 +444,7 @@
                   <text value="Data"/>
                 </properties>
               </component>
-              <component id="42260" class="javax.swing.JCheckBox" binding="bootCheckBox" default-binding="true">
+              <component id="42260" class="javax.swing.JCheckBox" binding="boot_checkbox" default-binding="true">
                 <constraints>
                   <grid row="2" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -452,7 +452,7 @@
                   <text value="Boot"/>
                 </properties>
               </component>
-              <component id="bc58a" class="javax.swing.JCheckBox" binding="cacheCheckBox" default-binding="true">
+              <component id="bc58a" class="javax.swing.JCheckBox" binding="cache_checkbox" default-binding="true">
                 <constraints>
                   <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -460,7 +460,7 @@
                   <text value="Cache"/>
                 </properties>
               </component>
-              <component id="67d25" class="javax.swing.JCheckBox" binding="radioCheckBox" default-binding="true">
+              <component id="67d25" class="javax.swing.JCheckBox" binding="radio_checkbox" default-binding="true">
                 <constraints>
                   <grid row="3" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -509,7 +509,7 @@
                   <text value="Flash"/>
                 </properties>
               </component>
-              <component id="8b554" class="javax.swing.JRadioButton" binding="recoveryRadioButton" default-binding="true">
+              <component id="8b554" class="javax.swing.JRadioButton" binding="recovery_radio_button" default-binding="true">
                 <constraints>
                   <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -517,7 +517,7 @@
                   <text value="Recovery"/>
                 </properties>
               </component>
-              <component id="3f699" class="javax.swing.JRadioButton" binding="cacheRadioButton" default-binding="true">
+              <component id="3f699" class="javax.swing.JRadioButton" binding="cache_radio_button" default-binding="true">
                 <constraints>
                   <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -525,7 +525,7 @@
                   <text value="Cache"/>
                 </properties>
               </component>
-              <component id="7cb75" class="javax.swing.JRadioButton" binding="systemRadioButton1" default-binding="true">
+              <component id="7cb75" class="javax.swing.JRadioButton" binding="system_radio_button" default-binding="true">
                 <constraints>
                   <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -533,7 +533,7 @@
                   <text value="System"/>
                 </properties>
               </component>
-              <component id="6a907" class="javax.swing.JRadioButton" binding="dataRadioButton" default-binding="true">
+              <component id="6a907" class="javax.swing.JRadioButton" binding="data_radio_button" default-binding="true">
                 <constraints>
                   <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -541,7 +541,7 @@
                   <text value="Data"/>
                 </properties>
               </component>
-              <component id="48336" class="javax.swing.JRadioButton" binding="bootRadioButton" default-binding="true">
+              <component id="48336" class="javax.swing.JRadioButton" binding="boot_radio_button" default-binding="true">
                 <constraints>
                   <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -549,7 +549,7 @@
                   <text value="Boot"/>
                 </properties>
               </component>
-              <component id="65f99" class="javax.swing.JRadioButton" binding="radioRadioButton" default-binding="true">
+              <component id="65f99" class="javax.swing.JRadioButton" binding="radio_radio_button" default-binding="true">
                 <constraints>
                   <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -559,7 +559,7 @@
               </component>
             </children>
           </grid>
-          <grid id="b025d" binding="recoveryPanel" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="b025d" binding="recovery_panel" layout-manager="GridLayoutManager" row-count="3" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="Recovery"/>
@@ -614,7 +614,7 @@
               </hspacer>
             </children>
           </grid>
-          <grid id="e0bac" binding="consolePanel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="e0bac" binding="console_panel" layout-manager="GridLayoutManager" row-count="2" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="5" left="5" bottom="5" right="5"/>
             <constraints>
               <tabbedpane title="Console"/>
@@ -640,7 +640,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="8eb55" class="javax.swing.JTextArea" binding="inputArea">
+                      <component id="8eb55" class="javax.swing.JTextArea" binding="command_input">
                         <constraints/>
                         <properties/>
                       </component>
@@ -653,7 +653,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="306f5" class="javax.swing.JTextArea" binding="outputArea">
+                      <component id="306f5" class="javax.swing.JTextArea" binding="command_output">
                         <constraints/>
                         <properties/>
                       </component>
@@ -688,7 +688,7 @@
           </grid>
         </children>
       </tabbedpane>
-      <grid id="35b76" binding="devicePanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="35b76" binding="device_panel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="5" left="5" bottom="5" right="5"/>
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
@@ -752,7 +752,7 @@
             <properties/>
             <border type="none" title="Connection" title-justification="2"/>
             <children>
-              <component id="e226b" class="javax.swing.JLabel" binding="notConnectedLabel1">
+              <component id="e226b" class="javax.swing.JLabel" binding="connection_label">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -794,7 +794,7 @@
               </component>
             </children>
           </grid>
-          <scrollpane id="da0c6" binding="scrollPane1">
+          <scrollpane id="da0c6" binding="device_properties_scroll_panel">
             <constraints>
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
             </constraints>

@@ -87,7 +87,7 @@ fun searchFilter(searchTerm: String) {
 		}
 	}
 	apps_list_model = filteredItems
-	at_form.list1.model = apps_list_model
+	at_form.apps_list.model = apps_list_model
 }
 
 fun versionCheck() {
@@ -142,7 +142,7 @@ fun updateUI() {
 
 fun desableCompoments() {
 	val components: Array<Component> =
-		at_form.fastbootPanel.components + at_form.adbPanel.components + at_form.logsPanel.components + at_form.consolePanel.components + at_form.recoveryPanel.components + at_form.devicePanel.components
+		at_form.fastboot_panel.components + at_form.adb_panel.components + at_form.logs_panel.components + at_form.console_panel.components + at_form.recovery_panel.components + at_form.device_panel.components
 	for (component in components)
 		if (component != at_form.open_system_terminal_button)
 			component.isEnabled = false
