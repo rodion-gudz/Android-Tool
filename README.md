@@ -1,10 +1,13 @@
 # Android Tool
 
-![Logo](https://github.com/fast-geek/Android-Tool/raw/master/Images/logo.png)
+![Logo](Images/logo.png)
 
 ## What is it?
 
 #### Android Tool is a powerful and beautiful program, created to make popular adb and fastboot commands easier to use. A dark theme, intuitive interface and other features
+
+![Main Screenshot](Images/app_manager.png)
+
 
 ## Main Features:
 
@@ -17,33 +20,14 @@
 * #### Always relevant links to firmware and everything you need
 * #### And not only 😉
 
+## Screenshots
+#### All screenshots can be found [here](Images/screenshots.md)
+
 ## Links:
 
-* #### Telegram channel - [@android_tooI](https://t.me/android_tooI)
-* #### Telegram chat - [@android_tooI_chat](https://t.me/android_tooI_chat)
+* #### Telegram channel - [@android_tool](https://t.me/android_tooI)
+* #### Telegram chat - [@android_tool_chat](https://t.me/android_tooI_chat)
 * #### 4PDA thread - [Android Tool](https://4pda.to/forum/index.php?showtopic=1000362)
-
-## Screenshots:
-
-* ##### App Manager
-
-![Adb Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/app_manager.png)
-
-* ##### Logcat
-
-![Logcat Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/logs.png)
-
-* ##### Fastboot
-
-![Fastboot Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/fastboot.png)
-
-* ##### Recovery
-
-![Recovery Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/recovery.png)
-
-* ##### Console
-
-![Console Screenshot](https://github.com/fast-geek/Android-Tool/raw/master/Images/console.png)
 
 ## The Latest Version And Updates
 
