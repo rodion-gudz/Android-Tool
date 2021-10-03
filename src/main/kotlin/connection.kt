@@ -132,7 +132,8 @@ fun connectionCheck() {
 			at_form.connect_to_device_button.isEnabled = false
 			at_form.change_wireless_port_button.isVisible = false
 			if (enabledAll) {
-				val disableComponents: Array<Component> = at_form.adb_panel.components + at_form.fastboot_panel.components
+				val disableComponents: Array<Component> =
+					at_form.adb_panel.components + at_form.fastboot_panel.components
 				for (component in disableComponents)
 					if (component != at_form.open_system_terminal_button)
 						component.isEnabled = false

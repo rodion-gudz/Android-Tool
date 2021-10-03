@@ -98,13 +98,17 @@ fun createUI() {
 					val builderList = when {
 						at_form.verbose_radio_button.isSelected -> Runtime.getRuntime()
 							.exec("${SDK_folder}adb logcat *:V")
-						at_form.debug_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:D")
+						at_form.debug_radio_button.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:D")
 						at_form.info_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:I")
 						at_form.warning_radio_button.isSelected -> Runtime.getRuntime()
 							.exec("${SDK_folder}adb logcat *:W")
-						at_form.error_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:E")
-						at_form.fatal_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:F")
-						at_form.silent_radio_button.isSelected -> Runtime.getRuntime().exec("${SDK_folder}adb logcat *:S")
+						at_form.error_radio_button.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:E")
+						at_form.fatal_radio_button.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:F")
+						at_form.silent_radio_button.isSelected -> Runtime.getRuntime()
+							.exec("${SDK_folder}adb logcat *:S")
 						else -> Runtime.getRuntime().exec("${SDK_folder}adb logcat -c")
 					}
 
