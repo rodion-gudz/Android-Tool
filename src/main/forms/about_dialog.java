@@ -55,14 +55,14 @@ public class about_dialog extends JDialog {
         });
         alphaBuildButton.addActionListener(e -> {
             try {
-                Desktop.getDesktop().browse(new URI("https://files.lavender.ml/AT/Android-Tool.jar"));
+                Desktop.getDesktop().browse(new URI("https://github.com/fast-geek/Android-Tool/releases/latest/download/Android-Tool.jar"));
             } catch (IOException | URISyntaxException ex) {
                 ex.printStackTrace();
             }
         });
         buyMeACoffeButton.addActionListener(e -> {
             try {
-                Desktop.getDesktop().browse(new URI("https://telegra.ph/Donat-07-13"));
+                Desktop.getDesktop().browse(new URI("https://lavblog.ml/donat"));
             } catch (IOException | URISyntaxException ex) {
                 ex.printStackTrace();
             }

@@ -81,7 +81,7 @@
             </constraints>
             <properties>
               <focusable value="false"/>
-              <text value="Alpha Build"/>
+              <text value="Last Build"/>
               <toolTipText value="Download a latest unstable build"/>
             </properties>
           </component>
