@@ -47,6 +47,7 @@ var SDK_folder = jar_folder + if (windows) "\\Windows-SDK\\" else {
 }
 val device_properties_model = DefaultTableModel()
 var program_version = ""
+val values_properties = Properties()
 val app_names_list = Properties()
 val menu_bar = JMenuBar()
 val menu_bar_main = JMenu("Program")
