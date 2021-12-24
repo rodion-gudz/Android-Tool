@@ -23,7 +23,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="KotlinJavaRuntime" level="project" />
     <orderEntry type="library" exported="" name="Kotlinx-Coroutines" level="project" />
-    <orderEntry type="library" exported="" name="Maven-Artifact" level="project" />
     <orderEntry type="library" exported="" name="FormDev FlatFaf" level="project" />
     <orderEntry type="library" exported="" name="Intellij Forms" level="project" />
     <orderEntry type="library" exported="" name="Zip File" level="project" />

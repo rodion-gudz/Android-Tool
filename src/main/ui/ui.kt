@@ -435,7 +435,7 @@ fun createUI() {
 		}
 	}
 	createMenuBar()
-	desableCompoments()
+	disableComponents()
 	if (getSettings("lastIP") == "") {
 		system_IP_address = when {
 			windows -> InetAddress.getLocalHost().hostAddress

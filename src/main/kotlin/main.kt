@@ -1,9 +1,7 @@
 import com.formdev.flatlaf.FlatDarculaLaf
 import com.formdev.flatlaf.FlatIntelliJLaf
-import kotlinx.coroutines.DelicateCoroutinesApi
 import java.awt.Image
 import java.util.*
-import javax.imageio.ImageIO
 import javax.swing.*
 import javax.swing.table.DefaultTableModel
 
@@ -44,11 +42,11 @@ val jar_folder = System.getProperty("user.dir").toString()
 val user_folder = System.getProperty("user.home").toString()
 val cpu_arm_arch = "aarch64" == System.getProperty("os.arch").toString()
 val program_folder: String = user_folder + if (windows) "\\.android_tool\\" else "/.android_tool/"
-var SDK_folder = program_folder + if (windows) "SDK-Tools\\" else "SDK-Tools/"
+var SDK_folder = jar_folder + if (windows) "\\Windows-SDK\\" else {
+	if (macos) "/MacOS-SDK/" else "/Linux-SDK/"
+}
 val device_properties_model = DefaultTableModel()
 var program_version = ""
-val values_properties = Properties()
-var latest_program_version = ""
 val app_names_list = Properties()
 val menu_bar = JMenuBar()
 val menu_bar_main = JMenu("Program")
@@ -60,7 +58,6 @@ val menu_bar_settings = JMenuItem("Settings")
 open class AndroidTool {
 
 	init {
-		System.setProperty("apple.awt.application.name", "Android-Tool")
 		System.setProperty("apple.awt.application.appearance", "system")
 		System.setProperty("apple.laf.useScreenMenuBar", "true")
 		createFolder()
@@ -82,15 +79,8 @@ open class AndroidTool {
 	val frame = JFrame()
 
 	companion object : AndroidTool() {
-		@OptIn(DelicateCoroutinesApi::class)
 		@JvmStatic
 		fun main() {
-			if (macos) {
-				val application = com.apple.eawt.Application.getApplication()
-				val image = ImageIO.read(AndroidTool()::class.java.getResource("appIcon.png"))
-				application.dockIconImage = image
-				application.setAboutHandler { about_dialog.main() }
-			}
 			frame.iconImage = app_icon
 			frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
 			frame.contentPane = at_form.panel

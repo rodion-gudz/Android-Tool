@@ -139,7 +139,7 @@ public class about_dialog extends JDialog {
         panel1.add(telegramButton, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         alphaBuildButton = new JButton();
         alphaBuildButton.setFocusable(false);
-        alphaBuildButton.setText("Alpha Build");
+        alphaBuildButton.setText("Last Build");
         alphaBuildButton.setToolTipText("Download a latest unstable build");
         panel1.add(alphaBuildButton, new GridConstraints(5, 3, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         webButton = new JButton();
